@@ -36,8 +36,20 @@ def viewbox(svg):
     return re.search(r'viewBox="([^"]+)"', svg).group(1)
 
 LOCKUP_H   = read("bws-lockup-horizontal.svg")
+LOCKUP_P   = read("bws-lockup-primary.svg")
 LOCKUP_REV = read("bws-lockup-primary-reversed.svg")
 BADGE_FULL = read("bws-logo-primary.svg")
+
+def stacked_lockup(idpfx):
+    """Two-line lockup for narrow screens. Same simplified badge as the wide
+    header; cropped to an even 8-unit margin (artwork spans x14-396, y14-114)."""
+    svg = LOCKUP_P
+    for p in re.findall(r'<path d="[^"]+" fill="#FDF0DC"/>', svg):
+        svg = svg.replace(p, '')
+    return ('<svg class="lockup lockup--header lockup--stacked" viewBox="6 6 398 116" '
+            'role="img" aria-label="Beaumont West Solutions">%s</svg>'
+            % strip_shell(svg, idpfx))
+
 
 def header_lockup(idpfx):
     """Horizontal lockup with the badge's B and S removed.
@@ -52,7 +64,7 @@ def header_lockup(idpfx):
         svg = svg.replace(p, '')
     # crop the file's own padding (artwork spans 14..94 of 108) to an even
     # 8-unit margin, so the logo reads larger at the same header height
-    return ('<svg class="lockup lockup--header" viewBox="6 6 478 96" role="img" '
+    return ('<svg class="lockup lockup--header lockup--wide" viewBox="6 6 478 96" role="img" '
             'aria-label="Beaumont West Solutions">%s</svg>'
             % strip_shell(svg, idpfx))
 
@@ -227,8 +239,13 @@ p:last-child{margin-bottom:0}
   gap:24px;width:var(--shell);margin-inline:auto;padding-block:9px}
 .lockup{display:block;height:auto}
 .lockup--header{height:56px;width:auto}
-@media(max-width:899px){.lockup--header{height:46px}}
-@media(max-width:400px){.lockup--header{height:40px}}
+.lockup--stacked{display:none}
+@media(max-width:899px){
+  .lockup--wide{display:none}
+  .lockup--stacked{display:block;height:66px}
+  .masthead__in{padding-block:8px}
+}
+@media(max-width:400px){.lockup--stacked{height:56px}}
 .brandlink{display:inline-flex;text-decoration:none;border-radius:6px}
 .nav{display:none;align-items:center;gap:30px}
 .nav a{
@@ -245,15 +262,17 @@ p:last-child{margin-bottom:0}
 .masthead .btn{padding:13px 24px;font-size:13px;display:none}
 @media(min-width:900px){.masthead .btn{display:inline-flex}}
 .navtoggle{
-  display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
-  width:44px;height:44px;padding:0 10px;background:none;border:1px solid var(--rule);
-  border-radius:10px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;flex:none;
+  width:46px;height:46px;padding:0;background:none;border:1px solid var(--rule);
+  border-radius:10px;cursor:pointer;color:var(--teal);
+  -webkit-appearance:none;appearance:none;
 }
-.navtoggle span{display:block;height:1.8px;background:var(--teal);border-radius:2px;
-  transition:transform .2s ease,opacity .2s ease}
-.navtoggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6.8px) rotate(45deg)}
-.navtoggle[aria-expanded="true"] span:nth-child(2){opacity:0}
-.navtoggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.8px) rotate(-45deg)}
+.navtoggle__icon{display:block;width:24px;height:24px}
+.navtoggle__icon path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;
+  transform-box:fill-box;transform-origin:center;transition:transform .2s ease,opacity .2s ease}
+.navtoggle[aria-expanded="true"] .nt1{transform:translateY(5px) rotate(45deg)}
+.navtoggle[aria-expanded="true"] .nt2{opacity:0}
+.navtoggle[aria-expanded="true"] .nt3{transform:translateY(-5px) rotate(-45deg)}
 .mobilenav{display:none;border-top:1px solid var(--rule);background:var(--paper)}
 .mobilenav.open{display:block}
 .mobilenav ul{list-style:none;margin:0;padding:8px 0 20px;width:var(--shell);margin-inline:auto}
@@ -294,6 +313,9 @@ p:last-child{margin-bottom:0}
 .divider svg{display:block;width:100%}
 .divider--ridge{background:var(--paper)}
 .divider--ridge svg{height:clamp(84px,10vw,132px)}
+.divider--ridge,.divider--wave{position:relative}
+.divider--ridge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal)}
+.divider--wave::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--teal)}
 .ridge-far{fill:var(--teal-mid);opacity:.45}
 .ridge-back{fill:var(--teal-mid)}
 .ridge-front{fill:var(--teal)}
@@ -597,13 +619,13 @@ def mobile_links(current):
 def masthead(current):
     return """<header class="masthead">
   <div class="masthead__in">
-    <a class="brandlink" href="index.html" aria-label="Beaumont West Solutions — home">%s</a>
+    <a class="brandlink" href="index.html" aria-label="Beaumont West Solutions — home">%s%s</a>
     <nav class="nav" aria-label="Primary">
         %s
     </nav>
     <a class="btn btn--primary" href="contact.html">Start a project</a>
     <button class="navtoggle" type="button" aria-expanded="false" aria-controls="mobilenav" aria-label="Menu">
-      <span></span><span></span><span></span>
+      <svg class="navtoggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="nt1" d="M4 7h16"/><path class="nt2" d="M4 12h16"/><path class="nt3" d="M4 17h16"/></svg>
     </button>
   </div>
   <div class="mobilenav" id="mobilenav">
@@ -611,7 +633,7 @@ def masthead(current):
       %s
     </ul>
   </div>
-</header>""" % (header_lockup("hd"), nav_links(current), mobile_links(current))
+</header>""" % (header_lockup("hd"), stacked_lockup("hs"), nav_links(current), mobile_links(current))
 
 FOOTER = """<footer class="foot">
   <div class="wrap">
