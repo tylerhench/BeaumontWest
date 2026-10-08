@@ -50,11 +50,21 @@ def header_lockup(idpfx):
     letters = re.findall(r'<path d="[^"]+" fill="#FDF0DC"/>', svg)
     for p in letters:
         svg = svg.replace(p, '')
-    return ('<svg class="lockup lockup--header" viewBox="%s" role="img" '
+    # crop the file's own padding (artwork spans 14..94 of 108) to an even
+    # 8-unit margin, so the logo reads larger at the same header height
+    return ('<svg class="lockup lockup--header" viewBox="6 6 478 96" role="img" '
             'aria-label="Beaumont West Solutions">%s</svg>'
-            % (viewbox(LOCKUP_H), strip_shell(svg, idpfx)))
+            % strip_shell(svg, idpfx))
 
 def footer_lockup(idpfx):
+    # the badge's own ring is #1B4552, which disappears against a teal footer,
+    # so a coral ring is added just outside it to hold the mark off the ground
+    ring = ('<circle cx="100" cy="100" r="92" fill="none" stroke="#E86F51" '
+            'stroke-width="6"/>')
+    global LOCKUP_REV
+    anchor = '<circle cx="100" cy="100" r="88" fill="none" stroke="#1B4552" stroke-width="5"/>'
+    if anchor in LOCKUP_REV and 'E86F51" stroke-width="6"' not in LOCKUP_REV:
+        LOCKUP_REV = LOCKUP_REV.replace(anchor, anchor + ring)
     return ('<svg class="lockup lockup--footer" viewBox="%s" role="img" '
             'aria-label="Beaumont West Solutions">%s</svg>'
             % (viewbox(LOCKUP_REV), strip_shell(LOCKUP_REV, idpfx)))
@@ -73,13 +83,53 @@ RIDGE = """<div class="divider divider--ridge" aria-hidden="true">
 </svg></div>"""
 
 def wave(to="paper"):
-    """Teal above, light below — the coastal counterpart to the ridge."""
+    """Teal above, light below: a three-layer tide, matching the ridge's depth."""
     return """<div class="divider divider--wave to-%s" aria-hidden="true">
-<svg viewBox="0 0 1440 92" preserveAspectRatio="none" focusable="false">
-<path class="wave" d="M0,0 L1440,0 L1440,30 C1250,84 1080,88 920,52 C760,16 620,-4 460,34 C300,72 158,70 0,8 Z"/>
+<svg viewBox="0 0 1440 100" preserveAspectRatio="none" focusable="false">
+<path class="tide-far" d="M0,0 L1440,0 L1440,66 C1186,88 995,60 720,74 C445,88 254,64 0,80 Z"/>
+<path class="tide-mid" d="M0,0 L1440,0 L1440,52 C1228,70 1016,44 762,58 C508,72 275,48 0,62 Z"/>
+<path class="tide-front" d="M0,0 L1440,0 L1440,36 C1249,54 995,26 720,42 C445,58 233,32 0,46 Z"/>
 </svg></div>""" % to
 
 RIDGE_CREAM = RIDGE.replace('divider--ridge"', 'divider--ridge from-cream"')
+SUN_ARC = """<div class="divider divider--arc" aria-hidden="true">
+<svg viewBox="0 0 1440 110" preserveAspectRatio="none" focusable="false">
+<path class="arc-fill" d="M0,110 L0,66 Q720,2 1440,66 L1440,110 Z"/>
+<path class="arc-line" d="M0,66 Q720,2 1440,66"/>
+</svg></div>"""
+
+SUN_ARC_INVERSE = SUN_ARC.replace('divider--arc"', 'divider--arc arc--inverse"')
+
+ANGLE = """<div class="divider divider--angle" aria-hidden="true">
+<svg viewBox="0 0 1440 110" preserveAspectRatio="none" focusable="false">
+<path class="angle-fill" d="M0,110 L0,88 L1440,26 L1440,110 Z"/>
+</svg></div>"""
+
+RIDGE_SAND = RIDGE.replace('divider--ridge"', 'divider--ridge from-sand"')
+SUN_ARC_TEAL = SUN_ARC.replace('divider--arc"', 'divider--arc arc--teal"')
+SUN_HORIZON = """<div class="horizon sunrise" aria-hidden="true">
+<svg viewBox="0 0 120 90" focusable="false">
+<defs><clipPath id="bws-sky"><rect x="0" y="0" width="120" height="45"/></clipPath></defs>
+<g clip-path="url(#bws-sky)"><g class="sun-up">
+<circle cx="60" cy="45" r="40" fill="#E86F51" opacity=".13"/>
+<circle cx="60" cy="45" r="29" fill="#E86F51" opacity=".14"/>
+<circle cx="60" cy="45" r="18" fill="#E86F51"/>
+</g></g>
+<g class="sun-refl" stroke="#E86F51" stroke-width="2.6" stroke-linecap="round">
+<line x1="37" y1="53" x2="83" y2="53" opacity=".55"/>
+<line x1="44" y1="61" x2="76" y2="61" opacity=".42"/>
+<line x1="51" y1="69" x2="69" y2="69" opacity=".3"/>
+<line x1="57" y1="77" x2="63" y2="77" opacity=".2"/>
+</g>
+</svg></div>"""
+
+MOUNTAIN_HORIZON = """<div class="horizon horizon--close" aria-hidden="true">
+<svg viewBox="0 0 120 90" focusable="false">
+<path d="M21,45 L39,20 L50,37 L60,27 L70,37 L81,20 L99,45 Z" fill="#1B4552"/>
+</svg></div>"""
+
+PLAIN_HORIZON = """<div class="horizon horizon--plain" aria-hidden="true"></div>"""
+
 WAVE = wave("paper")
 WAVE_CREAM = wave("cream")
 
@@ -88,7 +138,7 @@ CSS = r"""
 :root{
   --teal:#1B4552; --teal-mid:#38606E; --teal-deep:#143641;
   --cream:#FDF0DC; --paper:#FBF6EC; --coral:#E86F51; --peach:#F4A261;
-  --rule:#C9D3D6;
+  --rule:#C9D3D6; --sand:#D4D1C3; --teal-sub:#33586A;
   --display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --body:"Newsreader",Georgia,"Times New Roman",serif;
   --shell:min(1120px,100% - 48px);
@@ -125,14 +175,21 @@ p:last-child{margin-bottom:0}
 
 /* ---------- layout ---------- */
 .wrap{width:var(--shell);margin-inline:auto}
-.section{padding-block:clamp(64px,8.5vw,110px)}
+.section{padding-block:clamp(52px,6.5vw,88px)}
+/* 1. a scenic divider already separates sections, so the padding beside it halves */
+.divider + .section,.horizon + .section{padding-top:clamp(34px,4vw,56px)}
+.section:has(+ .divider),.section:has(+ .horizon){padding-bottom:clamp(34px,4vw,56px)}
 .section--tight{padding-block:clamp(48px,6vw,76px)}
 .band-paper{background:var(--paper)}
 .band-cream{background:var(--cream)}
+.band-paper + .band-paper{border-top:1px solid var(--rule)}
+.band-tint{background:linear-gradient(180deg,var(--sand) 0,var(--paper) 100%)}
+.band-tint .card{border-color:rgba(27,69,82,.32)}
+.band-tint .eyebrow,.band-tint .lede{color:var(--teal)}
 .band-teal{background:var(--teal);color:var(--cream)}
 .band-teal .eyebrow{color:rgba(253,240,220,.7)}
 .band-teal .lede,.band-teal .small{color:rgba(253,240,220,.82)}
-.head{max-width:62ch;margin-bottom:clamp(36px,4.5vw,56px)}
+.head{max-width:62ch;margin-bottom:clamp(28px,3.2vw,40px)}
 .head--center{margin-inline:auto;text-align:center}
 .grid{display:grid;gap:22px}
 .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
@@ -167,13 +224,15 @@ p:last-child{margin-bottom:0}
   backdrop-filter:blur(9px);border-bottom:1px solid var(--rule);
 }
 .masthead__in{display:flex;align-items:center;justify-content:space-between;
-  gap:24px;width:var(--shell);margin-inline:auto;padding-block:14px}
+  gap:24px;width:var(--shell);margin-inline:auto;padding-block:9px}
 .lockup{display:block;height:auto}
-.lockup--header{height:46px;width:auto}
+.lockup--header{height:56px;width:auto}
+@media(max-width:899px){.lockup--header{height:46px}}
+@media(max-width:400px){.lockup--header{height:40px}}
 .brandlink{display:inline-flex;text-decoration:none;border-radius:6px}
 .nav{display:none;align-items:center;gap:30px}
 .nav a{
-  font-family:var(--display);font-weight:500;font-size:15px;text-decoration:none;
+  font-family:var(--display);font-weight:500;font-size:17px;text-decoration:none;
   padding:6px 0;position:relative;letter-spacing:.005em;
 }
 .nav a::after{
@@ -183,7 +242,7 @@ p:last-child{margin-bottom:0}
 }
 .nav a:hover::after{transform:scaleX(1)}
 .nav a[aria-current="page"]::after{transform:scaleX(1);background:var(--coral)}
-.masthead .btn{padding:12px 22px;font-size:12.5px;display:none}
+.masthead .btn{padding:13px 24px;font-size:13px;display:none}
 @media(min-width:900px){.masthead .btn{display:inline-flex}}
 .navtoggle{
   display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
@@ -211,18 +270,24 @@ p:last-child{margin-bottom:0}
 
 /* ---------- hero ---------- */
 .hero{position:relative;overflow:hidden;background:var(--paper);
-  padding-block:clamp(52px,7vw,86px) 0;text-align:center}
+  padding-block:clamp(40px,5vw,66px) 0;text-align:center}
 .hero__glow{
-  position:absolute;left:50%;top:-14%;width:min(760px,120%);aspect-ratio:1;
+  position:absolute;left:50%;top:-110px;width:min(760px,120%);aspect-ratio:1;
   transform:translateX(-50%);border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle,rgba(232,111,81,.19) 0%,rgba(232,111,81,.07) 42%,rgba(232,111,81,0) 68%);
+  background:radial-gradient(circle,rgba(232,111,81,.32) 0%,rgba(232,111,81,.13) 44%,rgba(232,111,81,0) 70%);
 }
 .hero__in{position:relative;width:var(--shell);margin-inline:auto}
 .badge{width:104px;height:104px;display:block;margin:0 auto 26px}
 .hero h1{max-width:16ch;margin-inline:auto}
 .hero .lede{margin:22px auto 0;text-align:center}
 .hero .btn-row{justify-content:center;margin-top:34px}
-.hero__foot{margin-top:clamp(44px,5vw,66px);padding-bottom:6px}
+.hero__foot{margin-top:clamp(28px,3vw,40px);padding-bottom:6px}
+.hero__in{z-index:2}
+.hero--lite{text-align:left;padding-block:clamp(40px,4.5vw,60px) clamp(26px,3vw,38px)}
+.hero--lite h1{max-width:20ch;margin-inline:0}
+.hero--lite .lede{margin:20px 0 0;text-align:left}
+.hero--lite::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;
+  pointer-events:none;background:linear-gradient(to bottom,rgba(251,246,236,0),var(--paper))}
 
 /* ---------- dividers ---------- */
 .divider{line-height:0}
@@ -232,23 +297,76 @@ p:last-child{margin-bottom:0}
 .ridge-far{fill:var(--teal-mid);opacity:.45}
 .ridge-back{fill:var(--teal-mid)}
 .ridge-front{fill:var(--teal)}
+.divider--arc{background:var(--paper)}
+.divider--arc.arc--inverse .arc-fill{fill:var(--paper)}
+.divider--arc.arc--teal .arc-fill{fill:var(--teal)}
+.divider--arc.arc--teal .arc-line{display:none}
+.band-tint--inverse{background:linear-gradient(180deg,var(--paper) 0,var(--sand) 180px)}
+.divider--arc svg{height:clamp(58px,6.5vw,96px)}
+.arc-fill{fill:var(--sand)}
+.arc-line{fill:none;stroke:var(--coral);stroke-width:3;vector-effect:non-scaling-stroke}
+.divider--angle{background:var(--sand)}
+.divider--angle svg{height:clamp(38px,4vw,62px)}
+.angle-fill{fill:var(--paper)}
 .divider--wave{background:var(--paper)}
 .divider--wave.to-cream{background:var(--cream)}
-.divider--wave svg{height:clamp(50px,5.5vw,82px)}
-.wave{fill:var(--teal)}
+.divider--wave svg{height:clamp(66px,7.5vw,112px)}
+.tide-far{fill:var(--teal-mid);opacity:.35}
+.tide-mid{fill:var(--teal-mid)}
+.tide-front{fill:var(--teal)}
 .divider--ridge.from-cream{background:var(--cream)}
+.divider--ridge.from-sand{background:var(--sand)}
 
 /* ---------- cards ---------- */
 .card{
-  background:var(--cream);border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--cream);border:1px solid rgba(27,69,82,.13);border-radius:var(--r);
   padding:clamp(24px,3vw,32px);
 }
-.band-cream .card{background:var(--paper)}
 .band-teal .card{background:var(--cream);border-color:transparent;color:var(--teal)}
 .band-teal .card .small{color:var(--teal-mid)}
 .card h3{margin-bottom:10px}
+.card--dark{background:var(--teal);border-color:transparent;color:var(--cream)}
+.card.card--dark h3{color:var(--cream)}
+.card.card--dark p{color:rgba(253,240,220,.88)}
+.card.card--dark .eyebrow{color:rgba(253,240,220,.7)}
+.careplan{padding:clamp(30px,4.6vw,58px)}
+.careplan .lede{font-size:clamp(19px,2.1vw,22px);line-height:1.55}
+.careplan .small{font-size:15.5px}
+.band-cream--framed{position:relative}
+.horizon{position:relative;height:clamp(76px,8vw,96px);
+  background:linear-gradient(to bottom,var(--paper) 50%,var(--cream) 50%)}
+.horizon::before{content:"";position:absolute;left:0;right:0;top:50%;height:1.3px;
+  transform:translateY(-50%);background:linear-gradient(to right,
+  rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 22px),transparent calc(50% - 22px),
+  transparent calc(50% + 22px),#9FB0B5 calc(50% + 22px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
+.horizon--close{background:linear-gradient(to bottom,var(--cream) 50%,var(--paper) 50%)}
+.horizon--close::before{background:linear-gradient(to right,
+  rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 44px),transparent calc(50% - 44px),
+  transparent calc(50% + 44px),#9FB0B5 calc(50% + 44px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
+.horizon--plain::before{background:linear-gradient(to right,
+  rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 68%,rgba(159,176,181,0) 100%)}
+.horizon svg{position:absolute;left:50%;top:50%;width:120px;height:90px;transform:translate(-50%,-50%)}
+.horizon{--rise:1}
+.sunrise .sun-up{transform:translateY(calc((1 - var(--rise)) * 42px));
+  opacity:calc(.25 + var(--rise) * .75)}
+.sunrise .sun-refl{opacity:clamp(0,calc((var(--rise) - .45) / .55),1)}
 .card p{font-size:16.5px;line-height:1.6;color:var(--teal-mid)}
 .band-teal .card p{color:var(--teal-mid)}
+.srow{display:grid;gap:clamp(22px,3.5vw,54px);grid-template-columns:1fr;
+  padding-block:clamp(30px,4vw,46px);border-top:1px solid rgba(27,69,82,.18)}
+.srow:first-child{border-top:none;padding-top:0}
+.band-teal .srow{border-top-color:rgba(253,240,220,.22)}
+.band-teal .srow p,.band-teal .srow__tag{color:rgba(253,240,220,.78)}
+.srow:last-child{padding-bottom:0}
+.srow h3{font-size:clamp(23px,2.7vw,30px);margin-bottom:12px}
+.srow p{font-size:17.5px;line-height:1.55;color:var(--teal-sub);margin:0}
+.srow__tag{font-family:var(--display);font-size:11.5px;font-weight:600;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--teal-sub);display:block;margin-bottom:12px}
+@media(min-width:860px){
+  .srow{grid-template-columns:0.92fr 1.08fr;align-items:start}
+  .srow:nth-child(even) .srow__intro{order:2}
+  .srow:nth-child(even) .checks{order:1}
+}
 .card__tag{
   font-family:var(--display);font-size:11.5px;font-weight:600;letter-spacing:.16em;
   text-transform:uppercase;color:var(--teal-mid);display:block;margin-bottom:12px;
@@ -264,9 +382,38 @@ p:last-child{margin-bottom:0}
 }
 .facts li{display:flex;gap:12px;align-items:flex-start;font-family:var(--display);
   font-size:14.5px;font-weight:500;line-height:1.45}
+.facts .sun{margin-top:calc((1.45em - 9px) / 2 + 1px)}
 
 /* ---------- steps ---------- */
+.track{display:grid;grid-template-columns:repeat(5,1fr);margin-top:10px}
+.track__step{text-align:center;padding:0 12px}
+.track__n{display:block;font-family:var(--display);font-weight:600;font-size:12.5px;
+  letter-spacing:.16em;color:var(--teal-mid);margin-bottom:14px}
+.track__marker{position:relative;display:block;height:18px;margin-bottom:18px}
+.track__marker::before{content:"";position:absolute;left:-12px;right:-12px;top:50%;
+  height:2px;background:var(--rule);transform:translateY(-50%)}
+.track__step:first-child .track__marker::before{left:50%}
+.track__step:last-child .track__marker::before{right:50%}
+.track__dot{position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
+  background:var(--teal);transform:translate(-50%,-50%)}
+.track__step:last-child .track__dot{background:var(--coral)}
+.track h3{margin-bottom:9px}
+.track p{font-size:15.5px;line-height:1.5;color:var(--teal-mid);margin:0}
+@media(max-width:899px){
+  .track{grid-template-columns:repeat(2,1fr);gap:34px 26px}
+  .track__marker::before{display:none}
+}
+@media(max-width:559px){
+  .track{grid-template-columns:1fr;gap:28px}
+  .track__step{text-align:left;padding:0}
+  .track__dot{left:8px;transform:translate(0,-50%)}
+  .track__marker{height:14px;margin-bottom:12px}
+}
 .steps{display:grid;gap:2px;margin-top:8px;border-top:1px solid rgba(253,240,220,.22)}
+.band-paper .steps{border-top-color:var(--rule)}
+.band-paper .step{border-bottom-color:var(--rule)}
+.band-paper .step__n{color:var(--teal-mid)}
+.band-paper .step p{color:var(--teal-mid)}
 .step{display:grid;gap:6px 28px;padding:26px 0;border-bottom:1px solid rgba(253,240,220,.22)}
 @media(min-width:760px){.step{grid-template-columns:74px 1fr}}
 .step__n{
@@ -298,6 +445,12 @@ p:last-child{margin-bottom:0}
 
 /* ---------- faq ---------- */
 .faq{border-top:1px solid var(--rule)}
+.band-teal .faq,.band-teal .faq details{border-color:rgba(253,240,220,.24)}
+.band-teal .faq summary::after{border-right-color:var(--cream);border-bottom-color:var(--cream)}
+.band-teal .faq p{color:rgba(253,240,220,.82)}
+.stepnum{display:inline-block;min-width:44px;font-size:13px;letter-spacing:.15em;
+  font-weight:500;color:var(--teal-mid)}
+.band-teal .stepnum{color:rgba(253,240,220,.55)}
 .faq details{border-bottom:1px solid var(--rule)}
 .faq summary{
   list-style:none;cursor:pointer;padding:22px 40px 22px 0;position:relative;
@@ -390,6 +543,26 @@ JS = r"""
     },{rootMargin:'0px 0px -8% 0px',threshold:.08});
     els.forEach(function(e){io.observe(e);});
   }
+  var hz=document.querySelector('.sunrise');
+  if(hz){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      hz.style.setProperty('--rise','1');
+    }else{
+      var ticking=false;
+      var upd=function(){
+        ticking=false;
+        var r=hz.getBoundingClientRect();
+        var vh=window.innerHeight||document.documentElement.clientHeight;
+        var p=Math.max(0,Math.min(1,(vh-r.top)/(vh*0.55)));
+        p=p*p*(3-2*p);
+        hz.style.setProperty('--rise',p.toFixed(3));
+      };
+      var onScroll=function(){if(!ticking){ticking=true;requestAnimationFrame(upd);}};
+      window.addEventListener('scroll',onScroll,{passive:true});
+      window.addEventListener('resize',onScroll);
+      upd();
+    }
+  }
   var f=document.getElementById('projectform');
   if(f){f.addEventListener('submit',function(ev){
     var action=f.getAttribute('action')||'';
@@ -405,13 +578,11 @@ JS = r"""
 """
 
 # ------------------------------------------------------------------- chrome
-NAV = [("index.html","Home"),("services.html","Services"),("work.html","Work"),
-       ("about.html","About"),("contact.html","Contact")]
+NAV = [("index.html","Home"),("services.html","Services"),("contact.html","Contact")]
 
 def nav_links(current, cls=""):
     out=[]
     for href,label in NAV:
-        if label=="Contact": continue
         cur=' aria-current="page"' if href==current else ''
         out.append('<a href="%s"%s>%s</a>'%(href,cur,label))
     return "\n        ".join(out)
@@ -455,8 +626,6 @@ FOOTER = """<footer class="foot">
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="services.html">Services</a></li>
-          <li><a href="work.html">Work</a></li>
-          <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
@@ -526,11 +695,11 @@ home = """
     %s
     <span class="eyebrow">Websites for service businesses</span>
     <h1>Do great work. Be easy to find.</h1>
-    <p class="lede">We design and build websites for salons, studios, landscapers, trainers and
-    trades — the businesses that run on word of mouth and deserve to be found by everyone else too.</p>
+    <p class="lede">Sites for salons, studios, landscapers, trainers and trades.
+    Live in three to four weeks, and yours to keep.</p>
     <div class="btn-row">
-      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">→</span></a>
-      <a class="btn btn--ghost" href="work.html">See the work</a>
+      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--ghost" href="services.html">What we do</a>
     </div>
     <div class="hero__foot"></div>
   </div>
@@ -538,19 +707,16 @@ home = """
 
 %s
 
-<section class="section section--tight band-teal">
+<section class="section band-teal">
   <div class="wrap">
     <ul class="facts reveal">
       <li><span class="sun" aria-hidden="true"></span><span>Live in three to four weeks</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Built for phones first</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>You own the domain and the files</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Hosted by us, or by you</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Set up to show in local search</span></li>
     </ul>
   </div>
-</section>
-
-<section class="section band-teal" style="padding-top:0">
-  <div class="wrap">
+  <div class="wrap" style="margin-top:clamp(40px,4.8vw,64px)">
     <div class="head reveal">
       <span class="eyebrow">Who we build for</span>
       <h2>Three versions of the same problem</h2>
@@ -558,21 +724,18 @@ home = """
     <div class="grid g3 reveal">
       <article class="card">
         <span class="card__tag">No site at all</span>
-        <h3>You've run on referrals</h3>
-        <p>A phone number and a Facebook page got you here. It works right up until
-        someone searches your name at 9pm and finds nothing they can trust.</p>
+        <h3>Running on referrals</h3>
+        <p>Which works right up until someone searches your name at 9pm and finds nothing.</p>
       </article>
       <article class="card">
         <span class="card__tag">A site you're stuck with</span>
-        <h3>Someone built it in 2016</h3>
-        <p>You can't change the hours, the photos are of a truck you sold, and nobody
-        remembers who has the login. Updating it costs a favour every time.</p>
+        <h3>Built in 2016</h3>
+        <p>You can't change the hours, and nobody remembers who has the login.</p>
       </article>
       <article class="card">
         <span class="card__tag">Outgrowing word of mouth</span>
-        <h3>The admin is eating your evenings</h3>
-        <p>Quotes, bookings and the same five questions, all by text, all after hours.
-        A site should take the first pass at every one of them.</p>
+        <h3>Admin after hours</h3>
+        <p>Quotes and bookings by text, every evening. The site should take the first pass.</p>
       </article>
     </div>
   </div>
@@ -585,80 +748,43 @@ home = """
     <div class="reveal">
       <span class="eyebrow">What's included</span>
       <h2>Every build ships with these</h2>
-      <p class="lede" style="margin-top:20px">No tiers, no upsell menu. This is the floor,
-      and most projects need nothing beyond it.</p>
+      <p class="lede" style="margin-top:18px">No tiers and no upsell menu. This is the floor.</p>
     </div>
     <ul class="checks reveal">
-      <li><span class="sun" aria-hidden="true"></span><span>A homepage that says what you do, where you do it, and how to start</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>A homepage that says what you do, where, and how to start</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Service pages written the way people actually search</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Click-to-call and click-to-text within thumb's reach on every screen</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>A quote or booking form that lands in your inbox and your phone</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Your Google Business Profile claimed, filled in, and pointed at the site</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Photos edited and placed — or a shot list if you'd rather take them yourself</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Pages that load fast on a bad signal in a parking lot</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Click-to-call and click-to-text on every screen</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>A quote or booking form that reaches your inbox</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Your Google Business Profile claimed and connected</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Pages that load fast on a weak signal</span></li>
     </ul>
   </div>
 </section>
 
-<section class="section band-cream">
+%s
+
+<section class="section band-cream band-cream--framed" style="padding-block:clamp(32px,3.8vw,52px)">
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Plain terms</span>
-      <h2>What it costs, and how we talk about it</h2>
-      <p class="lede" style="margin-top:20px">Every project is quoted after one short call,
-      because a five-page site for a barber and a twenty-page site for a roofing company
-      are not the same job. You'll have the number in writing before anything starts,
-      and it won't move unless you ask for something new.</p>
+      <h2>What it costs</h2>
+      <p class="lede" style="margin-top:18px">Every project is quoted after one short call. You'll
+      have the number in writing before anything starts, and it won't move unless you ask for
+      something new.</p>
     </div>
     <div class="grid g3 reveal">
-      <article class="card">
+      <article class="card card--dark">
         <h3>No long contracts</h3>
-        <p class="small" style="margin-top:8px">The agreement covers the build. Care plans are
-        month to month and you can stop them whenever.</p>
+        <p style="margin-top:8px">The agreement covers the build. Care plans are month to month.</p>
       </article>
-      <article class="card">
-        <h3>No rented pages</h3>
-        <p class="small" style="margin-top:8px">You get the domain, the hosting account and the
-        files. If you ever leave, you leave with everything.</p>
+      <article class="card card--dark">
+        <h3>Hosting, your call</h3>
+        <p style="margin-top:8px">Run it yourself, or we handle hosting, updates and backups for a monthly fee.</p>
       </article>
-      <article class="card">
-        <h3>No mystery line items</h3>
-        <p class="small" style="margin-top:8px">One number for the build, one number a month if
-        you want us to keep looking after it. That's the whole invoice.</p>
+      <article class="card card--dark">
+        <h3>One number</h3>
+        <p style="margin-top:8px">One for the build, one a month if you want us to keep looking after it.</p>
       </article>
-    </div>
-  </div>
-</section>
-
-%s
-
-<section class="section band-teal">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">How it goes</span>
-      <h2>Four steps, about a month</h2>
-    </div>
-    <div class="steps reveal">
-      <div class="step">
-        <div class="step__n">01</div>
-        <div><h3>Call</h3><p>Thirty minutes. What you do, who you'd like more of, and what's
-        getting in the way. You get the quote within two days.</p></div>
-      </div>
-      <div class="step">
-        <div class="step__n">02</div>
-        <div><h3>Draft</h3><p>A designed homepage inside a week, so you're reacting to something
-        real instead of a description. Changes are expected, not charged for.</p></div>
-      </div>
-      <div class="step">
-        <div class="step__n">03</div>
-        <div><h3>Build</h3><p>The rest of the pages, the words, the photos, the forms and the
-        search setup. You review it on a private link before anyone else sees it.</p></div>
-      </div>
-      <div class="step">
-        <div class="step__n">04</div>
-        <div><h3>Launch</h3><p>We point the domain, test it on real phones, and hand you every
-        login. Then we stay reachable — most questions come in week two.</p></div>
-      </div>
     </div>
   </div>
 </section>
@@ -667,133 +793,96 @@ home = """
 
 <section class="section band-paper">
   <div class="wrap">
-    <div class="head head--center reveal">
-      <span class="eyebrow">Recent concepts</span>
-      <h2>How we'd approach three real businesses</h2>
-      <p class="lede" style="margin:20px auto 0">Beaumont West is new. Rather than pad a
-      portfolio, we built full concepts for the kinds of businesses we want to work with.</p>
+    <div class="head reveal">
+      <span class="eyebrow">How it goes</span>
+      <h2>Five steps, about a month</h2>
     </div>
-    <div class="grid g2 reveal">
-      %s
-      %s
+    <div class="track reveal">
+      <div class="track__step">
+        <span class="track__n">01</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Call</h3>
+        <p>Thirty minutes on the business.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">02</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Intake form</h3>
+        <p>You choose what's included. Quote in two days.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">03</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Draft</h3>
+        <p>A designed homepage within a week.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">04</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Build</h3>
+        <p>Pages, copy, photos, forms, search.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">05</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Launch</h3>
+        <p>Tested on real phones, then live.</p>
+      </div>
     </div>
-    <div class="btn-row" style="justify-content:center;margin-top:40px">
-      <a class="btn btn--ghost" href="work.html">See all three concepts <span class="arrow">→</span></a>
+    <div class="btn-row" style="margin-top:40px">
+      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--ghost" href="services.html">See the services</a>
     </div>
   </div>
 </section>
 
-<section class="section band-cream">
-  <div class="wrap head--center reveal" style="max-width:none">
-    <span class="eyebrow">Start here</span>
-    <h2 style="max-width:20ch;margin-inline:auto">Tell us about the business</h2>
-    <p class="lede" style="margin:20px auto 0">One call, no deck, no pressure. If we're not the
-    right fit we'll say so and point you somewhere better.</p>
-    <div class="btn-row" style="justify-content:center;margin-top:32px">
-      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">→</span></a>
-      <a class="btn btn--ghost" href="services.html">What we do</a>
-    </div>
-  </div>
-</section>
+%s
 """
-
-# ---- concept mockups ------------------------------------------------------
-def mock(brand, url, eyebrow, headline, blurb, cta, bg, accent, btn_bg, btn_fg, tiles, tile_bg, tile_fg):
-    ts = "".join(
-        '<div class="mock__tile" style="background:%s;color:%s">%s</div>' % (tile_bg, tile_fg, t)
-        for t in tiles)
-    return """<div class="mock" role="img" aria-label="Concept homepage design for %s">
-  <div class="mock__bar"><span class="mock__dot"></span><span class="mock__dot"></span><span class="mock__dot"></span>
-    <span class="mock__url">%s</span></div>
-  <div class="mock__body">
-    <div class="mock__hero" style="background:%s">
-      <div class="mock__eyebrow" style="color:%s">%s</div>
-      <div class="mock__h">%s</div>
-      <p class="mock__p">%s</p>
-      <span class="mock__btn" style="background:%s;color:%s">%s</span>
-    </div>
-    <div class="mock__row">%s</div>
-  </div>
-</div>""" % (brand, url, bg, accent, eyebrow, headline, blurb, btn_bg, btn_fg, cta, ts)
-
-MOCK_SALON = mock(
-    "Tidewater Salon &amp; Spa", "tidewatersalon.com", "Salon &amp; spa · Point Reyes",
-    "Book your chair in<br>under a minute.",
-    "Colour, cuts and facials by appointment, seven days a week.",
-    "Book now", "#2E4A45", "#C9D9CF", "#E7C9A9", "#243A36",
-    ["Book online", "Meet the stylists", "Gift cards"], "#F2EDE4", "#2E4A45")
-
-MOCK_LAND = mock(
-    "Harbor &amp; Pine Landscape", "harborandpine.com", "Landscape &amp; hardscape · Sonoma County",
-    "Yards that hold up<br>to real weather.",
-    "Design, build and maintenance for coastal properties. Free site visit.",
-    "Get a quote", "#3A4A3C", "#CFDCC6", "#D9A441", "#2B3A2D",
-    ["Recent yards", "Service areas", "Request a visit"], "#F1EEE6", "#3A4A3C")
-
-MOCK_GYM = mock(
-    "Cape Line Strength", "capelinestrength.com", "Strength &amp; conditioning · Half Moon Bay",
-    "Small classes.<br>Serious coaching.",
-    "Six people to a session. First week is free, no card needed.",
-    "Claim first week", "#33404F", "#C8D3E0", "#E07A5A", "#26313D",
-    ["Class schedule", "Coaches", "Free trial"], "#EFEDE8", "#33404F")
-
-home = home % (badge("hero"), RIDGE, WAVE, RIDGE_CREAM, WAVE, MOCK_SALON, MOCK_LAND)
+home = home % (badge("hero"), RIDGE, WAVE, SUN_HORIZON, MOUNTAIN_HORIZON, RIDGE)
 
 # ==========================================================================
 #  SERVICES
 # ==========================================================================
-def svc(tag, title, body, points):
+def srow(tag, title, body, points):
     lis = "".join('<li><span class="sun" aria-hidden="true"></span><span>%s</span></li>' % p
                   for p in points)
-    return """<article class="card reveal">
-  <span class="card__tag">%s</span>
-  <h3>%s</h3>
-  <p style="margin-top:10px">%s</p>
-  <ul class="checks" style="margin-top:20px">%s</ul>
+    return """<article class="srow reveal">
+  <div class="srow__intro">
+    <span class="srow__tag">%s</span>
+    <h3>%s</h3>
+    <p>%s</p>
+  </div>
+  <ul class="checks">%s</ul>
 </article>""" % (tag, title, body, lis)
 
-services = """
-<section class="section band-paper" style="padding-bottom:clamp(40px,5vw,60px)">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Services</span>
-      <h1 style="font-size:clamp(34px,4.6vw,56px)">One thing done properly, plus the pieces that make it work.</h1>
-      <p class="lede" style="margin-top:22px">The website is the job. Everything else on this page
-      exists because a website on its own doesn't get found, doesn't get answered, and doesn't stay
-      current. Take all of it or take the first one.</p>
-    </div>
-  </div>
-</section>
 
-<section class="section band-paper" style="padding-top:0">
-  <div class="wrap grid g2">
-    %s
-    %s
-    %s
-    %s
+def step(n, title, body, open_=False):
+    return """      <details%s>
+        <summary><span class="stepnum">%s</span>%s</summary>
+        <p>%s</p>
+      </details>""" % (" open" if open_ else "", n, title, body)
+
+
+services = """
+<section class="hero hero--lite">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__in">
+    <div class="head" style="margin-bottom:0">
+      <span class="eyebrow">Services</span>
+      <h1 style="font-size:clamp(34px,4.6vw,56px)">What we build, and what makes it work.</h1>
+      <p class="lede" style="margin-top:20px">The website is the job. The rest exists because a
+      site on its own doesn't get found, answered, or kept current.</p>
+    </div>
   </div>
 </section>
 
 %s
 
 <section class="section band-teal">
-  <div class="wrap split">
-    <div class="reveal">
-      <span class="eyebrow">Care plan</span>
-      <h2>After launch, if you want it</h2>
-    </div>
-    <div class="reveal">
-      <p class="lede">A site goes stale quietly. The care plan covers hosting, backups, security
-      updates and a monthly window for small changes — new photos, changed hours, a service you've
-      added, a seasonal promotion. It's month to month, and plenty of clients don't take it.
-      Nothing about the site depends on it.</p>
-      <ul class="checks" style="margin-top:26px">
-        <li><span class="sun" aria-hidden="true"></span><span>Hosting, SSL, daily backups</span></li>
-        <li><span class="sun" aria-hidden="true"></span><span>Small edits each month, sent by text or email</span></li>
-        <li><span class="sun" aria-hidden="true"></span><span>A short report on what people searched to reach you</span></li>
-        <li><span class="sun" aria-hidden="true"></span><span>Cancel whenever; the site and files stay yours</span></li>
-      </ul>
-    </div>
+  <div class="wrap">
+    %s
+    %s
+    %s
   </div>
 </section>
 
@@ -802,23 +891,52 @@ services = """
 <section class="section band-paper">
   <div class="wrap">
     <div class="head reveal">
-      <span class="eyebrow">Later</span>
-      <h2>Things we'll build once the site is earning</h2>
-      <p class="lede" style="margin-top:20px">Beaumont West is a web design studio first.
-      These come next, and only for businesses where they'd actually pay off.</p>
+      <span class="eyebrow">How a project runs</span>
+      <h2>Five steps, about a month</h2>
+      <p class="lede" style="margin-top:18px">Open any step to see what happens and what we need
+      from you to keep it moving.</p>
     </div>
-    <div class="grid g3 reveal">
-      <article class="card"><h3>Email lists</h3><p class="small" style="margin-top:8px">Seasonal
-      notes to past customers. The cheapest repeat business there is.</p></article>
-      <article class="card"><h3>Review generation</h3><p class="small" style="margin-top:8px">A
-      polite, automatic ask after every finished job, pointed at Google.</p></article>
-      <article class="card"><h3>Paid search</h3><p class="small" style="margin-top:8px">For the
-      handful of searches worth paying for, once the free ones are working.</p></article>
+    <div class="faq reveal">
+%s
+%s
+%s
+%s
+%s
     </div>
   </div>
 </section>
 
-<section class="section band-cream">
+%s
+
+<section class="section band-cream" style="padding-block:clamp(32px,3.8vw,52px)">
+  <div class="wrap">
+    <div class="card card--dark careplan reveal">
+      <div class="split" style="align-items:start">
+        <div>
+          <span class="eyebrow">After launch</span>
+          <h2>Care plan, if you want it</h2>
+          <p class="small" style="margin-top:18px">Email lists, review generation and paid search
+          come later, and only where they'd actually pay off.</p>
+        </div>
+        <div>
+          <p class="lede">Hosting, backups, security updates and a monthly window for small
+          changes. Month to month, and plenty of clients don't take it &mdash; nothing about the site
+          depends on it.</p>
+          <ul class="checks" style="margin-top:22px">
+            <li><span class="sun" aria-hidden="true"></span><span>Hosting, SSL and daily backups</span></li>
+            <li><span class="sun" aria-hidden="true"></span><span>Small edits each month, sent by text or email</span></li>
+            <li><span class="sun" aria-hidden="true"></span><span>A short note on what people searched to reach you</span></li>
+            <li><span class="sun" aria-hidden="true"></span><span>Month to month, cancel whenever</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+%s
+
+<section class="section band-paper">
   <div class="wrap">
     <div class="head reveal" style="max-width:52ch">
       <span class="eyebrow">Common questions</span>
@@ -828,277 +946,122 @@ services = """
       <details>
         <summary>What does a site cost?</summary>
         <p>It depends on how many pages you need, whether we're writing the words, and whether
-        booking or payments are involved. We quote after one call, in writing, and the number
-        doesn't move unless the job does. If you want a range before you call, say so in the form
-        and we'll send one.</p>
+        booking or payments are involved. The quote comes from your intake form, in writing, and it
+        doesn't move unless the job does. If you want a rough range before filling anything in, say
+        so in the contact form and we'll send one.</p>
       </details>
       <details>
         <summary>How long does it take?</summary>
         <p>Three to four weeks from the call for most projects. The part that slows it down is
-        almost always photos and content from your side — we'll tell you exactly what we need on
-        day one so it doesn't sit.</p>
+        almost always photos and content from your side, so we tell you exactly what we need on day
+        one and chase it rather than letting it sit.</p>
       </details>
       <details>
         <summary>I don't have any good photos.</summary>
         <p>Common, and fixable. We'll either direct a shoot, work with what's on your phone, or
-        build the design around type and colour so it doesn't lean on photography. What we won't do
-        is fill your site with stock images of someone else's business.</p>
+        build the design around type and colour so it doesn't lean on photography at all. What we
+        won't do is fill your site with stock images of someone else's business.</p>
       </details>
       <details>
         <summary>Can I update it myself?</summary>
-        <p>Yes. We hand over a site you can edit — hours, prices, photos, new services — and we walk
+        <p>Yes. You get a site you can edit &mdash; hours, prices, photos, new services &mdash; and we walk
         you through it on a recorded call you can keep. If you'd rather never touch it, that's what
         the care plan is for.</p>
       </details>
       <details>
-        <summary>Do you work outside the coast?</summary>
-        <p>Yes. Most of the work happens over calls and shared links regardless of where you are.
-        Local businesses get an in-person kickoff if they want one.</p>
+        <summary>What if I already have a site?</summary>
+        <p>Then the first question is whether it needs rebuilding or just fixing. Sometimes a day of
+        cleanup beats a new site, and we'll tell you that even though it's the smaller invoice. If
+        we do rebuild, your existing pages get redirected so you don't lose the search rankings
+        you've built up.</p>
       </details>
       <details>
-        <summary>What if I already have a site?</summary>
-        <p>Then the first question is whether it needs rebuilding or just fixing. Sometimes the
-        honest answer is that a day of cleanup beats a new site, and we'll tell you that even
-        though it's the smaller invoice.</p>
+        <summary>Do you work outside the area?</summary>
+        <p>Yes. Nearly all of it happens over calls and shared links, so where you are makes little
+        difference. Local businesses get an in-person kickoff if they'd like one.</p>
       </details>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:clamp(48px,5.6vw,72px)">
+      <h2 style="max-width:22ch;margin-inline:auto">Not sure which of these you need?</h2>
+      <p class="lede" style="margin:18px auto 0;text-align:center">That's the call. Bring the
+      business, we'll bring the recommendation.</p>
+      <div class="btn-row" style="justify-content:center;margin-top:28px">
+        <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section band-cream" style="padding-top:0">
-  <div class="wrap head--center reveal">
-    <h2 style="max-width:22ch;margin-inline:auto">Not sure which of these you need?</h2>
-    <p class="lede" style="margin:20px auto 0">That's the call. Bring the business, we'll bring
-    the recommendation.</p>
-    <div class="btn-row" style="justify-content:center;margin-top:30px">
-      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">→</span></a>
-    </div>
-  </div>
-</section>
+%s
 """ % (
-  svc("The core", "Website design &amp; build",
-      "A complete site, designed for your business rather than dropped into a template, and built "
-      "to load fast on a phone in a parking lot.",
-      ["Homepage, services, about, contact, and anything else the business needs",
-       "Written from a call with you, not filled with filler",
-       "Mobile-first, tested on real devices",
-       "Accessible contrast, real text, keyboard navigation",
+  RIDGE,
+  srow("The core", "Website design &amp; build",
+      "A complete site designed for your business rather than dropped into a template.",
+      ["Homepage, services, about and contact, plus whatever else the business needs",
+       "Copy written from a recorded call with you, not filled with filler",
+       "Photo direction, a shot list, or editing for what you already have",
+       "Mobile-first, fast, and tested on real devices",
        "Domain, hosting and email set up and handed over"]),
-  svc("Getting found", "Local search &amp; Google Business Profile",
-      "Most service businesses are chosen from a map, not a search page. That listing gets the same "
-      "attention as the site.",
+  srow("Getting found", "Local search",
+      "Most service businesses are chosen from a map, not a search page.",
       ["Google Business Profile claimed, filled in and verified",
        "Service-area pages for the towns you actually cover",
        "Consistent name, address and phone everywhere it appears",
        "A simple, non-annoying way to ask for reviews"]),
-  svc("Getting answered", "Booking &amp; lead capture",
-      "The point of the site is the next conversation. We make that the easiest thing on the page.",
+  srow("Getting answered", "Booking &amp; lead capture",
+      "The point of the site is the next conversation, so that's the easiest thing on the page.",
       ["Quote or booking forms that reach your inbox and your phone",
        "Scheduling connected to the calendar you already use",
        "Click-to-call and click-to-text on every screen",
        "Deposits or payments taken online where it makes sense"]),
-  svc("Words &amp; pictures", "Copy and photo direction",
-      "The reason most small-business sites read the same is that nobody asked the owner anything. "
-      "We start with the call and write from it.",
-      ["Copy drafted from a recorded conversation, in your voice",
-       "A shot list if you're taking photos yourself",
-       "Editing and cropping for what you already have",
-       "Direction for a photographer if you'd rather hire one"]),
-  RIDGE, WAVE)
-
-# ==========================================================================
-#  WORK
-# ==========================================================================
-def concept(mockup, tag, name, problem, moves, band="paper"):
-    lis = "".join('<li><span class="sun" aria-hidden="true"></span><span>%s</span></li>' % m
-                  for m in moves)
-    return """<section class="section band-%s">
-  <div class="wrap split reveal">
-    <div>
-      <span class="eyebrow">%s</span>
-      <h2 style="font-size:clamp(26px,3.2vw,36px)">%s</h2>
-      <p style="margin-top:18px;color:var(--teal-mid)">%s</p>
-      <ul class="checks" style="margin-top:22px">%s</ul>
-    </div>
-    <div>%s</div>
-  </div>
-</section>""" % (band, tag, name, problem, lis, mockup)
-
-work = """
-<section class="section band-paper" style="padding-bottom:clamp(36px,4vw,52px)">
-  <div class="wrap">
-    <div class="head">
-      <span class="eyebrow">Work</span>
-      <h1 style="font-size:clamp(34px,4.6vw,56px)">Three concepts, built the way we'd build yours.</h1>
-      <p class="lede" style="margin-top:22px">Beaumont West is new, so this isn't a client list.
-      These are complete concepts for three businesses we'd like to work with — the same thinking,
-      the same research, the same standard of finish, minus the invoice. Names and details are
-      invented.</p>
-    </div>
-  </div>
-</section>
-
-%s
-%s
-%s
-
-%s
-
-<section class="section band-teal">
-  <div class="wrap split">
-    <div class="reveal">
-      <span class="eyebrow">The pattern</span>
-      <h2>Same three questions, every time</h2>
-    </div>
-    <div class="reveal">
-      <p class="lede">Every concept above answers the same short list before a single colour gets
-      picked. What does this business want a visitor to do in the first ten seconds? What's the one
-      objection stopping them? And what does this business have that the competitor down the road
-      doesn't? Design is how those answers get built — not decoration laid on afterwards.</p>
-      <div class="btn-row" style="margin-top:30px">
-        <a class="btn btn--primary" href="contact.html">Talk about yours <span class="arrow">→</span></a>
-        <a class="btn btn--ghost" href="services.html">What's included</a>
-      </div>
-    </div>
-  </div>
-</section>
-""" % (
-  concept(MOCK_SALON, "Concept · Salon &amp; spa", "Tidewater Salon &amp; Spa",
-    "A busy salon losing evenings to booking texts, with a Facebook page as its only home online. "
-    "The whole design leads to one button.",
-    ["Booking above the fold on every screen, in every colour scheme we tried",
-     "Stylist pages, because people book a person and not a salon",
-     "Prices published — it removes the most common first text",
-     "Gift cards given their own page for the two months a year they matter"]),
-  concept(MOCK_LAND, "Concept · Landscape &amp; hardscape", "Harbor &amp; Pine Landscape",
-    "A contractor whose work is genuinely excellent and completely invisible. The job of the site "
-    "is proof, then a quote request.",
-    ["Finished yards shown large, seasons labelled, no stock photography",
-     "Service-area pages for each town, so the map listing has somewhere to point",
-     "A quote form that asks four questions instead of fourteen",
-     "Straight talk about lead times, which filters out the wrong callers"], band="cream"),
-  concept(MOCK_GYM, "Concept · Strength &amp; conditioning", "Cape Line Strength",
-    "A small gym competing with a chain two blocks away. It wins on coaching, so the site sells the "
-    "coaches and the first free week.",
-    ["Class schedule as the second thing you see, always current",
-     "Coach bios with real credentials, not motivational copy",
-     "Free trial claimable in two taps with no card",
-     "Membership terms in plain language, on the page, before anyone asks"]),
-  RIDGE)
-
-# ==========================================================================
-#  ABOUT
-# ==========================================================================
-about = """
-<section class="section band-paper" style="padding-bottom:clamp(40px,5vw,64px)">
-  <div class="wrap">
-    <div class="head head--center" style="margin-inline:auto">
-      %s
-      <span class="eyebrow">About</span>
-      <h1 style="font-size:clamp(34px,4.6vw,56px);max-width:18ch;margin-inline:auto">A small studio with a narrow specialty.</h1>
-      <p class="lede" style="margin:22px auto 0">Beaumont West Solutions designs and builds websites
-      for service businesses — the ones people find by asking a neighbour, and should be able to find
-      by opening their phone.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section band-cream" style="padding-block:clamp(48px,6vw,80px)">
-  <div class="wrap split">
-    <div class="reveal">
-      <span class="eyebrow">The name</span>
-      <h2>Beaumont means beautiful mountain.</h2>
-    </div>
-    <div class="reveal">
-      <p class="lede">West is where the water is. That's the whole idea, and it's in the mark: a
-      ridge line, a setting sun, and a horizon. The businesses we build for tend to live in that
-      same landscape — the ones that work outdoors, or on people, or on houses, in towns where the
-      mountains meet the coast.</p>
-      <p class="lede" style="margin-top:18px">It also describes the work. Something solid, made to
-      last, with a bit of warmth in it.</p>
-    </div>
-  </div>
-</section>
-
-%s
-
-<section class="section band-teal">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">How we work</span>
-      <h2>Three commitments</h2>
-    </div>
-    <div class="grid g3 reveal">
-      <article class="card">
-        <h3>Plain language, always</h3>
-        <p style="margin-top:10px">No jargon in the proposal, no jargon on the call, and none on
-        your site either. If a sentence needs explaining, it gets rewritten. You should be able to
-        repeat back exactly what you're buying.</p>
-      </article>
-      <article class="card">
-        <h3>You own everything</h3>
-        <p style="margin-top:10px">The domain is registered in your name. The hosting account is
-        yours. The files are yours. Nothing is held hostage, and leaving is never a negotiation —
-        it's a password handover.</p>
-      </article>
-      <article class="card">
-        <h3>Finish, then improve</h3>
-        <p style="margin-top:10px">A live site earning calls beats a perfect one still in review.
-        We ship a complete, careful first version on schedule, then improve it with what real
-        visitors actually do.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-%s
-
-<section class="section band-paper">
-  <div class="wrap split">
-    <div class="reveal">
-      <span class="eyebrow">Who you'll work with</span>
-      <h2>Small on purpose</h2>
-    </div>
-    <div class="reveal">
-      <p class="lede">You'll deal with the person doing the work, start to finish. No account
-      manager relaying messages, no handoff to a team you've never met, no ticket number. That's
-      the advantage of a studio this size, and it's why we take a limited number of builds at once.</p>
-      <p class="lede" style="margin-top:18px">It also means we sometimes say no. If a project needs
-      a twenty-person agency, or if what you actually need is a better booking system rather than a
-      new website, you'll hear that on the first call.</p>
-      <div class="btn-row" style="margin-top:30px">
-        <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">→</span></a>
-        <a class="btn btn--ghost" href="work.html">See the concepts</a>
-      </div>
-    </div>
-  </div>
-</section>
-""" % (badge("ab", "badge"), RIDGE_CREAM, WAVE)
+  WAVE,
+  step("01", "Call",
+       "Thirty minutes. What you do, who you'd like more of, and what's getting in the way right "
+       "now. No deck and no pitch &mdash; if we're not the right fit, you'll hear that on this call "
+       "rather than three weeks later.", open_=True),
+  step("02", "Intake form",
+       "A short form where you choose the pages you need, the features that matter, and the look "
+       "you're after. It takes about ten minutes and it's what the quote gets built from, so the "
+       "number reflects your project rather than an average. You'll have it in writing within two "
+       "days."),
+  step("03", "Draft",
+       "A designed homepage inside a week, so you're reacting to something real instead of a "
+       "description. Tell us what's wrong with it &mdash; changes at this stage are expected, not "
+       "charged for, and it's far cheaper to move things now than after the build."),
+  step("04", "Build",
+       "The rest of the pages, the words, the photos, the forms and the search setup. You review "
+       "all of it on a private link before anyone else sees it. This is the stage that slows down "
+       "if photos or content are still outstanding on your side."),
+  step("05", "Launch",
+       "We point the domain, test on real phones and real connections, and walk you through "
+       "editing the site on a recorded call you can keep. Then we stay reachable &mdash; most "
+       "questions turn up in week two, once you've started sending people to it."),
+  PLAIN_HORIZON, MOUNTAIN_HORIZON, RIDGE)
 
 # ==========================================================================
 #  CONTACT
 # ==========================================================================
 contact = """
-<section class="section band-paper" style="padding-bottom:clamp(36px,4vw,56px)">
-  <div class="wrap">
-    <div class="head">
+<section class="hero hero--lite">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__in">
+    <div class="head" style="margin-bottom:0">
       <span class="eyebrow">Contact</span>
       <h1 style="font-size:clamp(34px,4.6vw,56px)">Tell us about the business.</h1>
-      <p class="lede" style="margin-top:22px">Fill this in and you'll hear back within one business
-      day, from a person, with either a question or a time to talk. If you'd rather just call, the
-      number's below.</p>
+      <p class="lede" style="margin-top:20px">You'll hear back within one business day, from a
+      person, with either a question or a time to talk.</p>
     </div>
   </div>
 </section>
 
-<section class="section band-paper" style="padding-top:0">
+<section class="section band-paper" style="padding-top:clamp(28px,3.5vw,44px)">
   <div class="wrap split">
     <div class="reveal">
       <div class="formstatus" id="formstatus" role="status">
         <h3>Form isn't connected yet</h3>
-        <p class="small" style="margin-top:10px">Your details look complete, but this demo site has
-        no form handler wired up. Point the form's <code>action</code> at a service like Formspree,
-        Netlify Forms or your own endpoint before launch — the note under the button explains where.</p>
+        <p class="small" style="margin-top:10px">Your details look complete, but this site has no
+        form handler wired up. Point the form's <code>action</code> at Formspree, Netlify Forms or
+        your own endpoint before launch.</p>
       </div>
       <form class="form" id="projectform" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
         <div class="field--pair">
@@ -1148,17 +1111,8 @@ contact = """
           <label for="notes">What do you need?</label>
           <textarea id="notes" name="notes" placeholder="What you do, where you work, and what's not working right now. A few sentences is plenty." required></textarea>
         </div>
-        <div class="field">
-          <label for="when">When would you like it live?</label>
-          <select id="when" name="when">
-            <option value="">No particular deadline</option>
-            <option>As soon as possible</option>
-            <option>Within a month or two</option>
-            <option>Before a specific season or event</option>
-          </select>
-        </div>
-        <div class="btn-row" style="margin-top:6px">
-          <button class="btn btn--primary" type="submit">Send it over <span class="arrow">→</span></button>
+        <div class="btn-row" style="margin-top:4px">
+          <button class="btn btn--primary" type="submit">Send it over <span class="arrow">&rarr;</span></button>
         </div>
         <p class="formnote">We'll only use this to reply to you. No list, no newsletter, no sharing.</p>
       </form>
@@ -1177,14 +1131,9 @@ contact = """
           <a href="tel:+15550142200">(555) 014-2200</a>
         </div>
         <div class="rail__item">
-          <h3>Where we work</h3>
-          <p class="small">Based on the Northern California coast, working with service businesses
-          anywhere in the United States. Local projects get an in-person kickoff.</p>
-        </div>
-        <div class="rail__item">
           <h3>What happens next</h3>
-          <p class="small">A reply within one business day, then a thirty-minute call. You get a
-          written quote within two days of that call. Nothing is charged until you say yes.</p>
+          <p class="small">A reply within one business day, then a thirty-minute call. A written
+          quote within two days of that call. Nothing is charged until you say yes.</p>
         </div>
       </div>
     </div>
@@ -1192,17 +1141,6 @@ contact = """
 </section>
 
 %s
-
-<section class="section band-teal">
-  <div class="wrap head--center reveal" style="max-width:none">
-    <span class="eyebrow">Not ready yet?</span>
-    <h2 style="max-width:24ch;margin-inline:auto">Have a look at how we'd build it first.</h2>
-    <div class="btn-row" style="justify-content:center;margin-top:30px">
-      <a class="btn btn--primary" href="work.html">See the concepts <span class="arrow">→</span></a>
-      <a class="btn btn--ghost" href="services.html">Read the services</a>
-    </div>
-  </div>
-</section>
 """ % RIDGE
 
 # ==========================================================================
@@ -1210,11 +1148,7 @@ PAGES = [
  ("index.html","Beaumont West Solutions — Websites for service businesses",
   "We design and build websites for salons, studios, landscapers, trainers and trades. Live in three to four weeks, built for phones, and yours to keep.", home),
  ("services.html","Services — Beaumont West Solutions",
-  "Website design and build, local search and Google Business Profile, booking and lead capture, copy and photo direction, and an optional monthly care plan.", services),
- ("work.html","Work — Beaumont West Solutions",
-  "Three complete website concepts for a salon and spa, a landscape contractor, and a strength gym — built the way we'd build yours.", work),
- ("about.html","About — Beaumont West Solutions",
-  "A small studio with a narrow specialty: websites for service businesses. Plain language, full ownership, and a finished site on schedule.", about),
+  "Website design and build, local search, booking and lead capture, copy and photo direction, and an optional monthly care plan.", services),
  ("contact.html","Contact — Beaumont West Solutions",
   "Tell us about your business. A reply within one business day, a thirty-minute call, and a written quote two days after that.", contact),
 ]
@@ -1226,8 +1160,14 @@ if os.path.abspath(SRC) != os.path.abspath(adir):
     for f in os.listdir(SRC):
         shutil.copy(os.path.join(SRC, f), os.path.join(adir, f))
 
+# pages that no longer exist should not linger in the deploy folder
+for gone in ("work.html", "about.html"):
+    p = os.path.join(OUT, gone)
+    if os.path.exists(p):
+        os.remove(p)
+        print("removed", gone)
+
 for slug, title, desc, body in PAGES:
     with open(os.path.join(OUT, slug), "w") as fh:
         fh.write(page(slug, title, desc, body))
     print("wrote", slug, os.path.getsize(os.path.join(OUT, slug)), "bytes")
-print("assets:", len(os.listdir(adir)))

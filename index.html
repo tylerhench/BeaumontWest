@@ -20,7 +20,7 @@
 :root{
   --teal:#1B4552; --teal-mid:#38606E; --teal-deep:#143641;
   --cream:#FDF0DC; --paper:#FBF6EC; --coral:#E86F51; --peach:#F4A261;
-  --rule:#C9D3D6;
+  --rule:#C9D3D6; --sand:#D4D1C3; --teal-sub:#33586A;
   --display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --body:"Newsreader",Georgia,"Times New Roman",serif;
   --shell:min(1120px,100% - 48px);
@@ -57,14 +57,21 @@ p:last-child{margin-bottom:0}
 
 /* ---------- layout ---------- */
 .wrap{width:var(--shell);margin-inline:auto}
-.section{padding-block:clamp(64px,8.5vw,110px)}
+.section{padding-block:clamp(52px,6.5vw,88px)}
+/* 1. a scenic divider already separates sections, so the padding beside it halves */
+.divider + .section,.horizon + .section{padding-top:clamp(34px,4vw,56px)}
+.section:has(+ .divider),.section:has(+ .horizon){padding-bottom:clamp(34px,4vw,56px)}
 .section--tight{padding-block:clamp(48px,6vw,76px)}
 .band-paper{background:var(--paper)}
 .band-cream{background:var(--cream)}
+.band-paper + .band-paper{border-top:1px solid var(--rule)}
+.band-tint{background:linear-gradient(180deg,var(--sand) 0,var(--paper) 100%)}
+.band-tint .card{border-color:rgba(27,69,82,.32)}
+.band-tint .eyebrow,.band-tint .lede{color:var(--teal)}
 .band-teal{background:var(--teal);color:var(--cream)}
 .band-teal .eyebrow{color:rgba(253,240,220,.7)}
 .band-teal .lede,.band-teal .small{color:rgba(253,240,220,.82)}
-.head{max-width:62ch;margin-bottom:clamp(36px,4.5vw,56px)}
+.head{max-width:62ch;margin-bottom:clamp(28px,3.2vw,40px)}
 .head--center{margin-inline:auto;text-align:center}
 .grid{display:grid;gap:22px}
 .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
@@ -99,13 +106,15 @@ p:last-child{margin-bottom:0}
   backdrop-filter:blur(9px);border-bottom:1px solid var(--rule);
 }
 .masthead__in{display:flex;align-items:center;justify-content:space-between;
-  gap:24px;width:var(--shell);margin-inline:auto;padding-block:14px}
+  gap:24px;width:var(--shell);margin-inline:auto;padding-block:9px}
 .lockup{display:block;height:auto}
-.lockup--header{height:46px;width:auto}
+.lockup--header{height:56px;width:auto}
+@media(max-width:899px){.lockup--header{height:46px}}
+@media(max-width:400px){.lockup--header{height:40px}}
 .brandlink{display:inline-flex;text-decoration:none;border-radius:6px}
 .nav{display:none;align-items:center;gap:30px}
 .nav a{
-  font-family:var(--display);font-weight:500;font-size:15px;text-decoration:none;
+  font-family:var(--display);font-weight:500;font-size:17px;text-decoration:none;
   padding:6px 0;position:relative;letter-spacing:.005em;
 }
 .nav a::after{
@@ -115,7 +124,7 @@ p:last-child{margin-bottom:0}
 }
 .nav a:hover::after{transform:scaleX(1)}
 .nav a[aria-current="page"]::after{transform:scaleX(1);background:var(--coral)}
-.masthead .btn{padding:12px 22px;font-size:12.5px;display:none}
+.masthead .btn{padding:13px 24px;font-size:13px;display:none}
 @media(min-width:900px){.masthead .btn{display:inline-flex}}
 .navtoggle{
   display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
@@ -143,18 +152,24 @@ p:last-child{margin-bottom:0}
 
 /* ---------- hero ---------- */
 .hero{position:relative;overflow:hidden;background:var(--paper);
-  padding-block:clamp(52px,7vw,86px) 0;text-align:center}
+  padding-block:clamp(40px,5vw,66px) 0;text-align:center}
 .hero__glow{
-  position:absolute;left:50%;top:-14%;width:min(760px,120%);aspect-ratio:1;
+  position:absolute;left:50%;top:-110px;width:min(760px,120%);aspect-ratio:1;
   transform:translateX(-50%);border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle,rgba(232,111,81,.19) 0%,rgba(232,111,81,.07) 42%,rgba(232,111,81,0) 68%);
+  background:radial-gradient(circle,rgba(232,111,81,.32) 0%,rgba(232,111,81,.13) 44%,rgba(232,111,81,0) 70%);
 }
 .hero__in{position:relative;width:var(--shell);margin-inline:auto}
 .badge{width:104px;height:104px;display:block;margin:0 auto 26px}
 .hero h1{max-width:16ch;margin-inline:auto}
 .hero .lede{margin:22px auto 0;text-align:center}
 .hero .btn-row{justify-content:center;margin-top:34px}
-.hero__foot{margin-top:clamp(44px,5vw,66px);padding-bottom:6px}
+.hero__foot{margin-top:clamp(28px,3vw,40px);padding-bottom:6px}
+.hero__in{z-index:2}
+.hero--lite{text-align:left;padding-block:clamp(40px,4.5vw,60px) clamp(26px,3vw,38px)}
+.hero--lite h1{max-width:20ch;margin-inline:0}
+.hero--lite .lede{margin:20px 0 0;text-align:left}
+.hero--lite::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;
+  pointer-events:none;background:linear-gradient(to bottom,rgba(251,246,236,0),var(--paper))}
 
 /* ---------- dividers ---------- */
 .divider{line-height:0}
@@ -164,23 +179,76 @@ p:last-child{margin-bottom:0}
 .ridge-far{fill:var(--teal-mid);opacity:.45}
 .ridge-back{fill:var(--teal-mid)}
 .ridge-front{fill:var(--teal)}
+.divider--arc{background:var(--paper)}
+.divider--arc.arc--inverse .arc-fill{fill:var(--paper)}
+.divider--arc.arc--teal .arc-fill{fill:var(--teal)}
+.divider--arc.arc--teal .arc-line{display:none}
+.band-tint--inverse{background:linear-gradient(180deg,var(--paper) 0,var(--sand) 180px)}
+.divider--arc svg{height:clamp(58px,6.5vw,96px)}
+.arc-fill{fill:var(--sand)}
+.arc-line{fill:none;stroke:var(--coral);stroke-width:3;vector-effect:non-scaling-stroke}
+.divider--angle{background:var(--sand)}
+.divider--angle svg{height:clamp(38px,4vw,62px)}
+.angle-fill{fill:var(--paper)}
 .divider--wave{background:var(--paper)}
 .divider--wave.to-cream{background:var(--cream)}
-.divider--wave svg{height:clamp(50px,5.5vw,82px)}
-.wave{fill:var(--teal)}
+.divider--wave svg{height:clamp(66px,7.5vw,112px)}
+.tide-far{fill:var(--teal-mid);opacity:.35}
+.tide-mid{fill:var(--teal-mid)}
+.tide-front{fill:var(--teal)}
 .divider--ridge.from-cream{background:var(--cream)}
+.divider--ridge.from-sand{background:var(--sand)}
 
 /* ---------- cards ---------- */
 .card{
-  background:var(--cream);border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--cream);border:1px solid rgba(27,69,82,.13);border-radius:var(--r);
   padding:clamp(24px,3vw,32px);
 }
-.band-cream .card{background:var(--paper)}
 .band-teal .card{background:var(--cream);border-color:transparent;color:var(--teal)}
 .band-teal .card .small{color:var(--teal-mid)}
 .card h3{margin-bottom:10px}
+.card--dark{background:var(--teal);border-color:transparent;color:var(--cream)}
+.card.card--dark h3{color:var(--cream)}
+.card.card--dark p{color:rgba(253,240,220,.88)}
+.card.card--dark .eyebrow{color:rgba(253,240,220,.7)}
+.careplan{padding:clamp(30px,4.6vw,58px)}
+.careplan .lede{font-size:clamp(19px,2.1vw,22px);line-height:1.55}
+.careplan .small{font-size:15.5px}
+.band-cream--framed{position:relative}
+.horizon{position:relative;height:clamp(76px,8vw,96px);
+  background:linear-gradient(to bottom,var(--paper) 50%,var(--cream) 50%)}
+.horizon::before{content:"";position:absolute;left:0;right:0;top:50%;height:1.3px;
+  transform:translateY(-50%);background:linear-gradient(to right,
+  rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 22px),transparent calc(50% - 22px),
+  transparent calc(50% + 22px),#9FB0B5 calc(50% + 22px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
+.horizon--close{background:linear-gradient(to bottom,var(--cream) 50%,var(--paper) 50%)}
+.horizon--close::before{background:linear-gradient(to right,
+  rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 44px),transparent calc(50% - 44px),
+  transparent calc(50% + 44px),#9FB0B5 calc(50% + 44px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
+.horizon--plain::before{background:linear-gradient(to right,
+  rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 68%,rgba(159,176,181,0) 100%)}
+.horizon svg{position:absolute;left:50%;top:50%;width:120px;height:90px;transform:translate(-50%,-50%)}
+.horizon{--rise:1}
+.sunrise .sun-up{transform:translateY(calc((1 - var(--rise)) * 42px));
+  opacity:calc(.25 + var(--rise) * .75)}
+.sunrise .sun-refl{opacity:clamp(0,calc((var(--rise) - .45) / .55),1)}
 .card p{font-size:16.5px;line-height:1.6;color:var(--teal-mid)}
 .band-teal .card p{color:var(--teal-mid)}
+.srow{display:grid;gap:clamp(22px,3.5vw,54px);grid-template-columns:1fr;
+  padding-block:clamp(30px,4vw,46px);border-top:1px solid rgba(27,69,82,.18)}
+.srow:first-child{border-top:none;padding-top:0}
+.band-teal .srow{border-top-color:rgba(253,240,220,.22)}
+.band-teal .srow p,.band-teal .srow__tag{color:rgba(253,240,220,.78)}
+.srow:last-child{padding-bottom:0}
+.srow h3{font-size:clamp(23px,2.7vw,30px);margin-bottom:12px}
+.srow p{font-size:17.5px;line-height:1.55;color:var(--teal-sub);margin:0}
+.srow__tag{font-family:var(--display);font-size:11.5px;font-weight:600;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--teal-sub);display:block;margin-bottom:12px}
+@media(min-width:860px){
+  .srow{grid-template-columns:0.92fr 1.08fr;align-items:start}
+  .srow:nth-child(even) .srow__intro{order:2}
+  .srow:nth-child(even) .checks{order:1}
+}
 .card__tag{
   font-family:var(--display);font-size:11.5px;font-weight:600;letter-spacing:.16em;
   text-transform:uppercase;color:var(--teal-mid);display:block;margin-bottom:12px;
@@ -196,9 +264,38 @@ p:last-child{margin-bottom:0}
 }
 .facts li{display:flex;gap:12px;align-items:flex-start;font-family:var(--display);
   font-size:14.5px;font-weight:500;line-height:1.45}
+.facts .sun{margin-top:calc((1.45em - 9px) / 2 + 1px)}
 
 /* ---------- steps ---------- */
+.track{display:grid;grid-template-columns:repeat(5,1fr);margin-top:10px}
+.track__step{text-align:center;padding:0 12px}
+.track__n{display:block;font-family:var(--display);font-weight:600;font-size:12.5px;
+  letter-spacing:.16em;color:var(--teal-mid);margin-bottom:14px}
+.track__marker{position:relative;display:block;height:18px;margin-bottom:18px}
+.track__marker::before{content:"";position:absolute;left:-12px;right:-12px;top:50%;
+  height:2px;background:var(--rule);transform:translateY(-50%)}
+.track__step:first-child .track__marker::before{left:50%}
+.track__step:last-child .track__marker::before{right:50%}
+.track__dot{position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
+  background:var(--teal);transform:translate(-50%,-50%)}
+.track__step:last-child .track__dot{background:var(--coral)}
+.track h3{margin-bottom:9px}
+.track p{font-size:15.5px;line-height:1.5;color:var(--teal-mid);margin:0}
+@media(max-width:899px){
+  .track{grid-template-columns:repeat(2,1fr);gap:34px 26px}
+  .track__marker::before{display:none}
+}
+@media(max-width:559px){
+  .track{grid-template-columns:1fr;gap:28px}
+  .track__step{text-align:left;padding:0}
+  .track__dot{left:8px;transform:translate(0,-50%)}
+  .track__marker{height:14px;margin-bottom:12px}
+}
 .steps{display:grid;gap:2px;margin-top:8px;border-top:1px solid rgba(253,240,220,.22)}
+.band-paper .steps{border-top-color:var(--rule)}
+.band-paper .step{border-bottom-color:var(--rule)}
+.band-paper .step__n{color:var(--teal-mid)}
+.band-paper .step p{color:var(--teal-mid)}
 .step{display:grid;gap:6px 28px;padding:26px 0;border-bottom:1px solid rgba(253,240,220,.22)}
 @media(min-width:760px){.step{grid-template-columns:74px 1fr}}
 .step__n{
@@ -230,6 +327,12 @@ p:last-child{margin-bottom:0}
 
 /* ---------- faq ---------- */
 .faq{border-top:1px solid var(--rule)}
+.band-teal .faq,.band-teal .faq details{border-color:rgba(253,240,220,.24)}
+.band-teal .faq summary::after{border-right-color:var(--cream);border-bottom-color:var(--cream)}
+.band-teal .faq p{color:rgba(253,240,220,.82)}
+.stepnum{display:inline-block;min-width:44px;font-size:13px;letter-spacing:.15em;
+  font-weight:500;color:var(--teal-mid)}
+.band-teal .stepnum{color:rgba(253,240,220,.55)}
 .faq details{border-bottom:1px solid var(--rule)}
 .faq summary{
   list-style:none;cursor:pointer;padding:22px 40px 22px 0;position:relative;
@@ -309,7 +412,7 @@ p:last-child{margin-bottom:0}
 <a class="skip" href="#main">Skip to content</a>
 <header class="masthead">
   <div class="masthead__in">
-    <a class="brandlink" href="index.html" aria-label="Beaumont West Solutions — home"><svg class="lockup lockup--header" viewBox="0 0 491.183 108" role="img" aria-label="Beaumont West Solutions"><defs><clipPath id="hd-d1"><circle cx="100" cy="100" r="88"/></clipPath></defs>
+    <a class="brandlink" href="index.html" aria-label="Beaumont West Solutions — home"><svg class="lockup lockup--header" viewBox="6 6 478 96" role="img" aria-label="Beaumont West Solutions"><defs><clipPath id="hd-d1"><circle cx="100" cy="100" r="88"/></clipPath></defs>
   <g transform="translate(14,14) scale(0.4)">
   <g>
       <circle cx="100" cy="100" r="88" fill="#FDF0DC"/>
@@ -327,8 +430,7 @@ p:last-child{margin-bottom:0}
     <nav class="nav" aria-label="Primary">
         <a href="index.html" aria-current="page">Home</a>
         <a href="services.html">Services</a>
-        <a href="work.html">Work</a>
-        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
     </nav>
     <a class="btn btn--primary" href="contact.html">Start a project</a>
     <button class="navtoggle" type="button" aria-expanded="false" aria-controls="mobilenav" aria-label="Menu">
@@ -339,8 +441,6 @@ p:last-child{margin-bottom:0}
     <ul>
       <li><a href="index.html" aria-current="page">Home</a></li>
       <li><a href="services.html">Services</a></li>
-      <li><a href="work.html">Work</a></li>
-      <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
@@ -364,11 +464,11 @@ p:last-child{margin-bottom:0}
   <path d="M161.50390625 144.40234375Q161.50390625 148.2109375 158.525390625 150.30078125Q155.546875 152.390625 150.13671875 152.390625Q140.078125 152.390625 138.4765625 145.3984375L142.08984375 144.67578125Q142.71484375 147.15625 144.74609375 148.318359375Q146.77734375 149.48046875 150.2734375 149.48046875Q153.88671875 149.48046875 155.849609375 148.240234375Q157.8125 147.0 157.8125 144.59765625Q157.8125 143.25 157.197265625 142.41015625Q156.58203125 141.5703125 155.46875 141.0234375Q154.35546875 140.4765625 152.8125 140.10546875Q151.26953125 139.734375 149.39453125 139.3046875Q146.1328125 138.58203125 144.443359375 137.859375Q142.75390625 137.13671875 141.77734375 136.248046875Q140.80078125 135.359375 140.283203125 134.16796875Q139.765625 132.9765625 139.765625 131.43359375Q139.765625 127.8984375 142.470703125 125.984375Q145.17578125 124.0703125 150.21484375 124.0703125Q154.90234375 124.0703125 157.3828125 125.505859375Q159.86328125 126.94140625 160.859375 130.3984375L157.1875 131.04296875Q156.58203125 128.85546875 154.8828125 127.869140625Q153.18359375 126.8828125 150.17578125 126.8828125Q146.875 126.8828125 145.13671875 127.9765625Q143.3984375 129.0703125 143.3984375 131.23828125Q143.3984375 132.5078125 144.072265625 133.337890625Q144.74609375 134.16796875 146.015625 134.744140625Q147.28515625 135.3203125 151.07421875 136.16015625Q152.34375 136.453125 153.603515625 136.755859375Q154.86328125 137.05859375 156.015625 137.478515625Q157.16796875 137.8984375 158.173828125 138.46484375Q159.1796875 139.03125 159.921875 139.8515625Q160.6640625 140.671875 161.083984375 141.78515625Q161.50390625 142.8984375 161.50390625 144.40234375Z" fill="#FDF0DC"/></svg>
     <span class="eyebrow">Websites for service businesses</span>
     <h1>Do great work. Be easy to find.</h1>
-    <p class="lede">We design and build websites for salons, studios, landscapers, trainers and
-    trades — the businesses that run on word of mouth and deserve to be found by everyone else too.</p>
+    <p class="lede">Sites for salons, studios, landscapers, trainers and trades.
+    Live in three to four weeks, and yours to keep.</p>
     <div class="btn-row">
-      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">→</span></a>
-      <a class="btn btn--ghost" href="work.html">See the work</a>
+      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--ghost" href="services.html">What we do</a>
     </div>
     <div class="hero__foot"></div>
   </div>
@@ -381,19 +481,16 @@ p:last-child{margin-bottom:0}
 <path class="ridge-front" d="M0,150 L0,118 L119,106 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
 </svg></div>
 
-<section class="section section--tight band-teal">
+<section class="section band-teal">
   <div class="wrap">
     <ul class="facts reveal">
       <li><span class="sun" aria-hidden="true"></span><span>Live in three to four weeks</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Built for phones first</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>You own the domain and the files</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Hosted by us, or by you</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Set up to show in local search</span></li>
     </ul>
   </div>
-</section>
-
-<section class="section band-teal" style="padding-top:0">
-  <div class="wrap">
+  <div class="wrap" style="margin-top:clamp(40px,4.8vw,64px)">
     <div class="head reveal">
       <span class="eyebrow">Who we build for</span>
       <h2>Three versions of the same problem</h2>
@@ -401,29 +498,28 @@ p:last-child{margin-bottom:0}
     <div class="grid g3 reveal">
       <article class="card">
         <span class="card__tag">No site at all</span>
-        <h3>You've run on referrals</h3>
-        <p>A phone number and a Facebook page got you here. It works right up until
-        someone searches your name at 9pm and finds nothing they can trust.</p>
+        <h3>Running on referrals</h3>
+        <p>Which works right up until someone searches your name at 9pm and finds nothing.</p>
       </article>
       <article class="card">
         <span class="card__tag">A site you're stuck with</span>
-        <h3>Someone built it in 2016</h3>
-        <p>You can't change the hours, the photos are of a truck you sold, and nobody
-        remembers who has the login. Updating it costs a favour every time.</p>
+        <h3>Built in 2016</h3>
+        <p>You can't change the hours, and nobody remembers who has the login.</p>
       </article>
       <article class="card">
         <span class="card__tag">Outgrowing word of mouth</span>
-        <h3>The admin is eating your evenings</h3>
-        <p>Quotes, bookings and the same five questions, all by text, all after hours.
-        A site should take the first pass at every one of them.</p>
+        <h3>Admin after hours</h3>
+        <p>Quotes and bookings by text, every evening. The site should take the first pass.</p>
       </article>
     </div>
   </div>
 </section>
 
 <div class="divider divider--wave to-paper" aria-hidden="true">
-<svg viewBox="0 0 1440 92" preserveAspectRatio="none" focusable="false">
-<path class="wave" d="M0,0 L1440,0 L1440,30 C1250,84 1080,88 920,52 C760,16 620,-4 460,34 C300,72 158,70 0,8 Z"/>
+<svg viewBox="0 0 1440 100" preserveAspectRatio="none" focusable="false">
+<path class="tide-far" d="M0,0 L1440,0 L1440,66 C1186,88 995,60 720,74 C445,88 254,64 0,80 Z"/>
+<path class="tide-mid" d="M0,0 L1440,0 L1440,52 C1228,70 1016,44 762,58 C508,72 275,48 0,62 Z"/>
+<path class="tide-front" d="M0,0 L1440,0 L1440,36 C1249,54 995,26 720,42 C445,58 233,32 0,46 Z"/>
 </svg></div>
 
 <section class="section band-paper">
@@ -431,148 +527,117 @@ p:last-child{margin-bottom:0}
     <div class="reveal">
       <span class="eyebrow">What's included</span>
       <h2>Every build ships with these</h2>
-      <p class="lede" style="margin-top:20px">No tiers, no upsell menu. This is the floor,
-      and most projects need nothing beyond it.</p>
+      <p class="lede" style="margin-top:18px">No tiers and no upsell menu. This is the floor.</p>
     </div>
     <ul class="checks reveal">
-      <li><span class="sun" aria-hidden="true"></span><span>A homepage that says what you do, where you do it, and how to start</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>A homepage that says what you do, where, and how to start</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Service pages written the way people actually search</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Click-to-call and click-to-text within thumb's reach on every screen</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>A quote or booking form that lands in your inbox and your phone</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Your Google Business Profile claimed, filled in, and pointed at the site</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Photos edited and placed — or a shot list if you'd rather take them yourself</span></li>
-      <li><span class="sun" aria-hidden="true"></span><span>Pages that load fast on a bad signal in a parking lot</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Click-to-call and click-to-text on every screen</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>A quote or booking form that reaches your inbox</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Your Google Business Profile claimed and connected</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Pages that load fast on a weak signal</span></li>
     </ul>
   </div>
 </section>
 
-<section class="section band-cream">
+<div class="horizon sunrise" aria-hidden="true">
+<svg viewBox="0 0 120 90" focusable="false">
+<defs><clipPath id="bws-sky"><rect x="0" y="0" width="120" height="45"/></clipPath></defs>
+<g clip-path="url(#bws-sky)"><g class="sun-up">
+<circle cx="60" cy="45" r="40" fill="#E86F51" opacity=".13"/>
+<circle cx="60" cy="45" r="29" fill="#E86F51" opacity=".14"/>
+<circle cx="60" cy="45" r="18" fill="#E86F51"/>
+</g></g>
+<g class="sun-refl" stroke="#E86F51" stroke-width="2.6" stroke-linecap="round">
+<line x1="37" y1="53" x2="83" y2="53" opacity=".55"/>
+<line x1="44" y1="61" x2="76" y2="61" opacity=".42"/>
+<line x1="51" y1="69" x2="69" y2="69" opacity=".3"/>
+<line x1="57" y1="77" x2="63" y2="77" opacity=".2"/>
+</g>
+</svg></div>
+
+<section class="section band-cream band-cream--framed" style="padding-block:clamp(32px,3.8vw,52px)">
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Plain terms</span>
-      <h2>What it costs, and how we talk about it</h2>
-      <p class="lede" style="margin-top:20px">Every project is quoted after one short call,
-      because a five-page site for a barber and a twenty-page site for a roofing company
-      are not the same job. You'll have the number in writing before anything starts,
-      and it won't move unless you ask for something new.</p>
+      <h2>What it costs</h2>
+      <p class="lede" style="margin-top:18px">Every project is quoted after one short call. You'll
+      have the number in writing before anything starts, and it won't move unless you ask for
+      something new.</p>
     </div>
     <div class="grid g3 reveal">
-      <article class="card">
+      <article class="card card--dark">
         <h3>No long contracts</h3>
-        <p class="small" style="margin-top:8px">The agreement covers the build. Care plans are
-        month to month and you can stop them whenever.</p>
+        <p style="margin-top:8px">The agreement covers the build. Care plans are month to month.</p>
       </article>
-      <article class="card">
-        <h3>No rented pages</h3>
-        <p class="small" style="margin-top:8px">You get the domain, the hosting account and the
-        files. If you ever leave, you leave with everything.</p>
+      <article class="card card--dark">
+        <h3>Hosting, your call</h3>
+        <p style="margin-top:8px">Run it yourself, or we handle hosting, updates and backups for a monthly fee.</p>
       </article>
-      <article class="card">
-        <h3>No mystery line items</h3>
-        <p class="small" style="margin-top:8px">One number for the build, one number a month if
-        you want us to keep looking after it. That's the whole invoice.</p>
+      <article class="card card--dark">
+        <h3>One number</h3>
+        <p style="margin-top:8px">One for the build, one a month if you want us to keep looking after it.</p>
       </article>
     </div>
   </div>
 </section>
 
-<div class="divider divider--ridge from-cream" aria-hidden="true">
+<div class="horizon horizon--close" aria-hidden="true">
+<svg viewBox="0 0 120 90" focusable="false">
+<path d="M21,45 L39,20 L50,37 L60,27 L70,37 L81,20 L99,45 Z" fill="#1B4552"/>
+</svg></div>
+
+<section class="section band-paper">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">How it goes</span>
+      <h2>Five steps, about a month</h2>
+    </div>
+    <div class="track reveal">
+      <div class="track__step">
+        <span class="track__n">01</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Call</h3>
+        <p>Thirty minutes on the business.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">02</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Intake form</h3>
+        <p>You choose what's included. Quote in two days.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">03</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Draft</h3>
+        <p>A designed homepage within a week.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">04</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Build</h3>
+        <p>Pages, copy, photos, forms, search.</p>
+      </div>
+      <div class="track__step">
+        <span class="track__n">05</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>Launch</h3>
+        <p>Tested on real phones, then live.</p>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:40px">
+      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--ghost" href="services.html">See the services</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider divider--ridge" aria-hidden="true">
 <svg viewBox="0 0 1440 150" preserveAspectRatio="none" focusable="false">
 <path class="ridge-far" d="M0,150 L0,90 L199,60 L419,78 L680,44 L919,72 L1180,52 L1440,70 L1440,150 Z"/>
 <path class="ridge-back" d="M0,150 L0,96 L180,58 L320,82 L559,40 L760,78 L980,50 L1150,80 L1379,46 L1440,60 L1440,150 Z"/>
 <path class="ridge-front" d="M0,150 L0,118 L119,106 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
 </svg></div>
-
-<section class="section band-teal">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">How it goes</span>
-      <h2>Four steps, about a month</h2>
-    </div>
-    <div class="steps reveal">
-      <div class="step">
-        <div class="step__n">01</div>
-        <div><h3>Call</h3><p>Thirty minutes. What you do, who you'd like more of, and what's
-        getting in the way. You get the quote within two days.</p></div>
-      </div>
-      <div class="step">
-        <div class="step__n">02</div>
-        <div><h3>Draft</h3><p>A designed homepage inside a week, so you're reacting to something
-        real instead of a description. Changes are expected, not charged for.</p></div>
-      </div>
-      <div class="step">
-        <div class="step__n">03</div>
-        <div><h3>Build</h3><p>The rest of the pages, the words, the photos, the forms and the
-        search setup. You review it on a private link before anyone else sees it.</p></div>
-      </div>
-      <div class="step">
-        <div class="step__n">04</div>
-        <div><h3>Launch</h3><p>We point the domain, test it on real phones, and hand you every
-        login. Then we stay reachable — most questions come in week two.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider divider--wave to-paper" aria-hidden="true">
-<svg viewBox="0 0 1440 92" preserveAspectRatio="none" focusable="false">
-<path class="wave" d="M0,0 L1440,0 L1440,30 C1250,84 1080,88 920,52 C760,16 620,-4 460,34 C300,72 158,70 0,8 Z"/>
-</svg></div>
-
-<section class="section band-paper">
-  <div class="wrap">
-    <div class="head head--center reveal">
-      <span class="eyebrow">Recent concepts</span>
-      <h2>How we'd approach three real businesses</h2>
-      <p class="lede" style="margin:20px auto 0">Beaumont West is new. Rather than pad a
-      portfolio, we built full concepts for the kinds of businesses we want to work with.</p>
-    </div>
-    <div class="grid g2 reveal">
-      <div class="mock" role="img" aria-label="Concept homepage design for Tidewater Salon &amp; Spa">
-  <div class="mock__bar"><span class="mock__dot"></span><span class="mock__dot"></span><span class="mock__dot"></span>
-    <span class="mock__url">tidewatersalon.com</span></div>
-  <div class="mock__body">
-    <div class="mock__hero" style="background:#2E4A45">
-      <div class="mock__eyebrow" style="color:#C9D9CF">Salon &amp; spa · Point Reyes</div>
-      <div class="mock__h">Book your chair in<br>under a minute.</div>
-      <p class="mock__p">Colour, cuts and facials by appointment, seven days a week.</p>
-      <span class="mock__btn" style="background:#E7C9A9;color:#243A36">Book now</span>
-    </div>
-    <div class="mock__row"><div class="mock__tile" style="background:#F2EDE4;color:#2E4A45">Book online</div><div class="mock__tile" style="background:#F2EDE4;color:#2E4A45">Meet the stylists</div><div class="mock__tile" style="background:#F2EDE4;color:#2E4A45">Gift cards</div></div>
-  </div>
-</div>
-      <div class="mock" role="img" aria-label="Concept homepage design for Harbor &amp; Pine Landscape">
-  <div class="mock__bar"><span class="mock__dot"></span><span class="mock__dot"></span><span class="mock__dot"></span>
-    <span class="mock__url">harborandpine.com</span></div>
-  <div class="mock__body">
-    <div class="mock__hero" style="background:#3A4A3C">
-      <div class="mock__eyebrow" style="color:#CFDCC6">Landscape &amp; hardscape · Sonoma County</div>
-      <div class="mock__h">Yards that hold up<br>to real weather.</div>
-      <p class="mock__p">Design, build and maintenance for coastal properties. Free site visit.</p>
-      <span class="mock__btn" style="background:#D9A441;color:#2B3A2D">Get a quote</span>
-    </div>
-    <div class="mock__row"><div class="mock__tile" style="background:#F1EEE6;color:#3A4A3C">Recent yards</div><div class="mock__tile" style="background:#F1EEE6;color:#3A4A3C">Service areas</div><div class="mock__tile" style="background:#F1EEE6;color:#3A4A3C">Request a visit</div></div>
-  </div>
-</div>
-    </div>
-    <div class="btn-row" style="justify-content:center;margin-top:40px">
-      <a class="btn btn--ghost" href="work.html">See all three concepts <span class="arrow">→</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="section band-cream">
-  <div class="wrap head--center reveal" style="max-width:none">
-    <span class="eyebrow">Start here</span>
-    <h2 style="max-width:20ch;margin-inline:auto">Tell us about the business</h2>
-    <p class="lede" style="margin:20px auto 0">One call, no deck, no pressure. If we're not the
-    right fit we'll say so and point you somewhere better.</p>
-    <div class="btn-row" style="justify-content:center;margin-top:32px">
-      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">→</span></a>
-      <a class="btn btn--ghost" href="services.html">What we do</a>
-    </div>
-  </div>
-</section>
 
 </main>
 <footer class="foot">
@@ -588,7 +653,7 @@ p:last-child{margin-bottom:0}
         <polygon points="12,130 58,46 79,122 100,60 121,122 142,46 188,130 206,130 206,220 -6,220 -6,130" fill="#1B4552"/>
         <polygon points="58,64 79,140 100,78 121,140 142,64 142,84 121,160 100,98 79,160 58,84" fill="#F4A261"/>
       </g>
-      <circle cx="100" cy="100" r="88" fill="none" stroke="#1B4552" stroke-width="5"/>
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#1B4552" stroke-width="5"/><circle cx="100" cy="100" r="92" fill="none" stroke="#E86F51" stroke-width="6"/>
       <path d="M61.23 144.25Q61.23 147.92 58.55 149.96Q55.88 152 51.11 152H39.94V124.48H49.94Q59.63 124.48 59.63 131.16Q59.63 133.6 58.26 135.26Q56.89 136.92 54.39 137.49Q57.68 137.88 59.45 139.69Q61.23 141.49 61.23 144.25ZM55.88 131.61Q55.88 129.38 54.36 128.43Q52.83 127.47 49.94 127.47H43.67V136.18H49.94Q52.93 136.18 54.4 135.06Q55.88 133.93 55.88 131.61ZM57.46 143.95Q57.46 139.09 50.62 139.09H43.67V149.01H50.92Q54.34 149.01 55.9 147.74Q57.46 146.47 57.46 143.95Z" fill="#FDF0DC"/>
       <path d="M161.5 144.4Q161.5 148.21 158.53 150.3Q155.55 152.39 150.14 152.39Q140.08 152.39 138.48 145.4L142.09 144.68Q142.71 147.16 144.75 148.32Q146.78 149.48 150.27 149.48Q153.89 149.48 155.85 148.24Q157.81 147 157.81 144.6Q157.81 143.25 157.2 142.41Q156.58 141.57 155.47 141.02Q154.36 140.48 152.81 140.11Q151.27 139.73 149.39 139.3Q146.13 138.58 144.44 137.86Q142.75 137.14 141.78 136.25Q140.8 135.36 140.28 134.17Q139.77 132.98 139.77 131.43Q139.77 127.9 142.47 125.98Q145.18 124.07 150.21 124.07Q154.9 124.07 157.38 125.51Q159.86 126.94 160.86 130.4L157.19 131.04Q156.58 128.86 154.88 127.87Q153.18 126.88 150.18 126.88Q146.88 126.88 145.14 127.98Q143.4 129.07 143.4 131.24Q143.4 132.51 144.07 133.34Q144.75 134.17 146.02 134.74Q147.29 135.32 151.07 136.16Q152.34 136.45 153.6 136.76Q154.86 137.06 156.02 137.48Q157.17 137.9 158.17 138.46Q159.18 139.03 159.92 139.85Q160.66 140.67 161.08 141.79Q161.5 142.9 161.5 144.4Z" fill="#FDF0DC"/>
     </g>
@@ -603,8 +668,6 @@ p:last-child{margin-bottom:0}
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="services.html">Services</a></li>
-          <li><a href="work.html">Work</a></li>
-          <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
@@ -639,6 +702,26 @@ p:last-child{margin-bottom:0}
       en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});
     },{rootMargin:'0px 0px -8% 0px',threshold:.08});
     els.forEach(function(e){io.observe(e);});
+  }
+  var hz=document.querySelector('.sunrise');
+  if(hz){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      hz.style.setProperty('--rise','1');
+    }else{
+      var ticking=false;
+      var upd=function(){
+        ticking=false;
+        var r=hz.getBoundingClientRect();
+        var vh=window.innerHeight||document.documentElement.clientHeight;
+        var p=Math.max(0,Math.min(1,(vh-r.top)/(vh*0.55)));
+        p=p*p*(3-2*p);
+        hz.style.setProperty('--rise',p.toFixed(3));
+      };
+      var onScroll=function(){if(!ticking){ticking=true;requestAnimationFrame(upd);}};
+      window.addEventListener('scroll',onScroll,{passive:true});
+      window.addEventListener('resize',onScroll);
+      upd();
+    }
   }
   var f=document.getElementById('projectform');
   if(f){f.addEventListener('submit',function(ev){
