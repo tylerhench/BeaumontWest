@@ -411,13 +411,28 @@ p:last-child{margin-bottom:0}
 .steps-foot .accent-bar,.band-foot .accent-bar{margin:0 auto 16px}
 .steps-foot p,.band-foot p{font-size:clamp(17.5px,1.4vw,20px);color:var(--teal-mid);margin:0 auto;max-width:52ch}
 .steps-foot p{font-size:clamp(19px,1.75vw,23px);max-width:48ch}
+/* steps + "handy to have ready" side card */
+.steps-layout{display:grid;gap:clamp(18px,2.4vw,28px);align-items:start}
+@media (min-width:900px){.steps-layout{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr)}}
+.ready-card{background:var(--paper);border:2px solid rgba(27,69,82,.5)}
+.ready-card h3{font-family:var(--display);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:600;color:var(--teal-mid);margin:0 0 16px}
+.ready-list{margin:0;padding-left:20px}
+.ready-list li{font-size:clamp(17.5px,1.3vw,19px);line-height:1.5;color:var(--teal);margin:0 0 8px}
+.ready-list li::marker{color:var(--coral)}
+.ready-card__pay{border-top:2px solid rgba(27,69,82,.18);margin-top:20px;padding-top:20px}
+.ready-card__pay .accent-bar{margin:0 0 14px}
+.ready-card .ready-card__pay p{margin:0;color:var(--teal-mid);font-size:clamp(17.5px,1.3vw,19px);line-height:1.55}
 .band-foot a{color:var(--teal);font-weight:500;text-decoration:none;border-bottom:1.5px solid var(--coral);padding-bottom:1px}
 .band-foot a:hover{border-bottom-color:var(--teal)}
 .steps-card--paper .faq details{border-bottom:2px solid rgba(27,69,82,.34)}
 .steps-card--paper .faq p{color:var(--teal-sub)}
 .steps-card--paper .stepnum{color:var(--coral)}
 .card--dark .stepnum{color:var(--peach)}
-.faq details:has(.stepnum) > p{padding-left:52px}
+.faq details:has(.stepnum) > p{padding-left:36px}
+.faq summary.has-num{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:start}
+/* centre each number on the first line of its title (same size and line height as the title text) */
+.faq summary.has-num .stepnum{display:flex;align-items:center;height:calc(clamp(19px,1.55vw,22px) * 1.35)}
 .cta-card{padding:clamp(34px,5vw,64px) clamp(24px,4vw,56px)}
 .cta-card .lede{font-size:clamp(19px,2.1vw,22px);line-height:1.55}
 .ways{list-style:none;margin:0;padding:0}
@@ -470,6 +485,10 @@ p:last-child{margin-bottom:0}
 .yearly__a{color:var(--cream);border-color:rgba(253,240,220,.5)!important;border-right:none!important;
   border-radius:999px 0 0 999px}
 .yearly__b{background:var(--peach);color:var(--teal);border-radius:0 999px 999px 0}
+.yearly span{white-space:nowrap;text-align:center;display:flex;align-items:center;justify-content:center}
+@media (max-width:520px){
+  .yearly span{font-size:clamp(11.5px,3.3vw,14px);letter-spacing:.1em;padding:12px clamp(12px,4vw,20px)}
+}
 .plan h3{font-size:clamp(28px,3vw,36px);margin-bottom:10px}
 .card.card--dark .eyebrow{color:rgba(253,240,220,.7)}
 .careplan{padding:clamp(30px,4.6vw,58px)}
@@ -490,9 +509,6 @@ p:last-child{margin-bottom:0}
   rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 68%,rgba(159,176,181,0) 100%)}
 .horizon svg{position:absolute;left:50%;top:50%;width:180px;height:148px;transform:translate(-50%,-50%)}
 .horizon{--rise:1}
-.sunrise .sun-up{transform:translateY(calc((1 - var(--rise)) * 72px));
-  opacity:calc(.25 + var(--rise) * .75)}
-.sunrise .sun-refl{opacity:clamp(0,calc((var(--rise) - .45) / .55),1)}
 .card p{font-size:16.5px;line-height:1.6;color:var(--teal-mid)}
 .card.plan p{font-size:clamp(17.5px,1.35vw,19.5px);line-height:1.6}
 .band-teal .card p{color:var(--teal-mid)}
@@ -592,7 +608,7 @@ p:last-child{margin-bottom:0}
 .band-teal .faq,.band-teal .faq details{border-color:rgba(253,240,220,.24)}
 .band-teal .faq summary::after{border-right-color:var(--cream);border-bottom-color:var(--cream)}
 .band-teal .faq p{color:rgba(253,240,220,.82)}
-.stepnum{display:inline-block;width:52px;font-size:14px;letter-spacing:.15em;
+.stepnum{display:inline-block;font-size:14px;letter-spacing:.15em;
   font-weight:500;color:var(--teal-mid)}
 .band-teal .stepnum{color:rgba(253,240,220,.55)}
 .faq details{border-bottom:1px solid var(--rule)}
@@ -693,6 +709,7 @@ JS = r"""
       hz.style.setProperty('--rise','1');
     }else{
       var ticking=false;
+      var up=hz.querySelector('.sun-up'),refl=hz.querySelector('.sun-refl');
       var upd=function(){
         ticking=false;
         var r=hz.getBoundingClientRect();
@@ -700,6 +717,11 @@ JS = r"""
         var p=Math.max(0,Math.min(1,(vh-r.top)/(vh*0.55)));
         p=p*p*(3-2*p);
         hz.style.setProperty('--rise',p.toFixed(3));
+        /* set the SVG attributes directly: iPhone Safari doesn't reliably repaint
+           CSS-variable transforms inside a clipped SVG group */
+        if(up){up.setAttribute('transform','translate(0 '+((1-p)*72).toFixed(2)+')');
+          up.setAttribute('opacity',(.25+p*.75).toFixed(3));}
+        if(refl){refl.setAttribute('opacity',Math.max(0,Math.min(1,(p-.45)/.55)).toFixed(3));}
       };
       var onScroll=function(){if(!ticking){ticking=true;requestAnimationFrame(upd);}};
       window.addEventListener('scroll',onScroll,{passive:true});
@@ -765,7 +787,7 @@ FOOTER = """<footer class="foot">
       <div>
         %s
         <p class="foot__blurb">Websites for service businesses on the coast and everywhere
-        else. Designed, built, and handed over — keys included.</p>
+        else. We build it and keep it running. You run your business.</p>
       </div>
       <div>
         <h4>Pages</h4>
@@ -1021,7 +1043,7 @@ def pkg(tag, name, line, points, level=1):
 
 def step(n, title, body, open_=False):
     return """      <details%s>
-        <summary><span class="stepnum">%s</span>%s</summary>
+        <summary class="has-num"><span class="stepnum">%s</span><span>%s</span></summary>
         <p>%s</p>
       </details>""" % (" open" if open_ else "", n, title, body)
 
@@ -1101,15 +1123,26 @@ services = """
       <p class="lede" style="margin-top:18px">Open any step to see what happens and what we need
       from you.</p>
     </div>
-    <div class="card steps-card steps-card--paper reveal"><div class="faq">
+    <div class="steps-layout">
+      <div class="card steps-card steps-card--paper reveal"><div class="faq">
 %s
 %s
 %s
 %s
-    </div></div>
-    <div class="steps-foot reveal">
-      <span class="accent-bar" aria-hidden="true"></span>
-      <p>Half to start, half at launch. Nothing is charged until you've chosen your package.</p>
+      </div></div>
+      <aside class="card ready-card reveal" aria-labelledby="ready-title">
+        <h3 id="ready-title">Handy to have ready</h3>
+        <ul class="ready-list">
+          <li>Your logo, if you have one</li>
+          <li>A list of your services</li>
+          <li>A few photos of your work</li>
+          <li>Two or three customer reviews</li>
+        </ul>
+        <div class="ready-card__pay">
+          <span class="accent-bar" aria-hidden="true"></span>
+          <p>Half to start, half at launch. Nothing is charged until you've chosen your package.</p>
+        </div>
+      </aside>
     </div>
   </div>
 </section>
