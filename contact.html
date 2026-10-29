@@ -173,6 +173,11 @@ p:last-child{margin-bottom:0}
 .hero .btn-row{justify-content:center;margin-top:34px}
 .hero__foot{margin-top:clamp(28px,3vw,40px);padding-bottom:6px}
 .hero__in{z-index:2}
+/* home hero: let the glow fade out behind the ridge instead of stopping at the hero edge */
+.hero:not(.hero--lite){background:transparent;overflow:visible;overflow-x:clip}
+.hero:not(.hero--lite) .hero__glow{z-index:-1}
+.hero:not(.hero--lite) + .divider--ridge{background:transparent}
+@supports not (overflow:clip){.hero:not(.hero--lite) .hero__glow{width:min(760px,100%)}}
 .hero--lite{text-align:left;padding-block:clamp(40px,4.5vw,60px) clamp(26px,3vw,38px)}
 .hero--lite h1{max-width:20ch;margin-inline:0}
 .hero--lite .lede{margin:20px 0 0;text-align:left}
@@ -187,9 +192,9 @@ p:last-child{margin-bottom:0}
 .divider--ridge,.divider--wave{position:relative}
 .divider--ridge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal)}
 .divider--wave::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--teal)}
-.ridge-far{fill:var(--peach);opacity:.75}
 .ridge-back{fill:var(--coral);opacity:.88}
 .ridge-front{fill:var(--teal)}
+.ridge-rim{fill:none;stroke:var(--cream);stroke-opacity:.55;stroke-width:2;vector-effect:non-scaling-stroke}
 .divider--arc{background:var(--paper)}
 .divider--arc.arc--inverse .arc-fill{fill:var(--paper)}
 .divider--arc.arc--teal .arc-fill{fill:var(--teal)}
@@ -208,6 +213,11 @@ p:last-child{margin-bottom:0}
 .tide-mid{fill:var(--teal-mid)}
 .tide-front{fill:var(--teal)}
 .divider--ridge.from-cream{background:var(--cream)}
+.divider--topo{position:relative;background:var(--cream);margin-bottom:-1px}
+.divider--topo svg{height:clamp(72px,8.9vw,128px)}
+.divider--topo + .section{padding-top:clamp(22px,2.6vw,36px)}
+.divider--topo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--teal)}
+.topo-line{fill:none;stroke:var(--teal);stroke-width:1.5;opacity:.35;vector-effect:non-scaling-stroke}
 .divider--ridge.from-sand{background:var(--sand)}
 
 /* ---------- cards ---------- */
@@ -222,12 +232,15 @@ p:last-child{margin-bottom:0}
 .card.card--dark h3{color:var(--cream)}
 .card.card--dark p{color:rgba(253,240,220,.88)}
 .pkgs{align-items:stretch}
-.pkg{display:flex;flex-direction:column;border-top:4px solid transparent}
+.pkg{display:flex;flex-direction:column;position:relative;overflow:hidden;
+  padding-bottom:calc(clamp(24px,3vw,32px) + 25px)}
+.pkg::before{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:var(--coral)}
+.pkg--l2::before{height:16px;background:linear-gradient(to top,var(--coral) 0 7px,var(--cream) 7px 9px,#EE8A5B 9px 16px)}
+.pkg--l3::before{height:25px;background:linear-gradient(to top,var(--coral) 0 7px,var(--cream) 7px 9px,#EE8A5B 9px 16px,var(--cream) 16px 18px,var(--peach) 18px 25px)}
 .pkg h3{font-size:clamp(28px,3vw,36px);margin-bottom:0}
 .pkg .pkg__line{margin:12px 0 0;font-size:clamp(17.5px,1.35vw,19.5px);line-height:1.55}
 .pkg .checks{margin-top:24px;gap:14px}
 .pkg .checks li{font-size:clamp(17px,1.3vw,19px)}
-.band-teal .card.pkg--featured{border-top-color:var(--coral)}
 .card--dark .btn--primary{background:var(--cream);color:var(--teal)}
 .card--dark .btn--primary:hover{background:#fff}
 .card--dark .btn--ghost{border-color:rgba(253,240,220,.4);color:var(--cream)}
@@ -243,14 +256,16 @@ p:last-child{margin-bottom:0}
 .steps-card .faq{border-top:none}
 .steps-card .faq details:last-child{border-bottom:none}
 .steps-card .faq p{font-size:clamp(17.5px,1.35vw,19.5px)}
-.steps-card--sand{background:var(--sand);border-color:transparent}
+.steps-card--paper{background:var(--paper);border:2px solid rgba(27,69,82,.5)}
 .steps-foot,.band-foot{text-align:center;margin-top:clamp(30px,3.6vw,44px)}
 .steps-foot .accent-bar,.band-foot .accent-bar{margin:0 auto 16px}
 .steps-foot p,.band-foot p{font-size:clamp(17.5px,1.4vw,20px);color:var(--teal-mid);margin:0 auto;max-width:52ch}
+.steps-foot p{font-size:clamp(19px,1.75vw,23px);max-width:48ch}
 .band-foot a{color:var(--teal);font-weight:500;text-decoration:none;border-bottom:1.5px solid var(--coral);padding-bottom:1px}
 .band-foot a:hover{border-bottom-color:var(--teal)}
-.steps-card--sand .faq details{border-bottom-color:rgba(27,69,82,.18)}
-.steps-card--sand .faq p,.steps-card--sand .stepnum{color:var(--teal-sub)}
+.steps-card--paper .faq details{border-bottom:2px solid rgba(27,69,82,.34)}
+.steps-card--paper .faq p{color:var(--teal-sub)}
+.steps-card--paper .stepnum{color:var(--coral)}
 .card--dark .stepnum{color:var(--peach)}
 .faq details:has(.stepnum) > p{padding-left:52px}
 .cta-card{padding:clamp(34px,5vw,64px) clamp(24px,4vw,56px)}
@@ -679,9 +694,11 @@ p:last-child{margin-bottom:0}
 
 <div class="divider divider--ridge" aria-hidden="true">
 <svg viewBox="0 0 1440 150" preserveAspectRatio="none" focusable="false">
-<path class="ridge-far" d="M0,150 L0,90 L199,60 L419,78 L680,44 L919,72 L1180,52 L1440,70 L1440,150 Z"/>
-<path class="ridge-back" d="M0,150 L0,96 L180,58 L320,82 L559,40 L760,78 L980,50 L1150,80 L1379,46 L1440,60 L1440,150 Z"/>
-<path class="ridge-front" d="M0,150 L0,118 L119,106 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<defs><linearGradient id="ridge-haze-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--peach);stop-opacity:.25"/><stop offset=".45" style="stop-color:var(--peach);stop-opacity:.85"/></linearGradient></defs>
+<path class="ridge-far" fill="url(#ridge-haze-1)" d="M0,150 L0,40 L200,10 L420,34 L700,4 L980,30 L1220,8 L1440,26 L1440,150 Z"/>
+<path class="ridge-back" d="M0,150 L0,80 L104,40 L184,64 L330,34 L410,70 L620,36 L700,72 L790,40 L860,70 L1029,30 L1100,70 L1209,38 L1280,70 L1440,52 L1440,150 Z"/>
+<path class="ridge-front" d="M0,150 L0,98 L96,72 L136,84 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<path class="ridge-rim" d="M0,98 L96,72 L136,84 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82"/>
 </svg></div>
 
 </main>

@@ -173,6 +173,11 @@ p:last-child{margin-bottom:0}
 .hero .btn-row{justify-content:center;margin-top:34px}
 .hero__foot{margin-top:clamp(28px,3vw,40px);padding-bottom:6px}
 .hero__in{z-index:2}
+/* home hero: let the glow fade out behind the ridge instead of stopping at the hero edge */
+.hero:not(.hero--lite){background:transparent;overflow:visible;overflow-x:clip}
+.hero:not(.hero--lite) .hero__glow{z-index:-1}
+.hero:not(.hero--lite) + .divider--ridge{background:transparent}
+@supports not (overflow:clip){.hero:not(.hero--lite) .hero__glow{width:min(760px,100%)}}
 .hero--lite{text-align:left;padding-block:clamp(40px,4.5vw,60px) clamp(26px,3vw,38px)}
 .hero--lite h1{max-width:20ch;margin-inline:0}
 .hero--lite .lede{margin:20px 0 0;text-align:left}
@@ -187,9 +192,9 @@ p:last-child{margin-bottom:0}
 .divider--ridge,.divider--wave{position:relative}
 .divider--ridge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal)}
 .divider--wave::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--teal)}
-.ridge-far{fill:var(--peach);opacity:.75}
 .ridge-back{fill:var(--coral);opacity:.88}
 .ridge-front{fill:var(--teal)}
+.ridge-rim{fill:none;stroke:var(--cream);stroke-opacity:.55;stroke-width:2;vector-effect:non-scaling-stroke}
 .divider--arc{background:var(--paper)}
 .divider--arc.arc--inverse .arc-fill{fill:var(--paper)}
 .divider--arc.arc--teal .arc-fill{fill:var(--teal)}
@@ -208,6 +213,11 @@ p:last-child{margin-bottom:0}
 .tide-mid{fill:var(--teal-mid)}
 .tide-front{fill:var(--teal)}
 .divider--ridge.from-cream{background:var(--cream)}
+.divider--topo{position:relative;background:var(--cream);margin-bottom:-1px}
+.divider--topo svg{height:clamp(72px,8.9vw,128px)}
+.divider--topo + .section{padding-top:clamp(22px,2.6vw,36px)}
+.divider--topo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--teal)}
+.topo-line{fill:none;stroke:var(--teal);stroke-width:1.5;opacity:.35;vector-effect:non-scaling-stroke}
 .divider--ridge.from-sand{background:var(--sand)}
 
 /* ---------- cards ---------- */
@@ -222,12 +232,15 @@ p:last-child{margin-bottom:0}
 .card.card--dark h3{color:var(--cream)}
 .card.card--dark p{color:rgba(253,240,220,.88)}
 .pkgs{align-items:stretch}
-.pkg{display:flex;flex-direction:column;border-top:4px solid transparent}
+.pkg{display:flex;flex-direction:column;position:relative;overflow:hidden;
+  padding-bottom:calc(clamp(24px,3vw,32px) + 25px)}
+.pkg::before{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:var(--coral)}
+.pkg--l2::before{height:16px;background:linear-gradient(to top,var(--coral) 0 7px,var(--cream) 7px 9px,#EE8A5B 9px 16px)}
+.pkg--l3::before{height:25px;background:linear-gradient(to top,var(--coral) 0 7px,var(--cream) 7px 9px,#EE8A5B 9px 16px,var(--cream) 16px 18px,var(--peach) 18px 25px)}
 .pkg h3{font-size:clamp(28px,3vw,36px);margin-bottom:0}
 .pkg .pkg__line{margin:12px 0 0;font-size:clamp(17.5px,1.35vw,19.5px);line-height:1.55}
 .pkg .checks{margin-top:24px;gap:14px}
 .pkg .checks li{font-size:clamp(17px,1.3vw,19px)}
-.band-teal .card.pkg--featured{border-top-color:var(--coral)}
 .card--dark .btn--primary{background:var(--cream);color:var(--teal)}
 .card--dark .btn--primary:hover{background:#fff}
 .card--dark .btn--ghost{border-color:rgba(253,240,220,.4);color:var(--cream)}
@@ -243,14 +256,16 @@ p:last-child{margin-bottom:0}
 .steps-card .faq{border-top:none}
 .steps-card .faq details:last-child{border-bottom:none}
 .steps-card .faq p{font-size:clamp(17.5px,1.35vw,19.5px)}
-.steps-card--sand{background:var(--sand);border-color:transparent}
+.steps-card--paper{background:var(--paper);border:2px solid rgba(27,69,82,.5)}
 .steps-foot,.band-foot{text-align:center;margin-top:clamp(30px,3.6vw,44px)}
 .steps-foot .accent-bar,.band-foot .accent-bar{margin:0 auto 16px}
 .steps-foot p,.band-foot p{font-size:clamp(17.5px,1.4vw,20px);color:var(--teal-mid);margin:0 auto;max-width:52ch}
+.steps-foot p{font-size:clamp(19px,1.75vw,23px);max-width:48ch}
 .band-foot a{color:var(--teal);font-weight:500;text-decoration:none;border-bottom:1.5px solid var(--coral);padding-bottom:1px}
 .band-foot a:hover{border-bottom-color:var(--teal)}
-.steps-card--sand .faq details{border-bottom-color:rgba(27,69,82,.18)}
-.steps-card--sand .faq p,.steps-card--sand .stepnum{color:var(--teal-sub)}
+.steps-card--paper .faq details{border-bottom:2px solid rgba(27,69,82,.34)}
+.steps-card--paper .faq p{color:var(--teal-sub)}
+.steps-card--paper .stepnum{color:var(--coral)}
 .card--dark .stepnum{color:var(--peach)}
 .faq details:has(.stepnum) > p{padding-left:52px}
 .cta-card{padding:clamp(34px,5vw,64px) clamp(24px,4vw,56px)}
@@ -574,27 +589,29 @@ p:last-child{margin-bottom:0}
 
 <div class="divider divider--ridge" aria-hidden="true">
 <svg viewBox="0 0 1440 150" preserveAspectRatio="none" focusable="false">
-<path class="ridge-far" d="M0,150 L0,90 L199,60 L419,78 L680,44 L919,72 L1180,52 L1440,70 L1440,150 Z"/>
-<path class="ridge-back" d="M0,150 L0,96 L180,58 L320,82 L559,40 L760,78 L980,50 L1150,80 L1379,46 L1440,60 L1440,150 Z"/>
-<path class="ridge-front" d="M0,150 L0,118 L119,106 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<defs><linearGradient id="ridge-haze-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--peach);stop-opacity:.25"/><stop offset=".45" style="stop-color:var(--peach);stop-opacity:.85"/></linearGradient></defs>
+<path class="ridge-far" fill="url(#ridge-haze-1)" d="M0,150 L0,40 L200,10 L420,34 L700,4 L980,30 L1220,8 L1440,26 L1440,150 Z"/>
+<path class="ridge-back" d="M0,150 L0,80 L104,40 L184,64 L330,34 L410,70 L620,36 L700,72 L790,40 L860,70 L1029,30 L1100,70 L1209,38 L1280,70 L1440,52 L1440,150 Z"/>
+<path class="ridge-front" d="M0,150 L0,98 L96,72 L136,84 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<path class="ridge-rim" d="M0,98 L96,72 L136,84 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82"/>
 </svg></div>
 
 <section class="section band-teal">
   <div class="wrap">
     <div class="grid g3 pkgs">
-      <article class="card pkg reveal">
+      <article class="card pkg pkg--l1 reveal">
   <span class="card__tag">Get found</span>
   <h3>Starter</h3>
   <p class="pkg__line">Everything a customer needs to find you and get in touch, on one page.</p>
   <ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>One-page website</span></li><li><span class="sun" aria-hidden="true"></span><span>Contact form and click-to-call</span></li><li><span class="sun" aria-hidden="true"></span><span>Built for phones first</span></li></ul>
 </article>
-      <article class="card pkg reveal">
+      <article class="card pkg pkg--l2 reveal">
   <span class="card__tag">Look established</span>
   <h3>Standard</h3>
   <p class="pkg__line">A full site that looks the part, with the words written for you.</p>
   <ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>Everything in Starter</span></li><li><span class="sun" aria-hidden="true"></span><span>Five pages: home, services, about, reviews and photo gallery</span></li><li><span class="sun" aria-hidden="true"></span><span>Page copy written from your intake form</span></li></ul>
 </article>
-      <article class="card pkg pkg--featured reveal">
+      <article class="card pkg pkg--l3 reveal">
   <span class="card__tag">Win more customers</span>
   <h3>Premium</h3>
   <p class="pkg__line">A site that brings in work: bookings online, found in local search.</p>
@@ -672,7 +689,7 @@ p:last-child{margin-bottom:0}
       <p class="lede" style="margin-top:18px">Open any step to see what happens and what we need
       from you.</p>
     </div>
-    <div class="card steps-card steps-card--sand reveal"><div class="faq">
+    <div class="card steps-card steps-card--paper reveal"><div class="faq">
       <details open>
         <summary><span class="stepnum">01</span>Complete the intake form</summary>
         <p>Share your business details, services and photos so the site is tailored to you. On Standard and Premium we write your page copy from it, so the more you share, the more it sounds like you.</p>
@@ -697,11 +714,20 @@ p:last-child{margin-bottom:0}
   </div>
 </section>
 
-<div class="divider divider--ridge from-cream" aria-hidden="true">
-<svg viewBox="0 0 1440 150" preserveAspectRatio="none" focusable="false">
-<path class="ridge-far" d="M0,150 L0,90 L199,60 L419,78 L680,44 L919,72 L1180,52 L1440,70 L1440,150 Z"/>
-<path class="ridge-back" d="M0,150 L0,96 L180,58 L320,82 L559,40 L760,78 L980,50 L1150,80 L1379,46 L1440,60 L1440,150 Z"/>
-<path class="ridge-front" d="M0,150 L0,118 L119,106 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<div class="divider divider--topo" aria-hidden="true">
+<svg viewBox="0 0 1440 128" preserveAspectRatio="none" focusable="false">
+<path d="M0,34 L20,36 L40,37 L60,38 L80,38 L100,38 L120,38 L140,37 L160,36 L180,35 L200,34 L220,33 L240,33 L260,32 L280,32 L300,30 L320,29 L340,26 L360,22 L380,17 L400,11 L420,6 L440,2 L460,3 L480,8 L500,15 L520,22 L540,27 L560,32 L580,35 L600,36 L620,36 L640,36 L660,35 L680,33 L700,31 L720,30 L740,28 L760,26 L780,25 L800,26 L820,28 L840,30 L860,31 L880,32 L900,32 L920,32 L940,32 L960,32 L980,33 L1000,33 L1020,32 L1040,31 L1060,28 L1080,25 L1100,21 L1120,18 L1140,19 L1160,21 L1180,23 L1200,25 L1220,27 L1240,28 L1260,29 L1280,30 L1300,31 L1320,32 L1340,33 L1360,33 L1380,34 L1400,34 L1420,34 L1440,34 L1440,170 L0,170 Z" fill="#F4A261" opacity="0.35"/>
+<path d="M0,53 L20,54 L40,53 L60,53 L80,52 L100,51 L120,50 L140,49 L160,49 L180,48 L200,48 L220,48 L240,47 L260,46 L280,44 L300,42 L320,40 L340,37 L360,34 L380,31 L400,29 L420,27 L440,26 L460,27 L480,31 L500,35 L520,38 L540,41 L560,43 L580,45 L600,45 L620,45 L640,45 L660,45 L680,45 L700,45 L720,44 L740,43 L760,42 L780,42 L800,43 L820,44 L840,45 L860,46 L880,47 L900,48 L920,49 L940,50 L960,50 L980,51 L1000,50 L1020,48 L1040,45 L1060,42 L1080,38 L1100,34 L1120,31 L1140,31 L1160,33 L1180,35 L1200,38 L1220,40 L1240,43 L1260,45 L1280,47 L1300,48 L1320,49 L1340,49 L1360,49 L1380,50 L1400,50 L1420,50 L1440,51 L1440,170 L0,170 Z" fill="#F4A261" opacity="0.75"/>
+<path d="M0,66 L20,65 L40,64 L60,64 L80,63 L100,63 L120,63 L140,62 L160,62 L180,61 L200,61 L220,59 L240,58 L260,57 L280,55 L300,54 L320,53 L340,52 L360,51 L380,51 L400,50 L420,48 L440,47 L460,47 L480,48 L500,49 L520,50 L540,51 L560,52 L580,53 L600,55 L620,56 L640,57 L660,58 L680,59 L700,59 L720,58 L740,58 L760,57 L780,56 L800,57 L820,59 L840,60 L860,62 L880,64 L900,65 L920,66 L940,66 L960,65 L980,64 L1000,61 L1020,58 L1040,55 L1060,52 L1080,49 L1100,46 L1120,46 L1140,47 L1160,49 L1180,52 L1200,54 L1220,56 L1240,58 L1260,60 L1280,61 L1300,62 L1320,63 L1340,63 L1360,64 L1380,65 L1400,66 L1420,67 L1440,67 L1440,170 L0,170 Z" fill="#E86F51" opacity="0.7"/>
+<path d="M0,76 L20,76 L40,76 L60,76 L80,76 L100,75 L120,75 L140,74 L160,73 L180,72 L200,71 L220,71 L240,70 L260,70 L280,71 L300,71 L320,71 L340,71 L360,70 L380,68 L400,66 L420,64 L440,62 L460,61 L480,60 L500,61 L520,61 L540,63 L560,64 L580,66 L600,68 L620,69 L640,70 L660,70 L680,71 L700,71 L720,71 L740,71 L760,71 L780,72 L800,74 L820,76 L840,77 L860,78 L880,79 L900,78 L920,77 L940,76 L960,74 L980,71 L1000,69 L1020,67 L1040,65 L1060,64 L1080,64 L1100,63 L1120,64 L1140,65 L1160,66 L1180,68 L1200,69 L1220,70 L1240,72 L1260,73 L1280,74 L1300,76 L1320,77 L1340,79 L1360,79 L1380,80 L1400,80 L1420,79 L1440,78 L1440,170 L0,170 Z" fill="#E86F51"/>
+<path d="M0,88 L20,87 L40,87 L60,86 L80,86 L100,85 L120,84 L140,84 L160,84 L180,84 L200,85 L220,86 L240,87 L260,87 L280,87 L300,87 L320,86 L340,84 L360,82 L380,80 L400,77 L420,75 L440,74 L460,74 L480,74 L500,75 L520,76 L540,77 L560,78 L580,79 L600,80 L620,81 L640,81 L660,82 L680,83 L700,84 L720,85 L740,86 L760,87 L780,88 L800,89 L820,89 L840,89 L860,88 L880,87 L900,85 L920,84 L940,82 L960,81 L980,81 L1000,80 L1020,80 L1040,80 L1060,80 L1080,80 L1100,80 L1120,80 L1140,80 L1160,81 L1180,82 L1200,83 L1220,84 L1240,86 L1260,88 L1280,89 L1300,90 L1320,90 L1340,90 L1360,89 L1380,88 L1400,87 L1420,85 L1440,84 L1440,170 L0,170 Z" fill="#38606E"/>
+<path d="M0,97 L20,96 L40,95 L60,95 L80,95 L100,95 L120,96 L140,97 L160,98 L180,100 L200,100 L220,101 L240,101 L260,100 L280,98 L300,97 L320,95 L340,93 L360,91 L380,90 L400,89 L420,89 L440,88 L460,89 L480,89 L500,90 L520,90 L540,90 L560,91 L580,91 L600,92 L620,93 L640,95 L660,96 L680,98 L700,99 L720,100 L740,100 L760,100 L780,99 L800,98 L820,97 L840,95 L860,94 L880,93 L900,93 L920,93 L940,93 L960,94 L980,94 L1000,94 L1020,94 L1040,94 L1060,94 L1080,93 L1100,93 L1120,94 L1140,94 L1160,95 L1180,97 L1200,98 L1220,99 L1240,100 L1260,100 L1280,99 L1300,98 L1320,97 L1340,96 L1360,95 L1380,94 L1400,94 L1420,94 L1440,95 L1440,170 L0,170 Z" fill="#2A5260"/>
+<path d="M0,105 L20,105 L40,105 L60,106 L80,108 L100,109 L120,111 L140,112 L160,112 L180,112 L200,111 L220,110 L240,108 L260,107 L280,105 L300,104 L320,104 L340,103 L360,103 L380,103 L400,103 L420,103 L440,102 L460,102 L480,102 L500,102 L520,103 L540,103 L560,105 L580,106 L600,107 L620,109 L640,110 L660,111 L680,111 L700,110 L720,109 L740,108 L760,106 L780,105 L800,104 L820,103 L840,103 L860,104 L880,104 L900,105 L920,105 L940,106 L960,106 L980,106 L1000,106 L1020,106 L1040,106 L1060,106 L1080,107 L1100,108 L1120,108 L1140,109 L1160,110 L1180,110 L1200,109 L1220,109 L1240,107 L1260,106 L1280,105 L1300,104 L1320,103 L1340,103 L1360,104 L1380,105 L1400,106 L1420,107 L1440,108 L1440,170 L0,170 Z" fill="#1B4552"/>
+<path d="M0,34 L20,36 L40,37 L60,38 L80,38 L100,38 L120,38 L140,37 L160,36 L180,35 L200,34 L220,33 L240,33 L260,32 L280,32 L300,30 L320,29 L340,26 L360,22 L380,17 L400,11 L420,6 L440,2 L460,3 L480,8 L500,15 L520,22 L540,27 L560,32 L580,35 L600,36 L620,36 L640,36 L660,35 L680,33 L700,31 L720,30 L740,28 L760,26 L780,25 L800,26 L820,28 L840,30 L860,31 L880,32 L900,32 L920,32 L940,32 L960,32 L980,33 L1000,33 L1020,32 L1040,31 L1060,28 L1080,25 L1100,21 L1120,18 L1140,19 L1160,21 L1180,23 L1200,25 L1220,27 L1240,28 L1260,29 L1280,30 L1300,31 L1320,32 L1340,33 L1360,33 L1380,34 L1400,34 L1420,34 L1440,34" class="topo-line"/>
+<path d="M0,53 L20,54 L40,53 L60,53 L80,52 L100,51 L120,50 L140,49 L160,49 L180,48 L200,48 L220,48 L240,47 L260,46 L280,44 L300,42 L320,40 L340,37 L360,34 L380,31 L400,29 L420,27 L440,26 L460,27 L480,31 L500,35 L520,38 L540,41 L560,43 L580,45 L600,45 L620,45 L640,45 L660,45 L680,45 L700,45 L720,44 L740,43 L760,42 L780,42 L800,43 L820,44 L840,45 L860,46 L880,47 L900,48 L920,49 L940,50 L960,50 L980,51 L1000,50 L1020,48 L1040,45 L1060,42 L1080,38 L1100,34 L1120,31 L1140,31 L1160,33 L1180,35 L1200,38 L1220,40 L1240,43 L1260,45 L1280,47 L1300,48 L1320,49 L1340,49 L1360,49 L1380,50 L1400,50 L1420,50 L1440,51" class="topo-line"/>
+<path d="M0,66 L20,65 L40,64 L60,64 L80,63 L100,63 L120,63 L140,62 L160,62 L180,61 L200,61 L220,59 L240,58 L260,57 L280,55 L300,54 L320,53 L340,52 L360,51 L380,51 L400,50 L420,48 L440,47 L460,47 L480,48 L500,49 L520,50 L540,51 L560,52 L580,53 L600,55 L620,56 L640,57 L660,58 L680,59 L700,59 L720,58 L740,58 L760,57 L780,56 L800,57 L820,59 L840,60 L860,62 L880,64 L900,65 L920,66 L940,66 L960,65 L980,64 L1000,61 L1020,58 L1040,55 L1060,52 L1080,49 L1100,46 L1120,46 L1140,47 L1160,49 L1180,52 L1200,54 L1220,56 L1240,58 L1260,60 L1280,61 L1300,62 L1320,63 L1340,63 L1360,64 L1380,65 L1400,66 L1420,67 L1440,67" class="topo-line"/>
+<path d="M0,76 L20,76 L40,76 L60,76 L80,76 L100,75 L120,75 L140,74 L160,73 L180,72 L200,71 L220,71 L240,70 L260,70 L280,71 L300,71 L320,71 L340,71 L360,70 L380,68 L400,66 L420,64 L440,62 L460,61 L480,60 L500,61 L520,61 L540,63 L560,64 L580,66 L600,68 L620,69 L640,70 L660,70 L680,71 L700,71 L720,71 L740,71 L760,71 L780,72 L800,74 L820,76 L840,77 L860,78 L880,79 L900,78 L920,77 L940,76 L960,74 L980,71 L1000,69 L1020,67 L1040,65 L1060,64 L1080,64 L1100,63 L1120,64 L1140,65 L1160,66 L1180,68 L1200,69 L1220,70 L1240,72 L1260,73 L1280,74 L1300,76 L1320,77 L1340,79 L1360,79 L1380,80 L1400,80 L1420,79 L1440,78" class="topo-line"/>
+<path d="M0,88 L20,87 L40,87 L60,86 L80,86 L100,85 L120,84 L140,84 L160,84 L180,84 L200,85 L220,86 L240,87 L260,87 L280,87 L300,87 L320,86 L340,84 L360,82 L380,80 L400,77 L420,75 L440,74 L460,74 L480,74 L500,75 L520,76 L540,77 L560,78 L580,79 L600,80 L620,81 L640,81 L660,82 L680,83 L700,84 L720,85 L740,86 L760,87 L780,88 L800,89 L820,89 L840,89 L860,88 L880,87 L900,85 L920,84 L940,82 L960,81 L980,81 L1000,80 L1020,80 L1040,80 L1060,80 L1080,80 L1100,80 L1120,80 L1140,80 L1160,81 L1180,82 L1200,83 L1220,84 L1240,86 L1260,88 L1280,89 L1300,90 L1320,90 L1340,90 L1360,89 L1380,88 L1400,87 L1420,85 L1440,84" class="topo-line"/>
 </svg></div>
 
 <section class="section band-teal">
@@ -751,20 +777,8 @@ p:last-child{margin-bottom:0}
         <p>Each package has a fixed price, so you'll know the full cost before we start. Ask for the price sheet on the contact page, or we'll go through it on a quick call.</p>
       </details>
       <details>
-        <summary>How long does it take?</summary>
-        <p>One to three weeks, depending on the package. The biggest variable is how quickly your intake form and photos come back.</p>
-      </details>
-      <details>
         <summary>How does payment work?</summary>
         <p>Half to start and half at launch. Premium can also be split into smaller payments.</p>
-      </details>
-      <details>
-        <summary>Can I add pages or features?</summary>
-        <p>Yes. Standard and Premium can add pages one at a time, and anything outside the packages we'll quote up front.</p>
-      </details>
-      <details>
-        <summary>Can I upgrade later?</summary>
-        <p>Yes. Upgrade within six months and everything you've paid counts toward the new package.</p>
       </details>
       <details>
         <summary>Do I need a care plan?</summary>
@@ -794,9 +808,11 @@ p:last-child{margin-bottom:0}
 
 <div class="divider divider--ridge" aria-hidden="true">
 <svg viewBox="0 0 1440 150" preserveAspectRatio="none" focusable="false">
-<path class="ridge-far" d="M0,150 L0,90 L199,60 L419,78 L680,44 L919,72 L1180,52 L1440,70 L1440,150 Z"/>
-<path class="ridge-back" d="M0,150 L0,96 L180,58 L320,82 L559,40 L760,78 L980,50 L1150,80 L1379,46 L1440,60 L1440,150 Z"/>
-<path class="ridge-front" d="M0,150 L0,118 L119,106 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<defs><linearGradient id="ridge-haze-2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--peach);stop-opacity:.25"/><stop offset=".45" style="stop-color:var(--peach);stop-opacity:.85"/></linearGradient></defs>
+<path class="ridge-far" fill="url(#ridge-haze-2)" d="M0,150 L0,40 L200,10 L420,34 L700,4 L980,30 L1220,8 L1440,26 L1440,150 Z"/>
+<path class="ridge-back" d="M0,150 L0,80 L104,40 L184,64 L330,34 L410,70 L620,36 L700,72 L790,40 L860,70 L1029,30 L1100,70 L1209,38 L1280,70 L1440,52 L1440,150 Z"/>
+<path class="ridge-front" d="M0,150 L0,98 L96,72 L136,84 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82 L1440,150 Z"/>
+<path class="ridge-rim" d="M0,98 L96,72 L136,84 L250,46 L330,94 L470,18 L640,102 L720,62 L790,90 L900,34 L1029,98 L1139,56 L1209,86 L1330,30 L1440,82"/>
 </svg></div>
 
 </main>
