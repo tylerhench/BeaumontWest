@@ -1128,6 +1128,9 @@ p:last-child{margin-bottom:0}
   .pkgs > .pkg{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0;align-content:start}
   .pkgs > .pkg .checks{align-content:start}
 }
+
+/* speed: the hero headline and copy show immediately; only the phone animates in */
+.hero .badge,.hero h1,.hero .lede,.hero .btn-row,.hero--build .hero__copy{animation:none}
 /* round 2: automatic check states */
 .ac-steps[hidden]{display:none}
 .ac-steps{list-style:none;margin:6px 0 4px;padding:0;display:grid;gap:2px}
@@ -1488,6 +1491,24 @@ JS = r"""
     var wait=function(ms){return new Promise(function(r){setTimeout(r,reduce?0:ms);});};
     var noteText=acMsg.textContent;
 
+    /* the spam check's script only loads once the form is close to the screen (or someone starts typing) */
+    var tsLoading=false;
+    var loadTurnstile=function(){
+      if(tsLoading)return;tsLoading=true;
+      window.bwsTurnstileReady=function(){
+        var el=af.querySelector('.cf-turnstile');
+        if(el&&window.turnstile)window.turnstile.render(el,{sitekey:el.getAttribute('data-sitekey'),size:'flexible',theme:'light'});
+      };
+      var sc=document.createElement('script');
+      sc.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=bwsTurnstileReady';
+      sc.async=true;document.head.appendChild(sc);
+    };
+    if('IntersectionObserver' in window){
+      var tio=new IntersectionObserver(function(en){if(en.some(function(x){return x.isIntersecting;})){loadTurnstile();tio.disconnect();}},{rootMargin:'800px 0px'});
+      tio.observe(af);
+    }else{loadTurnstile();}
+    af.addEventListener('focusin',loadTurnstile);
+
     acNone.addEventListener('change',function(){acUrl.disabled=acNone.checked;if(acNone.checked)acUrl.value='';else acUrl.focus();});
     [acName,acUrl,acEmail].forEach(function(el){el.addEventListener('input',function(){el.setCustomValidity('');});});
 
@@ -1519,7 +1540,7 @@ JS = r"""
       if(!af.reportValidity())return;
       if(af.querySelector('[name="botcheck"]').checked)return;
       var token=(af.querySelector('[name="cf-turnstile-response"]')||{}).value||'';
-      if(!token){acMsg.textContent='One moment: the spam check is still loading. Try again in a few seconds.';return;}
+      if(!token){loadTurnstile();acMsg.textContent='One moment: the spam check is still loading. Try again in a few seconds.';return;}
       acMsg.textContent=noteText;
 
       var f={business:acName.value.trim(),town:acTown.value.trim(),website:acNone.checked?'':acUrl.value.trim(),
@@ -1824,8 +1845,7 @@ CHECK_AUTO = r"""<section class="section check" id="check">
       </div>
     </div>
   </div>
-</section>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>"""
+</section>"""
 
 def page_url(slug):
     return SITE_URL + "/" + ("" if slug == "index.html" else slug)
@@ -1864,7 +1884,8 @@ def page(slug, title, desc, body):
 <script>if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('fx');</script>%s
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:wght@400..500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:wght@400..500&display=swap"></noscript>
 <style>%s</style>
 </head>
 <body>
