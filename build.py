@@ -6,10 +6,12 @@ import re, os, shutil, html
 # Change any of these once and every page picks it up on the next build.
 BRAND         = "Beaumont West Solutions"
 SITE_URL      = "https://beaumontwest.com"   # no trailing slash
-EMAIL         = "hello@beaumontwest.com"
+EMAIL         = "info@beaumontwest.com"
 PHONE_DISPLAY = "(555) 014-2200"
 PHONE_LINK    = "+15550142200"               # digits only, with country code
 YEAR          = "2026"
+# Web3Forms access key: paste yours between the quotes (Web3Forms dashboard -> your form -> Access Key)
+WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY"
 # ---------------------------------------------------------------------------
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -541,8 +543,10 @@ p:last-child{margin-bottom:0}
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
 }
 .facts li{display:flex;gap:12px;align-items:flex-start;font-family:var(--display);
-  font-size:14.5px;font-weight:500;line-height:1.45}
+  font-size:clamp(16.5px,1.3vw,18.5px);font-weight:500;line-height:1.45}
 .facts .sun{margin-top:calc((1.45em - 9px) / 2 + 1px)}
+@media(min-width:640px) and (max-width:1099px){.facts{grid-template-columns:repeat(2,max-content);gap:14px 56px}}
+@media(min-width:1100px){.facts{grid-template-columns:repeat(4,auto);justify-content:space-between}}
 
 /* ---------- steps ---------- */
 .track{display:grid;grid-template-columns:repeat(4,1fr);margin-top:10px}
@@ -644,6 +648,7 @@ p:last-child{margin-bottom:0}
   background:var(--paper);padding:22px 24px}
 .formstatus.show{display:block}
 .formstatus h3{margin-bottom:8px}
+.form .hp{display:none}
 
 /* ---------- contact rail ---------- */
 .rail{display:grid;gap:26px}
@@ -657,16 +662,18 @@ p:last-child{margin-bottom:0}
 .lockup--footer{height:88px;width:auto}
 .foot__top{display:grid;gap:40px;grid-template-columns:1fr}
 @media(min-width:820px){.foot__top{grid-template-columns:1.2fr .8fr .8fr}}
-.foot h4{font-family:var(--display);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+.foot h4{font-family:var(--display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:600;color:rgba(253,240,220,.62);margin:0 0 16px}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
-.foot a{text-decoration:none;font-family:var(--display);font-size:15px;font-weight:400;
+.foot a{text-decoration:none;font-family:var(--display);font-size:17px;font-weight:400;
   color:rgba(253,240,220,.92)}
 .foot a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
-.foot__blurb{margin:22px 0 0;font-size:16px;color:rgba(253,240,220,.78);max-width:38ch}
+.foot a[href^="mailto:"],.foot a[href^="tel:"]{border-bottom:1.5px solid var(--coral);padding-bottom:2px}
+.foot a[href^="mailto:"]:hover,.foot a[href^="tel:"]:hover{text-decoration:none;border-bottom-color:var(--peach)}
+.foot__blurb{margin:22px 0 0;font-size:18px;color:rgba(253,240,220,.78);max-width:38ch}
 .foot__base{margin-top:46px;padding-top:22px;border-top:1px solid rgba(253,240,220,.2);
   display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:space-between;
-  font-size:13.5px;color:rgba(253,240,220,.62);font-family:var(--display)}
+  font-size:15px;color:rgba(253,240,220,.62);font-family:var(--display)}
 
 /* ---------- a11y + motion ---------- */
 .skip{position:absolute;left:-9999px;top:0;background:var(--teal);color:var(--cream);
@@ -733,14 +740,35 @@ JS = r"""
   if(pre){var w=document.getElementById(pre);if(w)w.checked=true;}
   var f=document.getElementById('projectform');
   if(f){f.addEventListener('submit',function(ev){
-    var action=f.getAttribute('action')||'';
-    if(action.indexOf('YOUR_FORM_ID')>-1){
-      ev.preventDefault();
-      if(!f.checkValidity()){f.reportValidity();return;}
-      document.getElementById('formstatus').classList.add('show');
-      f.style.display='none';
+    ev.preventDefault();
+    if(!f.checkValidity()){f.reportValidity();return;}
+    var st=document.getElementById('formstatus'),
+        tt=document.getElementById('formstatus-title'),
+        tx=document.getElementById('formstatus-text'),
+        btn=f.querySelector('button[type="submit"],input[type="submit"]');
+    var show=function(title,text){
+      tt.textContent=title; tx.textContent=text;
+      st.classList.add('show'); f.style.display='none';
       window.scrollTo({top:f.parentNode.offsetTop-90,behavior:'smooth'});
+      st.focus({preventScroll:true});
+    };
+    var key=(f.querySelector('[name="access_key"]')||{}).value||'';
+    if(key.indexOf('YOUR_')===0){
+      show("Form isn't connected yet","Add your Web3Forms access key in build.py (WEB3FORMS_KEY) and rebuild.");
+      return;
     }
+    if(btn){btn.disabled=true;btn.setAttribute('aria-busy','true');}
+    var data=Object.fromEntries(new FormData(f));
+    fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.success,j:j};});})
+      .then(function(res){
+        if(res.ok){show("Thanks, we've got it.","You'll hear back within one business day, from a person.");}
+        else{throw new Error(res.j&&res.j.message);}
+      })
+      .catch(function(){
+        if(btn){btn.disabled=false;btn.removeAttribute('aria-busy');}
+        alert("Sorry, that didn't send. Please try again, or email us at hello@beaumontwest.com.");
+      });
   });}
 })();
 """
@@ -848,6 +876,7 @@ def page(slug, title, desc, body):
        SITE_URL, CSS, masthead(slug), body, FOOTER, JS)
     out = out.replace("Beaumont West Solutions", BRAND)
     out = out.replace("hello@beaumontwest.com", EMAIL)
+    out = out.replace("__WEB3FORMS_KEY__", WEB3FORMS_KEY)
     out = out.replace("(555) 014-2200", PHONE_DISPLAY)
     out = out.replace("+15550142200", PHONE_LINK)
     out = out.replace("\u00a9 2026", "\u00a9 " + YEAR)
@@ -869,7 +898,7 @@ home = """
     <span class="eyebrow">Websites for service businesses</span>
     <h1>Good work deserves to be seen.</h1>
     <p class="lede">For the businesses people call, book and recommend. Three clear packages,
-    live in one to three weeks.</p>
+    typically live in two to four weeks.</p>
     <div class="btn-row">
       <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
       <a class="btn btn--ghost" href="services.html">See the packages</a>
@@ -883,7 +912,7 @@ home = """
 <section class="section band-teal">
   <div class="wrap">
     <ul class="facts reveal">
-      <li><span class="sun" aria-hidden="true"></span><span>Live in one to three weeks</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Typically live in two to four weeks</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Built for phones first</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Three fixed packages, no hourly billing</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Care plans optional</span></li>
@@ -989,7 +1018,7 @@ home = """
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">How it goes</span>
-      <h2>Four steps, one to three weeks</h2>
+      <h2>Four steps, two to four weeks</h2>
     </div>
     <div class="track reveal">
       <div class="track__step">
@@ -1071,7 +1100,7 @@ services = """
       <span class="eyebrow">Packages</span>
       <h1 style="font-size:clamp(34px,4.6vw,56px)">Three packages. One standard of work.</h1>
       <p class="lede" style="margin-top:20px">Every site is designed for your business, built for
-      phones, and live in one to three weeks. Pick the one that fits where you are now. You can
+      phones, and typically live in two to four weeks. Pick the one that fits where you are now. You can
       move up later.</p>
     </div>
   </div>
@@ -1119,7 +1148,7 @@ services = """
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">How a project runs</span>
-      <h2>Four steps, one to three weeks</h2>
+      <h2>Four steps, two to four weeks</h2>
       <p class="lede" style="margin-top:18px">Open any step to see what happens and what we need
       from you.</p>
     </div>
@@ -1234,9 +1263,9 @@ services = """
        "We design one page first, so you can confirm the direction before the rest is built. On "
        "Starter, that page is your whole site."),
   step("03", "Refine and build out",
-       "We incorporate your feedback, then carry it through the remaining pages. Most sites are "
-       "ready in one to three weeks, depending on the package and how quickly the intake form "
-       "comes back."),
+       "We incorporate your feedback, then carry it through the remaining pages. Most projects are "
+       "completed in two to four weeks, depending on the package and how quickly we receive your "
+       "intake form, photos and final approval."),
   step("04", "Launch",
        "We point your domain, test on real phones and go live. Then it runs on your own hosting "
        "account, or we look after it on a care plan."),
@@ -1280,13 +1309,15 @@ contact = """
 <section class="section band-paper" style="padding-top:clamp(28px,3.5vw,44px)">
   <div class="wrap split">
     <div class="reveal">
-      <div class="formstatus" id="formstatus" role="status">
-        <h3>Form isn't connected yet</h3>
-        <p class="small" style="margin-top:10px">Your details look complete, but this site has no
-        form handler wired up. Point the form's <code>action</code> at Formspree, Netlify Forms or
-        your own endpoint before launch.</p>
+      <div class="formstatus" id="formstatus" role="status" tabindex="-1">
+        <h3 id="formstatus-title">Thanks, we've got it.</h3>
+        <p class="small" id="formstatus-text" style="margin-top:10px">You'll hear back within one business day, from a person.</p>
       </div>
-      <form class="form" id="projectform" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form class="form" id="projectform" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="__WEB3FORMS_KEY__">
+        <input type="hidden" name="subject" value="New enquiry from beaumontwest.com">
+        <input type="hidden" name="from_name" value="Beaumont West Solutions website">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <fieldset class="choice">
           <legend>What would you like?</legend>
           <div class="choice__opts">
@@ -1389,9 +1420,9 @@ contact = """
 # ==========================================================================
 PAGES = [
  ("index.html","Beaumont West Solutions — Websites for service businesses",
-  "Websites for the businesses people call, book and recommend. Three clear packages, live in one to three weeks.", home),
+  "Websites for the businesses people call, book and recommend. Three clear packages, typically live in two to four weeks.", home),
  ("services.html","Packages — Beaumont West Solutions",
-  "Three website packages for service businesses — Starter, Standard and Premium — plus optional monthly care plans. Live in one to three weeks.", services),
+  "Three website packages for service businesses — Starter, Standard and Premium — plus optional monthly care plans. Typically live in two to four weeks.", services),
  ("contact.html","Contact — Beaumont West Solutions",
   "Request the price sheet or book a call. You'll hear back within one business day, from a person.", contact),
 ]

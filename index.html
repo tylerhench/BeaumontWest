@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Beaumont West Solutions — Websites for service businesses</title>
-<meta name="description" content="Websites for the businesses people call, book and recommend. Three clear packages, live in one to three weeks.">
+<meta name="description" content="Websites for the businesses people call, book and recommend. Three clear packages, typically live in two to four weeks.">
 <meta property="og:title" content="Beaumont West Solutions — Websites for service businesses">
-<meta property="og:description" content="Websites for the businesses people call, book and recommend. Three clear packages, live in one to three weeks.">
+<meta property="og:description" content="Websites for the businesses people call, book and recommend. Three clear packages, typically live in two to four weeks.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://beaumontwest.com/assets/bws-social-1200x630.png">
 <meta name="theme-color" content="#1B4552">
@@ -391,8 +391,10 @@ p:last-child{margin-bottom:0}
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
 }
 .facts li{display:flex;gap:12px;align-items:flex-start;font-family:var(--display);
-  font-size:14.5px;font-weight:500;line-height:1.45}
+  font-size:clamp(16.5px,1.3vw,18.5px);font-weight:500;line-height:1.45}
 .facts .sun{margin-top:calc((1.45em - 9px) / 2 + 1px)}
+@media(min-width:640px) and (max-width:1099px){.facts{grid-template-columns:repeat(2,max-content);gap:14px 56px}}
+@media(min-width:1100px){.facts{grid-template-columns:repeat(4,auto);justify-content:space-between}}
 
 /* ---------- steps ---------- */
 .track{display:grid;grid-template-columns:repeat(4,1fr);margin-top:10px}
@@ -494,6 +496,7 @@ p:last-child{margin-bottom:0}
   background:var(--paper);padding:22px 24px}
 .formstatus.show{display:block}
 .formstatus h3{margin-bottom:8px}
+.form .hp{display:none}
 
 /* ---------- contact rail ---------- */
 .rail{display:grid;gap:26px}
@@ -507,16 +510,18 @@ p:last-child{margin-bottom:0}
 .lockup--footer{height:88px;width:auto}
 .foot__top{display:grid;gap:40px;grid-template-columns:1fr}
 @media(min-width:820px){.foot__top{grid-template-columns:1.2fr .8fr .8fr}}
-.foot h4{font-family:var(--display);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+.foot h4{font-family:var(--display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:600;color:rgba(253,240,220,.62);margin:0 0 16px}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
-.foot a{text-decoration:none;font-family:var(--display);font-size:15px;font-weight:400;
+.foot a{text-decoration:none;font-family:var(--display);font-size:17px;font-weight:400;
   color:rgba(253,240,220,.92)}
 .foot a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
-.foot__blurb{margin:22px 0 0;font-size:16px;color:rgba(253,240,220,.78);max-width:38ch}
+.foot a[href^="mailto:"],.foot a[href^="tel:"]{border-bottom:1.5px solid var(--coral);padding-bottom:2px}
+.foot a[href^="mailto:"]:hover,.foot a[href^="tel:"]:hover{text-decoration:none;border-bottom-color:var(--peach)}
+.foot__blurb{margin:22px 0 0;font-size:18px;color:rgba(253,240,220,.78);max-width:38ch}
 .foot__base{margin-top:46px;padding-top:22px;border-top:1px solid rgba(253,240,220,.2);
   display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:space-between;
-  font-size:13.5px;color:rgba(253,240,220,.62);font-family:var(--display)}
+  font-size:15px;color:rgba(253,240,220,.62);font-family:var(--display)}
 
 /* ---------- a11y + motion ---------- */
 .skip{position:absolute;left:-9999px;top:0;background:var(--teal);color:var(--cream);
@@ -608,7 +613,7 @@ p:last-child{margin-bottom:0}
     <span class="eyebrow">Websites for service businesses</span>
     <h1>Good work deserves to be seen.</h1>
     <p class="lede">For the businesses people call, book and recommend. Three clear packages,
-    live in one to three weeks.</p>
+    typically live in two to four weeks.</p>
     <div class="btn-row">
       <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
       <a class="btn btn--ghost" href="services.html">See the packages</a>
@@ -629,7 +634,7 @@ p:last-child{margin-bottom:0}
 <section class="section band-teal">
   <div class="wrap">
     <ul class="facts reveal">
-      <li><span class="sun" aria-hidden="true"></span><span>Live in one to three weeks</span></li>
+      <li><span class="sun" aria-hidden="true"></span><span>Typically live in two to four weeks</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Built for phones first</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Three fixed packages, no hourly billing</span></li>
       <li><span class="sun" aria-hidden="true"></span><span>Care plans optional</span></li>
@@ -760,7 +765,7 @@ p:last-child{margin-bottom:0}
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">How it goes</span>
-      <h2>Four steps, one to three weeks</h2>
+      <h2>Four steps, two to four weeks</h2>
     </div>
     <div class="track reveal">
       <div class="track__step">
@@ -838,7 +843,7 @@ p:last-child{margin-bottom:0}
       <div>
         <h4>Get in touch</h4>
         <ul>
-          <li><a href="mailto:hello@beaumontwest.com">hello@beaumontwest.com</a></li>
+          <li><a href="mailto:info@beaumontwest.com">info@beaumontwest.com</a></li>
           <li><a href="tel:+15550142200">(555) 014-2200</a></li>
           <li><a href="contact.html">Start a project</a></li>
         </ul>
@@ -897,14 +902,35 @@ p:last-child{margin-bottom:0}
   if(pre){var w=document.getElementById(pre);if(w)w.checked=true;}
   var f=document.getElementById('projectform');
   if(f){f.addEventListener('submit',function(ev){
-    var action=f.getAttribute('action')||'';
-    if(action.indexOf('YOUR_FORM_ID')>-1){
-      ev.preventDefault();
-      if(!f.checkValidity()){f.reportValidity();return;}
-      document.getElementById('formstatus').classList.add('show');
-      f.style.display='none';
+    ev.preventDefault();
+    if(!f.checkValidity()){f.reportValidity();return;}
+    var st=document.getElementById('formstatus'),
+        tt=document.getElementById('formstatus-title'),
+        tx=document.getElementById('formstatus-text'),
+        btn=f.querySelector('button[type="submit"],input[type="submit"]');
+    var show=function(title,text){
+      tt.textContent=title; tx.textContent=text;
+      st.classList.add('show'); f.style.display='none';
       window.scrollTo({top:f.parentNode.offsetTop-90,behavior:'smooth'});
+      st.focus({preventScroll:true});
+    };
+    var key=(f.querySelector('[name="access_key"]')||{}).value||'';
+    if(key.indexOf('YOUR_')===0){
+      show("Form isn't connected yet","Add your Web3Forms access key in build.py (WEB3FORMS_KEY) and rebuild.");
+      return;
     }
+    if(btn){btn.disabled=true;btn.setAttribute('aria-busy','true');}
+    var data=Object.fromEntries(new FormData(f));
+    fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.success,j:j};});})
+      .then(function(res){
+        if(res.ok){show("Thanks, we've got it.","You'll hear back within one business day, from a person.");}
+        else{throw new Error(res.j&&res.j.message);}
+      })
+      .catch(function(){
+        if(btn){btn.disabled=false;btn.removeAttribute('aria-busy');}
+        alert("Sorry, that didn't send. Please try again, or email us at info@beaumontwest.com.");
+      });
   });}
 })();
 </script>
