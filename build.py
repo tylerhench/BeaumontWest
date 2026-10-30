@@ -17,8 +17,8 @@ WEB3FORMS_KEY = "afaa391d-8e7a-42b5-be4a-4c8688b5e1a6"
 CF_ANALYTICS_TOKEN = ""
 # Automatic website check. Fill both in once the Cloudflare Worker is set up (see worker/SETUP.md).
 # While either is empty, the site uses the by-request form and you send reports yourself.
-CHECK_ENDPOINT = ""        # the Worker address, e.g. https://bws-site-check.yourname.workers.dev
-TURNSTILE_SITEKEY = ""     # Cloudflare Turnstile site key (the public one, not the secret)
+CHECK_ENDPOINT = "https://bws-site-check.tylerhench14.workers.dev"        # the Worker address, e.g. https://bws-site-check.yourname.workers.dev
+TURNSTILE_SITEKEY = "0x4AAAAAAFtQ6iLNd2y_qUzH"     # Cloudflare Turnstile site key (the public one, not the secret)
 # ---------------------------------------------------------------------------
 
 HERE = os.path.dirname(os.path.abspath(__file__))

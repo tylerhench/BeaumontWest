@@ -1179,87 +1179,99 @@ p:last-child{margin-bottom:0}
     <div class="head reveal">
       <span class="eyebrow">Free website check</span>
       <h2>See what customers see when they look you up</h2>
-      <p class="lede" style="margin-top:18px">Tell us where to look. We'll check your Google listing, how your
-      site works on a phone and how fast it loads, then email you a short report within two business days.
-      No website yet? That counts too.</p>
+      <p class="lede" style="margin-top:18px">Tell us where to look. In under a minute you'll get a score out of 100
+      and the things to fix first. No website yet? That counts too.</p>
     </div>
     <div class="check__grid">
-      <div class="reveal">
-        <div class="formstatus" id="checkstatus" role="status" tabindex="-1">
-          <h3 id="checkstatus-title">Thanks. Your check is booked.</h3>
-          <p class="small" id="checkstatus-text" style="margin-top:10px">You'll get your report within two business days.</p>
+      <form class="card check__form reveal" id="autocheck" data-endpoint="https://bws-site-check.tylerhench14.workers.dev" novalidate>
+        <input type="hidden" name="access_key" value="afaa391d-8e7a-42b5-be4a-4c8688b5e1a6">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field">
+          <label for="ac-name">Business name</label>
+          <input id="ac-name" name="business" autocomplete="organization" required>
         </div>
-        <form class="card check__form" id="checkform" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="afaa391d-8e7a-42b5-be4a-4c8688b5e1a6">
-          <input type="hidden" name="subject" value="Website check request from beaumontwest.com">
-          <input type="hidden" name="from_name" value="Beaumont West Solutions website">
-          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field">
+          <label for="ac-town">Town or city</label>
+          <input id="ac-town" name="town" autocomplete="address-level2">
+        </div>
+        <div class="field">
+          <label for="ac-url">Website</label>
+          <input id="ac-url" name="website" inputmode="url" placeholder="yourbusiness.com">
+        </div>
+        <label class="tick" for="ac-none"><input type="checkbox" id="ac-none" name="no_website" value="Yes"> We don't have a website yet</label>
+        <div class="field--pair">
           <div class="field">
-            <label for="ck-name">Business name</label>
-            <input id="ck-name" name="business" autocomplete="organization" required>
+            <label for="ac-first">First name</label>
+            <input id="ac-first" name="name" autocomplete="given-name">
           </div>
           <div class="field">
-            <label for="ck-town">Town or city</label>
-            <input id="ck-town" name="town" autocomplete="address-level2">
+            <label for="ac-email">Email</label>
+            <input id="ac-email" name="email" type="email" autocomplete="email" required>
           </div>
-          <div class="field">
-            <label for="ck-url">Website</label>
-            <input id="ck-url" name="website" inputmode="url" placeholder="yourbusiness.com" required>
-          </div>
-          <label class="tick" for="ck-none"><input type="checkbox" id="ck-none" name="no_website" value="Yes"> We don't have a website yet</label>
-          <div class="field">
-            <label for="ck-type">Type of business</label>
-            <select id="ck-type" name="business_type">
-              <option>Trades and home services</option>
-              <option>Health and wellness</option>
-              <option>Beauty and personal care</option>
-              <option>Food and drink</option>
-              <option>Professional services</option>
-              <option>Something else</option>
-            </select>
-          </div>
-          <div class="field--pair">
-            <div class="field">
-              <label for="ck-first">First name</label>
-              <input id="ck-first" name="name" autocomplete="given-name">
-            </div>
-            <div class="field">
-              <label for="ck-email">Email</label>
-              <input id="ck-email" name="email" type="email" autocomplete="email" required>
-            </div>
-          </div>
-          <button class="btn btn--primary" type="submit">Request my free check <span class="arrow">&rarr;</span></button>
-          <p class="formnote">We'll only use this to send your report. No list, no newsletter.</p>
-        </form>
-      </div>
+        </div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFtQ6iLNd2y_qUzH" data-size="flexible" data-theme="light"></div>
+        <button class="btn btn--primary" type="submit" id="ac-run">Run my free check <span class="arrow">&rarr;</span></button>
+        <p class="formnote" id="ac-msg">We'll only use your email to follow up on your report. No list, no newsletter.</p>
+      </form>
 
-      <div class="card card--dark check__report reveal" aria-label="Example report">
+      <div class="card card--dark check__report reveal" id="acreport" aria-live="polite">
         <div class="ck-head">
           <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
             <circle cx="50" cy="50" r="42" class="ring__track"/>
-            <circle cx="50" cy="50" r="42" class="ring__val" style="stroke-dashoffset:216.4"/>
+            <circle cx="50" cy="50" r="42" class="ring__val" id="ac-ring" style="stroke-dashoffset:216.4"/>
           </svg>
-          <div class="ck-score"><span>18</span><small>/100</small></div>
+          <div class="ck-score"><span id="ac-num">18</span><small>/100</small></div>
           <div class="ck-title">
-            <span class="eyebrow">Example report</span>
-            <h3>Harbor Line Plumbing, North Bend</h3>
-            <p>Hard to find</p>
+            <span class="eyebrow" id="ac-tag">Example report</span>
+            <h3 id="ac-biz">Harbor Line Plumbing, North Bend</h3>
+            <p id="ac-verdict">Hard to find</p>
           </div>
         </div>
-        <ul class="ck-list">
-          <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Google Business Profile</span><p class="ck-d">Listed, but missing hours and photos. Customers check both before they call.</p></li>
-          <li><span class="ck-chip miss">Missing</span><span class="ck-t">Website</span><p class="ck-d">No website found. People who search the name only see the Google listing.</p></li>
-          <li><span class="ck-chip miss">Missing</span><span class="ck-t">Works on phones</span><p class="ck-d">Nothing to check yet.</p></li>
-          <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Easy to contact</span><p class="ck-d">Customers can only call. There's no quote form for after-hours visitors.</p></li>
-          <li><span class="ck-chip miss">Missing</span><span class="ck-t">Bookings and quotes online</span><p class="ck-d">No way to book or ask for a quote online.</p></li>
-        </ul>
-        <div class="ck-reco"><span class="eyebrow">Best fit</span><strong>Starter</strong>
-          <p>A one-page site closes the biggest gap: being findable, with tap-to-call and a quote form.</p></div>
-        <p class="ck-example">A sample report for a made-up business with no website.</p>
+
+        <ol class="ac-steps" id="ac-steps" hidden>
+          <li><span class="ac-dot"></span><span>Finding your Google listing</span></li>
+          <li><span class="ac-dot"></span><span>Loading your website</span></li>
+          <li><span class="ac-dot"></span><span>Testing it on a phone connection<small>Google's test, usually 15&ndash;30 seconds</small></span></li>
+          <li><span class="ac-dot"></span><span>Checking how customers reach you</span></li>
+        </ol>
+
+        <div id="ac-result">
+          <ul class="ck-list" id="ac-list">
+            <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Google Business Profile</span><p class="ck-d">Listed, but missing hours and photos. Customers check these before they call.</p></li>
+            <li><span class="ck-chip miss">Missing</span><span class="ck-t">Website</span><p class="ck-d">No website found. People who search the name only see the Google listing.</p></li>
+            <li><span class="ck-chip miss">Missing</span><span class="ck-t">Works on phones</span><p class="ck-d">Nothing to check yet.</p></li>
+            <li><span class="ck-chip miss">Missing</span><span class="ck-t">Loads quickly</span><p class="ck-d">Nothing to check yet.</p></li>
+            <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Easy to contact</span><p class="ck-d">Customers can only call. There's no quote form for after-hours visitors.</p></li>
+            <li><span class="ck-chip miss">Missing</span><span class="ck-t">Bookings and quotes online</span><p class="ck-d">No way to book or ask for a quote online.</p></li>
+          </ul>
+          <div class="ck-reco" id="ac-reco"><span class="eyebrow">Best fit</span><strong>Starter</strong>
+            <p>A one-page site closes the biggest gap: being findable, with tap-to-call and a quote form.</p></div>
+          <details class="ac-rubric">
+            <summary>How the score works</summary>
+            <table>
+              <tr><th>Google Business Profile</th><td>20</td><td>Full marks with hours, photos and reviews. Half if it's listed but incomplete.</td></tr>
+              <tr><th>Website</th><td>20</td><td>Full marks if it loads securely and looks current. Half if it's dated or not secure.</td></tr>
+              <tr><th>Works on phones</th><td>15</td><td>Google's phone checks: set up for phone screens, with readable text.</td></tr>
+              <tr><th>Loads quickly</th><td>15</td><td>Full marks under 3 seconds on a phone connection. Half from 3 to 6.</td></tr>
+              <tr><th>Easy to contact</th><td>15</td><td>Tap-to-call number and a contact form on the home page. Half for one of the two.</td></tr>
+              <tr><th>Bookings and quotes</th><td>15</td><td>Full marks for online booking or a quote request.</td></tr>
+            </table>
+            <p>Under 40 is &ldquo;Hard to find&rdquo;, 40 to 69 &ldquo;Needs work&rdquo;, 70 and up &ldquo;In good shape&rdquo;.</p>
+          </details>
+          <div class="ac-next" id="ac-next" hidden>
+            <p id="ac-next-text">We'll follow up within two business days with what we'd fix first.</p>
+            <div class="btn-row">
+              <a class="btn btn--primary" href="contact.html#call">Book a call about this <span class="arrow">&rarr;</span></a>
+              <a class="btn btn--ghost" href="services.html">See the packages</a>
+            </div>
+          </div>
+        </div>
+        <p class="ck-example" id="ac-example">A sample report for a made-up business with no website.</p>
       </div>
     </div>
   </div>
 </section>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <section class="section band-paper">
   <div class="wrap split">
