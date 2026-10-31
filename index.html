@@ -952,6 +952,9 @@ p:last-child{margin-bottom:0}
 
 /* speed: the hero headline and copy show immediately; only the phone animates in */
 .hero .badge,.hero h1,.hero .lede,.hero .btn-row,.hero--build .hero__copy{animation:none}
+
+/* line break used on desktop only */
+@media(max-width:899px){.br-desk{display:none}}
 /* round 2: automatic check states */
 .ac-steps[hidden]{display:none}
 .ac-steps{list-style:none;margin:6px 0 4px;padding:0;display:grid;gap:2px}
@@ -1045,7 +1048,7 @@ p:last-child{margin-bottom:0}
     <div class="hero__copy">
       <span class="eyebrow">Websites for service businesses</span>
       <h1>Good work deserves to be seen.</h1>
-      <p class="lede">For the businesses people call, book and recommend. Three clear packages,
+      <p class="lede">For the businesses people call, book and recommend.<br class="br-desk"> Three clear packages,
       typically live in two to four weeks.</p>
       <div class="btn-row">
         <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
@@ -1263,7 +1266,7 @@ p:last-child{margin-bottom:0}
             <p>Under 40 is &ldquo;Hard to find&rdquo;, 40 to 69 &ldquo;Needs work&rdquo;, 70 and up &ldquo;In good shape&rdquo;.</p>
           </details>
           <div class="ac-next" id="ac-next" hidden>
-            <p id="ac-next-text">We'll follow up within two business days with what we'd fix first.</p>
+            <p id="ac-next-text">Want help fixing these? Book a call and we'll walk through it together. Either way, we'll email a short fix plan within two business days.</p>
             <div class="btn-row">
               <a class="btn btn--primary" href="contact.html#call">Book a call about this <span class="arrow">&rarr;</span></a>
               <a class="btn btn--ghost" href="services.html">See the packages</a>
@@ -1774,7 +1777,18 @@ p:last-child{margin-bottom:0}
       if(x.isIntersecting&&!lp.timer)lp.timer=setInterval(lp.tick,lp.ms);
       if(!x.isIntersecting&&lp.timer){clearInterval(lp.timer);lp.timer=null;}
     });},{threshold:.3});
-    pvs.forEach(function(p){var lp=makeLoop(p);if(lp)loops.set(p,lp);pio.observe(p);});
+    var start=function(el){var lp=loops.get(el);el.classList.add('play');if(lp&&!lp.timer)lp.timer=setInterval(lp.tick,lp.ms);};
+    var stop=function(el){var lp=loops.get(el);el.classList.remove('play');if(lp&&lp.timer){clearInterval(lp.timer);lp.timer=null;}};
+    /* with a mouse, a card's preview only plays while that card is hovered; on phones it plays while on screen */
+    var canHover=window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    pvs.forEach(function(p){
+      var lp=makeLoop(p);if(lp)loops.set(p,lp);
+      var card=p.closest('.pkg');
+      if(canHover&&card){
+        card.addEventListener('mouseenter',function(){start(p);});
+        card.addEventListener('mouseleave',function(){stop(p);});
+      }else{pio.observe(p);}
+    });
   }
   /* ---------- automatic website check (Cloudflare Worker) ---------- */
   var af=document.getElementById('autocheck');
@@ -1816,16 +1830,26 @@ p:last-child{margin-bottom:0}
         if(p<1&&!reduce)requestAnimationFrame(step);else acNum.textContent=v;})(t0);
     };
 
-    /* you get every request by email, with the results (or a note that the check didn't finish) */
+    /* you get every request by email: the headline result, talking points, then the detail behind each check */
     var sendLead=function(f,report){
-      var data={access_key:af.querySelector('[name="access_key"]').value,from_name:'Beaumont West Solutions website',
-        subject:'Website check: '+f.business+(report?' scored '+report.score+'/100':' (check did not finish)'),
-        business:f.business,town:f.town,website:f.website||'(none)',name:f.name,email:f.email};
+      var key=af.querySelector('[name="access_key"]').value;
+      if(key.indexOf('YOUR_')===0)return;
+      var data={access_key:key,from_name:'Beaumont West Solutions website',
+        subject:'Website check: '+f.business+(report?' \u2013 '+report.score+'/100, '+report.verdict:' \u2013 check did not finish')};
+      data['Business']=f.business+(f.town?', '+f.town:'');
+      data.name=f.name||'(not given)';
+      data.email=f.email;
+      data['Site checked']=f.website||'(no website given)';
       if(report){
-        data.score=report.score+'/100, '+report.verdict;data.best_fit=report.pk;
-        data.results=report.items.map(function(it){return LABEL[it.s]+' – '+it.t+': '+it.d;}).join('\n');
-      }else{data.results='The automatic check did not finish. Send this report by hand.';}
-      if(data.access_key.indexOf('YOUR_')===0)return;
+        data['Score']=report.score+'/100 \u2013 '+report.verdict+'. Best fit: '+report.pk+'.';
+        if(report.talking&&report.talking.length)data['Talking points']=report.talking.map(function(t,i){return (i+1)+'. '+t;}).join('\n');
+        var d=report.details||{};
+        if(d.google)data['Google listing']=d.google;
+        if(d.speed)data['Speed on phones']=d.speed;
+        if(d.site)data['Website details']=d.site;
+        if(d.contact)data['Contact and booking']=d.contact;
+        data['What they saw']=report.items.map(function(it){return LABEL[it.s]+': '+it.t+'. '+it.d;}).join('\n');
+      }else{data['Result']='The automatic check did not finish. Send this report by hand.';}
       fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)}).catch(function(){});
     };
 
@@ -1874,7 +1898,7 @@ p:last-child{margin-bottom:0}
           return '<li><span class="ck-chip '+esc(it.s)+'">'+LABEL[it.s]+'</span><span class="ck-t">'+esc(it.t)+'</span><p class="ck-d">'+esc(it.d)+'</p></li>';
         }).join('');
         acReco.innerHTML='<span class="eyebrow">Best fit</span><strong>'+esc(report.pk)+'</strong><p>'+esc(report.why)+'</p>';
-        $('ac-next-text').textContent='Thanks'+who+'. We’ll follow up at '+f.email+' within two business days with what we’d fix first.';
+        $('ac-next-text').textContent='Want help fixing these'+who+'? Book a call and we’ll walk through it together. Either way, we’ll email a short fix plan to '+f.email+' within two business days: what to fix first, what each fix involves, and which package covers it.';
         setScore(report.score);
       }else{
         acTag.textContent='Your report';acVerdict.textContent='The check didn’t finish';acNum.textContent='–';
