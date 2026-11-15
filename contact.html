@@ -72,7 +72,7 @@ p:last-child{margin-bottom:0}
 .band-tint .card{border-color:rgba(27,69,82,.32)}
 .band-tint .eyebrow,.band-tint .lede{color:var(--teal)}
 .band-teal{background:var(--teal);color:var(--cream)}
-.band-teal .eyebrow{color:rgba(253,240,220,.7)}
+.band-teal .eyebrow{color:rgba(253,240,220,.8)}
 .band-teal .card .eyebrow,.band-teal .card .card__tag{color:var(--teal-mid)}
 .band-teal .lede,.band-teal .small{color:rgba(253,240,220,.82)}
 .head{max-width:62ch;margin-bottom:clamp(28px,3.2vw,40px)}
@@ -526,6 +526,8 @@ p:last-child{margin-bottom:0}
   transition:border-color .16s ease;
 }
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal)}
+/* keyboard and click focus is clearly visible on every form field */
+input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-color:var(--teal)}
 .field textarea{min-height:150px;resize:vertical}
 .field--pair{display:grid;gap:20px;grid-template-columns:1fr}
 @media(min-width:680px){.field--pair{grid-template-columns:1fr 1fr}}
@@ -551,6 +553,8 @@ p:last-child{margin-bottom:0}
 .foot h4{font-family:var(--display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:600;color:rgba(253,240,220,.62);margin:0 0 16px}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+@media(max-width:899px){.foot ul{gap:0}.foot li{min-height:44px;display:flex;align-items:center}
+  .foot li a{position:relative}.foot li a::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:44px;transform:translateY(-50%)}}
 .foot a{text-decoration:none;font-family:var(--display);font-size:17px;font-weight:400;
   color:rgba(253,240,220,.92)}
 .foot a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}

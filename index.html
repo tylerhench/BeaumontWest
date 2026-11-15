@@ -73,7 +73,7 @@ p:last-child{margin-bottom:0}
 .band-tint .card{border-color:rgba(27,69,82,.32)}
 .band-tint .eyebrow,.band-tint .lede{color:var(--teal)}
 .band-teal{background:var(--teal);color:var(--cream)}
-.band-teal .eyebrow{color:rgba(253,240,220,.7)}
+.band-teal .eyebrow{color:rgba(253,240,220,.8)}
 .band-teal .card .eyebrow,.band-teal .card .card__tag{color:var(--teal-mid)}
 .band-teal .lede,.band-teal .small{color:rgba(253,240,220,.82)}
 .head{max-width:62ch;margin-bottom:clamp(28px,3.2vw,40px)}
@@ -527,6 +527,8 @@ p:last-child{margin-bottom:0}
   transition:border-color .16s ease;
 }
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal)}
+/* keyboard and click focus is clearly visible on every form field */
+input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-color:var(--teal)}
 .field textarea{min-height:150px;resize:vertical}
 .field--pair{display:grid;gap:20px;grid-template-columns:1fr}
 @media(min-width:680px){.field--pair{grid-template-columns:1fr 1fr}}
@@ -552,6 +554,8 @@ p:last-child{margin-bottom:0}
 .foot h4{font-family:var(--display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:600;color:rgba(253,240,220,.62);margin:0 0 16px}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+@media(max-width:899px){.foot ul{gap:0}.foot li{min-height:44px;display:flex;align-items:center}
+  .foot li a{position:relative}.foot li a::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:44px;transform:translateY(-50%)}}
 .foot a{text-decoration:none;font-family:var(--display);font-size:17px;font-weight:400;
   color:rgba(253,240,220,.92)}
 .foot a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
@@ -1189,7 +1193,7 @@ p:last-child{margin-bottom:0}
       </div>
       <div class="about__copy">
         <p class="lede">Beaumont West began when I rebuilt my dad's <span class="nowrap">small-business</span> website. Now I help other small businesses <strong>get found</strong>, <strong>look established</strong> and <strong>win more customers</strong>. No <span class="nowrap">hand-offs</span>, no middlemen: I build every project myself, start to finish.</p>
-        <p class="about__call">Wherever you call home, let's build something you're proud&nbsp;of. East&nbsp;Coast, West&nbsp;Coast or anywhere in&nbsp;between.</p>
+        <p class="about__call">East&nbsp;Coast, West&nbsp;Coast or anywhere in&nbsp;between. Wherever you call home, let's build something you're proud&nbsp;of.</p>
       </div>
     </div>
   </div>
@@ -1347,19 +1351,19 @@ p:last-child{margin-bottom:0}
       <li>
         <span class="card__tag">Get found</span>
         <h3>Starter</h3>
-        <span class="pgs" aria-label="1 page"><span class="pgs__stack" style="--n:1"><i style="--i:0"></i></span>1 page</span>
+        <span class="pgs"><span class="pgs__stack" style="--n:1"><i style="--i:0"></i></span>1 page</span>
         <p>Everything a customer needs to find you and get in touch, on one page.</p>
       </li>
       <li>
         <span class="card__tag">Look established</span>
         <h3>Standard</h3>
-        <span class="pgs" aria-label="5 pages"><span class="pgs__stack" style="--n:5"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span>5 pages</span>
+        <span class="pgs"><span class="pgs__stack" style="--n:5"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span>5 pages</span>
         <p>A full five-page site, with the words written for you.</p>
       </li>
       <li>
         <span class="card__tag">Win more customers</span>
         <h3>Premium</h3>
-        <span class="pgs" aria-label="Up to 8"><span class="pgs__stack" style="--n:8"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i></span>Up to 8</span>
+        <span class="pgs"><span class="pgs__stack" style="--n:8"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i></span>Up to 8</span>
         <p>Online booking, a page for every service, and your Google profile set up.</p>
       </li>
     </ul>
