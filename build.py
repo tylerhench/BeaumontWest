@@ -7,8 +7,8 @@ import re, os, shutil, html, json, datetime
 BRAND         = "Beaumont West Solutions"
 SITE_URL      = "https://beaumontwest.com"   # no trailing slash
 EMAIL         = "info@beaumontwest.com"
-PHONE_DISPLAY = "(555) 014-2200"
-PHONE_LINK    = "+15550142200"               # digits only, with country code
+PHONE_DISPLAY = "(203) 350-9742"
+PHONE_LINK    = "+12033509742"               # digits only, with country code
 YEAR          = "2026"
 # Web3Forms access key: paste yours between the quotes (Web3Forms dashboard -> your form -> Access Key)
 WEB3FORMS_KEY = "afaa391d-8e7a-42b5-be4a-4c8688b5e1a6"
@@ -646,6 +646,21 @@ p:last-child{margin-bottom:0}
 .stepnum{display:inline-block;font-size:14px;letter-spacing:.15em;
   font-weight:500;color:var(--teal-mid)}
 .band-teal .stepnum{color:rgba(253,240,220,.55)}
+
+/* ---------- homepage about ---------- */
+.about-area{position:relative;isolation:isolate;overflow-x:clip}
+.about-bg{position:absolute;pointer-events:none;z-index:-1}
+.about-bg--contours{display:block;left:0;right:0;top:-70px;bottom:-70px;width:100%;height:calc(100% + 140px);color:rgba(253,240,220,.1);
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent)}
+.about__grid{display:grid;gap:clamp(18px,3vw,56px)}
+@media(min-width:900px){.about__grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start}}
+.about h2{max-width:20ch}
+.about__copy .lede{margin:0}
+.about__copy strong{color:var(--cream);font-weight:500}
+.about__call{margin:22px 0 0;font-family:var(--display);font-weight:600;font-size:clamp(18px,1.6vw,21px);line-height:1.4;color:var(--cream);max-width:40ch;text-wrap:pretty}
+.nowrap{white-space:nowrap}
+/* Who we build for follows About in the same teal section, separated by space only */
+.who--after{margin-top:clamp(84px,9vw,128px)}
 .faq details{border-bottom:1px solid var(--rule)}
 .faq summary{
   list-style:none;cursor:pointer;padding:22px 40px 22px 0;position:relative;
@@ -1538,13 +1553,13 @@ JS = r"""
       var key=af.querySelector('[name="access_key"]').value;
       if(key.indexOf('YOUR_')===0)return;
       var data={access_key:key,from_name:'Beaumont West Solutions website',
-        subject:'Website check: '+f.business+(report?' \u2013 '+report.score+'/100, '+report.verdict:' \u2013 check did not finish')};
+        subject:'Website check: '+f.business+(report?': '+report.score+'/100, '+report.verdict:': check did not finish')};
       data['Business']=f.business+(f.town?', '+f.town:'');
       data.name=f.name||'(not given)';
       data.email=f.email;
       data['Site checked']=f.website||'(no website given)';
       if(report){
-        data['Score']=report.score+'/100 \u2013 '+report.verdict+'. Best fit: '+report.pk+'.';
+        data['Score']=report.score+'/100, '+report.verdict+'. Best fit: '+report.pk+'.';
         if(report.talking&&report.talking.length)data['Talking points']=report.talking.map(function(t,i){return (i+1)+'. '+t;}).join('\n');
         var d=report.details||{};
         if(d.google)data['Google listing']=d.google;
@@ -1571,7 +1586,7 @@ JS = r"""
         name:acFirst.value.trim(),email:acEmail.value.trim()};
       var btn=$('ac-run');btn.disabled=true;btn.setAttribute('aria-busy','true');
       acTag.textContent='Checking';acBiz.textContent=f.business+(f.town?', '+f.town:'');acVerdict.textContent='This takes under a minute';
-      acRing.style.strokeDashoffset='263.9';acNum.textContent='–';
+      acRing.style.strokeDashoffset='263.9';acNum.textContent='?';
       acResult.hidden=true;acExample.hidden=true;acNext.hidden=true;acSteps.hidden=false;
       if(window.innerWidth<900)window.scrollTo({top:$('acreport').getBoundingClientRect().top+window.scrollY-90,behavior:reduce?'auto':'smooth'});
 
@@ -1604,7 +1619,7 @@ JS = r"""
         $('ac-next-text').textContent='Want help fixing these'+who+'? Book a call and we’ll walk through it together. Either way, we’ll email a short fix plan to '+f.email+' within two business days: what to fix first, what each fix involves, and which package covers it.';
         setScore(report.score);
       }else{
-        acTag.textContent='Your report';acVerdict.textContent='The check didn’t finish';acNum.textContent='–';
+        acTag.textContent='Your report';acVerdict.textContent='The check didn’t finish';acNum.textContent='?';
         acList.innerHTML='';acReco.innerHTML='<span class="eyebrow">What happens now</span><strong>We’ll send it by email</strong>'
           +'<p>Something went wrong on our side, so we’ve passed your details on. You’ll get your report at '+esc(f.email)+' within two business days.</p>';
         $('ac-next-text').textContent='Sorry about that'+who+'. If you’d rather talk it through, book a call.';
@@ -1637,7 +1652,7 @@ def mobile_links(current):
 def masthead(current):
     return """<header class="masthead">
   <div class="masthead__in">
-    <a class="brandlink" href="index.html" aria-label="Beaumont West Solutions — home">%s%s</a>
+    <a class="brandlink" href="index.html" aria-label="Beaumont West Solutions home">%s%s</a>
     <nav class="nav" aria-label="Primary">
         %s
     </nav>
@@ -1658,8 +1673,7 @@ FOOTER = """<footer class="foot">
     <div class="foot__top">
       <div>
         %s
-        <p class="foot__blurb">Websites for service businesses on the coast and everywhere
-        else. We build it and keep it running. You run your business.</p>
+        <p class="foot__blurb">Websites for service businesses, coast to coast. We build it and keep it running. You run your business.</p>
       </div>
       <div>
         <h4>Pages</h4>
@@ -1830,7 +1844,7 @@ CHECK_AUTO = r"""<section class="section check" id="check">
         <ol class="ac-steps" id="ac-steps" hidden>
           <li><span class="ac-dot"></span><span>Finding your Google listing</span></li>
           <li><span class="ac-dot"></span><span>Loading your website</span></li>
-          <li><span class="ac-dot"></span><span>Testing it on a phone connection<small>Google's test, usually 15&ndash;30 seconds</small></span></li>
+          <li><span class="ac-dot"></span><span>Testing it on a phone connection<small>Google's test, usually 15 to 30 seconds</small></span></li>
           <li><span class="ac-dot"></span><span>Checking how customers reach you</span></li>
         </ol>
 
@@ -1985,7 +1999,7 @@ home = """
                 </div>
                 <div class="b c-rev"><span class="c-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="c-q">&ldquo;Came the same afternoon and explained everything.&rdquo;</span><span class="c-who">Google review</span></div>
                 <div class="b c-form"><span class="c-t">Get a quote</span><span class="c-in">Your name</span><span class="c-in">What's going on?</span><span class="c-send">Send request</span></div>
-                <div class="b c-foot"><strong>Open Mon&ndash;Sat, 7am&ndash;6pm</strong><span>Serving the whole bay area</span></div>
+                <div class="b c-foot"><strong>Open Mon to Sat, 7am to 6pm</strong><span>Serving the whole bay area</span></div>
               </div></div>
             </div>
 
@@ -2025,7 +2039,7 @@ home = """
                 <div class="b c-ptitle">Contact</div>
                 <div class="b c-form"><span class="c-in">Your name</span><span class="c-in">Phone or email</span><span class="c-in">What's going on?</span><span class="c-send">Send request</span></div>
                 <div class="b c-map grow"><i></i></div>
-                <div class="b c-foot"><strong>Open Mon&ndash;Sat, 7am&ndash;6pm</strong><span>Serving the whole bay area</span></div>
+                <div class="b c-foot"><strong>Open Mon to Sat, 7am to 6pm</strong><span>Serving the whole bay area</span></div>
               </div></div>
             </div>
 
@@ -2043,7 +2057,21 @@ home = """
 %s
 
 <section class="section band-teal">
-  <div class="wrap">
+  <div class="about-area"><svg class="about-bg about-bg--contours" viewBox="0 0 1440 520" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.4"><path d="M-20,25.5 L0,30.0 L20,34.5 L40,38.8 L60,42.3 L80,45.0 L100,46.7 L120,47.4 L140,47.0 L160,45.8 L180,43.9 L200,41.7 L220,39.4 L240,37.4 L260,35.9 L280,35.0 L300,34.9 L320,35.6 L340,36.9 L360,38.6 L380,40.5 L400,42.4 L420,43.8 L440,44.6 L460,44.5 L480,43.4 L500,41.3 L520,38.2 L540,34.4 L560,30.1 L580,25.5 L600,21.1 L620,17.2 L640,13.9 L660,11.7 L680,10.5 L700,10.4 L720,11.3 L740,13.1 L760,15.4 L780,18.1 L800,20.7 L820,23.0 L840,24.8 L860,25.8 L880,26.1 L900,25.6 L920,24.6 L940,23.1 L960,21.4 L980,19.9 L1000,18.8 L1020,18.5 L1040,18.9 L1060,20.4 L1080,22.8 L1100,26.0 L1120,30.0 L1140,34.3 L1160,38.7 L1180,42.8 L1200,46.4 L1220,49.1 L1240,50.8 L1260,51.4 L1280,50.9 L1300,49.4 L1320,47.0 L1340,44.2 L1360,41.2 L1380,38.2 L1400,35.6 L1420,33.7 L1440,32.4 L1460,32.0"/><path d="M-20,87.8 L0,90.9 L20,92.7 L40,93.4 L60,93.0 L80,91.7 L100,89.8 L120,87.4 L140,85.0 L160,82.7 L180,80.9 L200,79.7 L220,79.2 L240,79.3 L260,79.9 L280,80.9 L300,81.9 L320,82.7 L340,83.0 L360,82.6 L380,81.2 L400,78.9 L420,75.5 L440,71.4 L460,66.5 L480,61.3 L500,56.1 L520,51.1 L540,46.8 L560,43.4 L580,41.1 L600,40.0 L620,40.1 L640,41.3 L660,43.4 L680,46.1 L700,49.1 L720,52.2 L740,54.9 L760,57.2 L780,58.8 L800,59.7 L820,59.9 L840,59.6 L860,59.0 L880,58.4 L900,57.9 L920,58.0 L940,58.8 L960,60.5 L980,63.1 L1000,66.6 L1020,70.8 L1040,75.5 L1060,80.5 L1080,85.4 L1100,89.8 L1120,93.4 L1140,96.1 L1160,97.5 L1180,97.8 L1200,96.8 L1220,94.7 L1240,91.8 L1260,88.4 L1280,84.8 L1300,81.2 L1320,78.0 L1340,75.4 L1360,73.5 L1380,72.3 L1400,71.9 L1420,71.9 L1440,72.3 L1460,72.8"/><path d="M-20,129.0 L0,126.9 L20,124.2 L40,121.3 L60,118.4 L80,115.9 L100,113.9 L120,112.6 L140,112.0 L160,112.2 L180,112.9 L200,113.9 L220,114.9 L240,115.8 L260,116.1 L280,115.8 L300,114.5 L320,112.3 L340,109.2 L360,105.3 L380,100.9 L400,96.2 L420,91.6 L440,87.4 L460,84.0 L480,81.5 L500,80.1 L520,79.9 L540,80.9 L560,82.9 L580,85.7 L600,88.9 L620,92.4 L640,95.7 L660,98.6 L680,100.8 L700,102.4 L720,103.1 L740,103.1 L760,102.6 L780,101.8 L800,101.0 L820,100.3 L840,100.2 L860,100.8 L880,102.3 L900,104.6 L920,107.7 L940,111.5 L960,115.8 L980,120.1 L1000,124.3 L1020,127.9 L1040,130.7 L1060,132.4 L1080,133.0 L1100,132.4 L1120,130.6 L1140,127.9 L1160,124.5 L1180,120.6 L1200,116.7 L1220,113.1 L1240,109.9 L1260,107.5 L1280,105.8 L1300,105.0 L1320,104.9 L1340,105.4 L1360,106.1 L1380,106.9 L1400,107.4 L1420,107.5 L1440,106.8 L1460,105.3"/><path d="M-20,145.8 L0,143.5 L20,141.9 L40,141.2 L60,141.4 L80,142.3 L100,143.9 L120,145.8 L140,147.7 L160,149.5 L180,150.7 L200,151.2 L220,150.9 L240,149.6 L260,147.4 L280,144.5 L300,141.1 L320,137.5 L340,134.0 L360,130.9 L380,128.5 L400,127.0 L420,126.6 L440,127.3 L460,128.9 L480,131.4 L500,134.4 L520,137.8 L540,141.0 L560,143.9 L580,146.3 L600,147.8 L620,148.4 L640,148.2 L660,147.2 L680,145.6 L700,143.7 L720,141.8 L740,140.2 L760,139.1 L780,138.7 L800,139.2 L820,140.7 L840,142.9 L860,145.8 L880,149.1 L900,152.6 L920,155.8 L940,158.5 L960,160.4 L980,161.4 L1000,161.3 L1020,160.1 L1040,158.0 L1060,155.2 L1080,151.8 L1100,148.3 L1120,144.9 L1140,141.9 L1160,139.6 L1180,138.2 L1200,137.7 L1220,138.0 L1240,139.1 L1260,140.8 L1280,142.7 L1300,144.6 L1320,146.2 L1340,147.2 L1360,147.5 L1380,146.9 L1400,145.4 L1420,143.2 L1440,140.3 L1460,137.2"/><path d="M-20,177.4 L0,178.6 L20,180.4 L40,182.5 L60,184.6 L80,186.4 L100,187.7 L120,188.2 L140,187.8 L160,186.5 L180,184.3 L200,181.5 L220,178.3 L240,174.9 L260,171.8 L280,169.1 L300,167.1 L320,166.2 L340,166.2 L360,167.3 L380,169.4 L400,172.2 L420,175.4 L440,178.8 L460,182.0 L480,184.8 L500,186.9 L520,188.1 L540,188.5 L560,187.9 L580,186.6 L600,184.7 L620,182.6 L640,180.6 L660,178.8 L680,177.7 L700,177.3 L720,177.8 L740,179.2 L760,181.4 L780,184.2 L800,187.3 L820,190.5 L840,193.4 L860,195.7 L880,197.2 L900,197.7 L920,197.2 L940,195.6 L960,193.2 L980,190.1 L1000,186.7 L1020,183.1 L1040,179.9 L1060,177.1 L1080,175.2 L1100,174.1 L1120,174.0 L1140,174.7 L1160,176.2 L1180,178.2 L1200,180.3 L1220,182.4 L1240,184.1 L1260,185.2 L1280,185.5 L1300,184.9 L1320,183.4 L1340,181.3 L1360,178.5 L1380,175.6 L1400,172.6 L1420,170.0 L1440,168.1 L1460,167.0"/><path d="M-20,219.7 L0,220.4 L20,220.6 L40,220.0 L60,218.7 L80,216.5 L100,213.6 L120,210.2 L140,206.6 L160,203.1 L180,199.9 L200,197.5 L220,196.0 L240,195.6 L260,196.4 L280,198.3 L300,201.2 L320,204.8 L340,209.0 L360,213.3 L380,217.4 L400,221.0 L420,223.9 L440,225.9 L460,227.1 L480,227.3 L500,226.9 L520,225.9 L540,224.7 L560,223.6 L580,222.8 L600,222.5 L620,223.0 L640,224.3 L660,226.3 L680,228.9 L700,232.0 L720,235.2 L740,238.2 L760,240.8 L780,242.5 L800,243.3 L820,243.0 L840,241.5 L860,239.0 L880,235.5 L900,231.4 L920,226.9 L940,222.4 L960,218.2 L980,214.6 L1000,211.8 L1020,209.9 L1040,209.0 L1060,209.0 L1080,209.7 L1100,210.9 L1120,212.4 L1140,213.7 L1160,214.7 L1180,215.1 L1200,214.8 L1220,213.7 L1240,211.9 L1260,209.6 L1280,206.9 L1300,204.1 L1320,201.6 L1340,199.7 L1360,198.6 L1380,198.4 L1400,199.4 L1420,201.5 L1440,204.7 L1460,208.6"/><path d="M-20,249.0 L0,246.5 L20,243.5 L40,240.1 L60,236.7 L80,233.5 L100,230.9 L120,229.1 L140,228.5 L160,229.0 L180,230.8 L200,233.7 L220,237.6 L240,242.3 L260,247.3 L280,252.4 L300,257.3 L320,261.5 L340,265.1 L360,267.6 L380,269.3 L400,270.0 L420,270.0 L440,269.5 L460,268.7 L480,268.0 L500,267.6 L520,267.8 L540,268.5 L560,270.0 L580,272.1 L600,274.6 L620,277.5 L640,280.2 L660,282.7 L680,284.5 L700,285.4 L720,285.2 L740,283.8 L760,281.2 L780,277.6 L800,273.0 L820,267.9 L840,262.5 L860,257.3 L880,252.4 L900,248.2 L920,244.9 L940,242.7 L960,241.4 L980,241.1 L1000,241.6 L1020,242.5 L1040,243.7 L1060,244.8 L1080,245.6 L1100,245.8 L1120,245.5 L1140,244.4 L1160,242.8 L1180,240.8 L1200,238.6 L1220,236.5 L1240,234.7 L1260,233.7 L1280,233.6 L1300,234.6 L1320,236.7 L1340,240.0 L1360,244.2 L1380,249.1 L1400,254.5 L1420,260.0 L1440,265.3 L1460,270.0"/><path d="M-20,279.1 L0,276.4 L20,274.4 L40,273.2 L60,273.0 L80,274.0 L100,276.1 L120,279.2 L140,283.1 L160,287.6 L180,292.4 L200,297.0 L220,301.2 L240,304.8 L260,307.4 L280,309.0 L300,309.7 L320,309.5 L340,308.5 L360,307.2 L380,305.6 L400,304.2 L420,303.2 L440,302.8 L460,303.1 L480,304.1 L500,305.8 L520,308.0 L540,310.4 L560,312.8 L580,314.8 L600,316.3 L620,316.8 L640,316.3 L660,314.7 L680,312.1 L700,308.5 L720,304.1 L740,299.4 L760,294.5 L780,289.9 L800,285.8 L820,282.6 L840,280.3 L860,279.1 L880,278.9 L900,279.6 L920,280.9 L940,282.7 L960,284.6 L980,286.4 L1000,287.7 L1020,288.4 L1040,288.4 L1060,287.6 L1080,286.3 L1100,284.4 L1120,282.4 L1140,280.5 L1160,279.0 L1180,278.1 L1200,278.2 L1220,279.2 L1240,281.3 L1260,284.5 L1280,288.4 L1300,293.0 L1320,297.8 L1340,302.6 L1360,307.1 L1380,310.8 L1400,313.7 L1420,315.5 L1440,316.1 L1460,315.8"/><path d="M-20,319.8 L0,320.5 L20,322.3 L40,324.9 L60,328.2 L80,331.9 L100,335.7 L120,339.3 L140,342.2 L160,344.4 L180,345.7 L200,346.0 L220,345.3 L240,343.8 L260,341.7 L280,339.3 L300,336.9 L320,334.8 L340,333.3 L360,332.4 L380,332.5 L400,333.4 L420,335.0 L440,337.2 L460,339.7 L480,342.2 L500,344.4 L520,346.0 L540,346.9 L560,346.7 L580,345.6 L600,343.5 L620,340.6 L640,337.1 L660,333.3 L680,329.6 L700,326.2 L720,323.4 L740,321.5 L760,320.6 L780,320.7 L800,321.7 L820,323.6 L840,325.9 L860,328.5 L880,331.1 L900,333.2 L920,334.8 L940,335.6 L960,335.6 L980,334.7 L1000,333.1 L1020,331.0 L1040,328.7 L1060,326.4 L1080,324.4 L1100,323.1 L1120,322.6 L1140,323.1 L1160,324.6 L1180,326.9 L1200,330.0 L1220,333.6 L1240,337.4 L1260,341.0 L1280,344.2 L1300,346.6 L1320,348.2 L1340,348.7 L1360,348.2 L1380,346.8 L1400,344.6 L1420,342.0 L1440,339.1 L1460,336.5"/><path d="M-20,368.6 L0,372.4 L20,376.2 L40,379.7 L60,382.5 L80,384.5 L100,385.4 L120,385.4 L140,384.4 L160,382.7 L180,380.4 L200,377.8 L220,375.3 L240,373.2 L260,371.7 L280,370.9 L300,371.0 L320,371.9 L340,373.5 L360,375.6 L380,378.0 L400,380.2 L420,382.2 L440,383.4 L460,383.9 L480,383.3 L500,381.8 L520,379.4 L540,376.2 L560,372.6 L580,368.7 L600,365.0 L620,361.8 L640,359.3 L660,357.7 L680,357.1 L700,357.5 L720,358.9 L740,361.0 L760,363.6 L780,366.4 L800,369.0 L820,371.3 L840,372.8 L860,373.6 L880,373.5 L900,372.6 L920,371.1 L940,369.0 L960,366.8 L980,364.8 L1000,363.1 L1020,362.1 L1040,362.0 L1060,362.8 L1080,364.6 L1100,367.3 L1120,370.5 L1140,374.2 L1160,378.0 L1180,381.5 L1200,384.4 L1220,386.6 L1240,387.8 L1260,387.9 L1280,387.0 L1300,385.2 L1320,382.7 L1340,379.8 L1360,376.8 L1380,374.0 L1400,371.7 L1420,370.2 L1440,369.4 L1460,369.5"/><path d="M-20,427.8 L0,430.3 L20,431.7 L40,432.0 L60,431.2 L80,429.6 L100,427.4 L120,424.9 L140,422.4 L160,420.2 L180,418.5 L200,417.5 L220,417.2 L240,417.6 L260,418.6 L280,419.9 L300,421.3 L320,422.4 L340,423.1 L360,423.1 L380,422.1 L400,420.2 L420,417.2 L440,413.5 L460,409.1 L480,404.4 L500,399.6 L520,395.1 L540,391.3 L560,388.4 L580,386.5 L600,385.8 L620,386.3 L640,387.7 L660,390.0 L680,392.8 L700,395.8 L720,398.7 L740,401.3 L760,403.3 L780,404.6 L800,405.1 L820,404.9 L840,404.2 L860,403.1 L880,402.0 L900,401.2 L920,400.8 L940,401.2 L960,402.5 L980,404.6 L1000,407.7 L1020,411.5 L1040,415.9 L1060,420.4 L1080,424.9 L1100,428.9 L1120,432.1 L1140,434.4 L1160,435.5 L1180,435.5 L1200,434.3 L1220,432.1 L1240,429.2 L1260,425.8 L1280,422.3 L1300,419.0 L1320,416.1 L1340,413.9 L1360,412.4 L1380,411.7 L1400,411.8 L1420,412.4 L1440,413.3 L1460,414.2"/><path d="M-20,474.4 L0,472.4 L20,469.7 L40,466.8 L60,463.8 L80,461.2 L100,459.1 L120,457.7 L140,456.9 L160,456.8 L180,457.2 L200,457.9 L220,458.5 L240,458.9 L260,458.8 L280,457.9 L300,456.1 L320,453.3 L340,449.7 L360,445.3 L380,440.5 L400,435.4 L420,430.5 L440,426.1 L460,422.5 L480,419.9 L500,418.5 L520,418.3 L540,419.3 L560,421.4 L580,424.2 L600,427.6 L620,431.2 L640,434.7 L660,437.7 L680,440.2 L700,442.0 L720,443.0 L740,443.3 L760,443.2 L780,442.8 L800,442.4 L820,442.2 L840,442.6 L860,443.7 L880,445.7 L900,448.5 L920,452.1 L940,456.3 L960,460.9 L980,465.6 L1000,469.9 L1020,473.7 L1040,476.5 L1060,478.3 L1080,478.8 L1100,478.0 L1120,476.1 L1140,473.2 L1160,469.5 L1180,465.5 L1200,461.4 L1220,457.5 L1240,454.0 L1260,451.3 L1280,449.4 L1300,448.2 L1320,447.8 L1340,447.8 L1360,448.1 L1380,448.5 L1400,448.5 L1420,448.1 L1440,446.9 L1460,445.0"/><path d="M-20,493.3 L0,490.7 L20,488.8 L40,487.7 L60,487.4 L80,487.8 L100,488.7 L120,489.9 L140,491.2 L160,492.1 L180,492.6 L200,492.2 L220,491.0 L240,489.0 L260,486.0 L280,482.4 L300,478.4 L320,474.3 L340,470.3 L360,466.9 L380,464.3 L400,462.8 L420,462.3 L440,463.0 L460,464.8 L480,467.5 L500,470.8 L520,474.4 L540,478.0 L560,481.4 L580,484.1 L600,486.1 L620,487.3 L640,487.7 L660,487.3 L680,486.4 L700,485.3 L720,484.1 L740,483.3 L760,483.0 L780,483.4 L800,484.7 L820,486.8 L840,489.7 L860,493.1 L880,496.9 L900,500.7 L920,504.1 L940,507.0 L960,508.9 L980,509.8 L1000,509.5 L1020,508.1 L1040,505.7 L1060,502.4 L1080,498.6 L1100,494.6 L1120,490.7 L1140,487.2 L1160,484.4 L1180,482.3 L1200,481.2 L1220,480.9 L1240,481.3 L1260,482.3 L1280,483.5 L1300,484.7 L1320,485.5 L1340,485.8 L1360,485.4 L1380,484.1 L1400,482.1 L1420,479.4 L1440,476.1 L1460,472.7"/></g></svg>
+  <div class="wrap about reveal" id="about">
+    <div class="about__grid">
+      <div>
+        <span class="eyebrow">About Beaumont West</span>
+        <h2>Started close to home</h2>
+      </div>
+      <div class="about__copy">
+        <p class="lede">Beaumont West began when I rebuilt my dad's <span class="nowrap">small-business</span> website. Now I help other small businesses <strong>get found</strong>, <strong>look established</strong> and <strong>win more customers</strong>. No <span class="nowrap">hand-offs</span>, no middlemen: I build every project myself, start to finish.</p>
+        <p class="about__call">Wherever you call home, let's build something you're proud&nbsp;of. East&nbsp;Coast, West&nbsp;Coast or anywhere in&nbsp;between.</p>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="wrap who--after">
     <div class="head reveal">
       <span class="eyebrow">Who we build for</span>
       <h2>Three versions of the same problem</h2>
@@ -2556,11 +2584,11 @@ contact = """
 
 # ==========================================================================
 PAGES = [
- ("index.html","Beaumont West Solutions — Websites for service businesses",
+ ("index.html","Beaumont West Solutions | Websites for service businesses",
   "Websites for the businesses people call, book and recommend. Three clear packages, typically live in two to four weeks.", home),
- ("services.html","Packages — Beaumont West Solutions",
-  "Three website packages for service businesses — Starter, Standard and Premium — plus optional monthly care plans. Typically live in two to four weeks.", services),
- ("contact.html","Contact — Beaumont West Solutions",
+ ("services.html","Packages | Beaumont West Solutions",
+  "Three website packages for service businesses (Starter, Standard and Premium), plus optional monthly care plans. Typically live in two to four weeks.", services),
+ ("contact.html","Contact | Beaumont West Solutions",
   "Request the price sheet or book a call. You'll hear back within one business day, from a person.", contact),
 ]
 
