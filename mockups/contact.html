@@ -1097,6 +1097,25 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 /* ---------- home: the Harbor Line demo ---------- */
 .demo-band{position:relative}
 .demo-band .head h2{max-width:none}
+.demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
+.demo-band .dtabs button{border-color:rgba(27,69,82,.28);color:var(--teal)}
+.demo-band .dtabs button small{color:var(--teal-mid)}
+.demo-band .dtabs button:hover{border-color:var(--teal)}
+.demo-band .dtabs button[aria-selected="true"]{background:var(--teal);color:var(--cream);border-color:var(--teal)}
+.demo-band .dtabs button[aria-selected="true"] small{color:rgba(253,240,220,.78)}
+.demo-band .dtabs__note{color:var(--teal-mid)}
+.demo-band .dstage{border:2px solid rgba(27,69,82,.5);box-shadow:0 24px 50px -32px rgba(27,69,82,.55)}
+.demo-cta{margin-top:clamp(22px,2.6vw,30px);display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;
+  background:var(--teal);color:var(--cream);border-radius:16px;padding:18px clamp(18px,2.6vw,28px)}
+.demo-cta p{margin:0;font-size:clamp(17px,1.4vw,19px);color:rgba(253,240,220,.88);max-width:56ch}
+.demo-cta strong{color:var(--cream);font-family:var(--display);font-weight:600}
+.demo-cta .btn--primary{background:var(--cream);color:var(--teal)}
+.demo-cta .btn--primary:hover{background:#fff}
+.demo-band .demo-small{color:var(--teal-mid)}
+/* about, now near the end of the home page on a light band */
+.about--light .about__copy strong{color:var(--teal);font-weight:600}
+.about--light .about__call{color:var(--teal)}
+.about--light .about h2{max-width:14ch}
 .demo-lead .hp{display:none}
 .dstage .btn--primary{background:var(--teal);color:var(--cream)}
 .dstage .btn--primary:hover{background:var(--teal-deep)}
@@ -2050,12 +2069,21 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
   cbox.addEventListener('submit',function(e){
     e.preventDefault();var v=cin.value.trim();if(!v||busy||phase==='done')return;cin.value='';say(v);
   });
-  var started=false;
-  var startChat=async function(){
-    if(started)return;started=true;busy=true;
-    await bot('Hi! I&rsquo;m Harbor Line&rsquo;s assistant. I can answer questions, give rough prices or book a visit, any hour. What&rsquo;s going on?',700);
-    busy=false;setChips(START);
+  var startP=null;
+  var startChat=function(){
+    return startP||(startP=(async function(){busy=true;
+      await bot('Hi! I&rsquo;m Harbor Line&rsquo;s assistant. I can answer questions, give rough prices or book a visit, any hour. What&rsquo;s going on?',700);
+      busy=false;setChips(START);})());
   };
+  var go=document.getElementById('demo-go');
+  if(go)go.addEventListener('click',async function(){
+    pick(tabs[0]);
+    document.getElementById('dp-chat').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+    await startChat();
+    while(busy)await wait(150);
+    if(phase.indexOf('lead')===0||phase==='done'){cin.focus();return;}
+    say('Set it up for my business','yes');
+  });
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){startChat();io.disconnect();}});},{threshold:.35});
     io.observe(log);
