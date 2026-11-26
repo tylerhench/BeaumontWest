@@ -23,7 +23,7 @@ TURNSTILE_SITEKEY = "0x4AAAAAAFtQ6iLNd2y_qUzH"     # Cloudflare Turnstile site k
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC  = os.path.join(HERE, "assets")   # logo + icon source files
-OUT  = HERE                           # pages are written next to this script
+OUT  = os.environ.get("BWS_OUT", HERE)  # pages are written next to this script (BWS_OUT=mockups for a preview build)
 
 # ---------------------------------------------------------------- brand SVGs
 def read(name):
@@ -1162,8 +1162,8 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 @media(min-width:900px){
   .grid.g3:has(> .card--who){row-gap:0;grid-template-rows:auto auto 1fr auto}
   .grid.g3 > .card--who{display:grid;grid-row:span 4;grid-template-rows:subgrid;row-gap:0}
-  .pkgs{row-gap:0;grid-template-rows:auto auto auto auto 1fr}
-  .pkgs > .pkg{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0;align-content:start}
+  .pkgs{row-gap:0;grid-template-rows:auto auto auto auto auto 1fr auto}
+  .pkgs > .pkg{display:grid;grid-row:span 7;grid-template-rows:subgrid;row-gap:0;align-content:start}
   .pkgs > .pkg .checks{align-content:start}
 }
 
@@ -1203,6 +1203,208 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
   .ac-rubric th{grid-column:1 / -1}.ac-rubric td{border:0}}
 
 .check__form .cf-turnstile{min-height:65px}
+
+/* ================= v2: AI packages, demo, pricing ================= */
+.nowrap{white-space:nowrap}
+/* package cards with prices and a button */
+.pkg__for{margin:12px 0 0;font-size:clamp(16.5px,1.25vw,18px);line-height:1.5;color:var(--teal-mid)}
+.pkg__price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-top:20px;padding:14px 0;
+  border-top:1.5px solid rgba(27,69,82,.14);border-bottom:1.5px solid rgba(27,69,82,.14);font-family:var(--display)}
+.pkg__price .from{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);width:100%}
+.pkg__price b{font-size:clamp(28px,2.6vw,34px);font-weight:650;letter-spacing:-.02em;color:var(--teal);font-variant-numeric:tabular-nums}
+.pkg__price span{font-size:15.5px;font-weight:500;color:var(--teal-mid)}
+.pkg__price .plus{color:var(--coral);font-weight:700;font-size:18px}
+.pkg__inc{margin:20px 0 0;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--teal)}
+.pkg .pkg__inc + .checks{margin-top:12px}
+.pkg__cta{margin-top:auto;padding-top:26px}
+.pkg__cta .btn{width:100%;justify-content:center}
+.band-teal .pkg__cta .btn--primary{background:var(--teal);color:var(--cream)}
+.band-teal .pkg__cta .btn--primary:hover{background:var(--teal-deep)}
+.pkg--pick{box-shadow:0 0 0 3px var(--peach)}
+.pkg__flag{position:absolute;top:0;right:22px;background:var(--peach);color:var(--teal);font-family:var(--display);
+  font-weight:700;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:0 0 8px 8px}
+.pkgs-foot{text-align:center;margin-top:clamp(30px,3.6vw,44px)}
+.pkgs-foot p{color:rgba(253,240,220,.85);font-size:clamp(17.5px,1.4vw,20px);margin:0}
+.pkgs-foot a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
+
+/* comparison table */
+.compare-wrap{overflow-x:auto;border:2px solid rgba(27,69,82,.5);border-radius:var(--r);background:var(--paper);-webkit-overflow-scrolling:touch}
+.compare{width:100%;border-collapse:collapse;min-width:560px;font-family:var(--display)}
+.compare th,.compare td{padding:14px 16px;text-align:center;border-bottom:1px solid rgba(27,69,82,.14);font-size:16px}
+.compare thead th{font-size:clamp(17px,1.5vw,20px);font-weight:650;background:var(--cream);border-bottom:2px solid rgba(27,69,82,.3)}
+.compare tbody th{text-align:left;font-weight:500;color:var(--teal);width:36%}
+.compare tbody tr:last-child th,.compare tbody tr:last-child td{border-bottom:0}
+.compare td{font-variant-numeric:tabular-nums;font-weight:600}
+.compare .yes{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--coral)}
+.compare .no{display:inline-block;width:14px;height:2px;background:rgba(27,69,82,.25);vertical-align:middle}
+.compare tr.money td{font-size:18px}
+.compare .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.compare-note{margin-top:14px;font-size:15px;color:var(--teal-mid)}
+
+/* how it works (packages page) */
+.intro2{display:grid;gap:clamp(28px,4vw,60px);align-items:start}
+@media(min-width:900px){.intro2{grid-template-columns:1fr 1fr}}
+.intro2 p{font-size:clamp(18px,1.45vw,20px);color:var(--teal-sub)}
+.intro2 .track{margin-top:clamp(34px,4vw,48px);grid-column:1 / -1}
+
+/* AI quick win */
+.qw{display:grid;gap:clamp(26px,4vw,56px);align-items:center}
+@media(min-width:900px){.qw{grid-template-columns:1fr 1fr}}
+.qw .pkg__price{max-width:420px;border-color:rgba(27,69,82,.2)}
+.qw-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.qw-list li{display:flex;gap:14px;align-items:center;background:var(--paper);border:1.5px solid rgba(27,69,82,.22);
+  border-radius:12px;padding:14px 18px;font-family:var(--display);font-weight:500;font-size:17px}
+.qw-list li .sun{margin-top:0}
+.qw-cap{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-mid);margin:0 0 12px}
+
+/* billing terms */
+.bill{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.bill .card h3{color:var(--peach);margin-bottom:8px}
+.bill .card p{margin:0}
+
+/* small demo teaser on the packages page */
+.demo-teaser{display:grid;gap:clamp(22px,3vw,40px);align-items:center}
+@media(min-width:900px){.demo-teaser{grid-template-columns:1.2fr .8fr}}
+.demo-teaser ul{margin:0 0 22px;padding-left:20px}
+.demo-teaser li{font-size:clamp(17.5px,1.35vw,19.5px);margin-bottom:6px}
+.demo-teaser li::marker{color:var(--peach)}
+.finep{font-size:14px;color:rgba(253,240,220,.66);margin-top:16px}
+.mini-chat{background:var(--paper);border-radius:18px;padding:18px;display:grid;gap:10px;color:var(--teal);font-size:15.5px;line-height:1.45}
+.mini-chat span{padding:10px 14px;border-radius:14px;max-width:88%}
+.mini-chat .b{background:var(--cream);border:1px solid rgba(27,69,82,.14);border-bottom-left-radius:4px}
+.mini-chat .u{background:var(--teal);color:var(--cream);justify-self:end;border-bottom-right-radius:4px}
+
+/* ---------- home: the Harbor Line demo ---------- */
+.demo-band{position:relative}
+.demo-band .head h2{max-width:none}
+.demo-lead .hp{display:none}
+.dstage .btn--primary{background:var(--teal);color:var(--cream)}
+.dstage .btn--primary:hover{background:var(--teal-deep)}
+.dstage .btn--primary:disabled{opacity:.45;cursor:default;transform:none}
+.dstage .btn--ghost{border-color:rgba(27,69,82,.28);color:var(--teal)}
+.dstage .btn--ghost:disabled{opacity:.45}
+.demo{display:grid;gap:18px;align-items:start}
+@media(min-width:960px){.demo{grid-template-columns:290px minmax(0,1fr);gap:26px}}
+.dtabs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.dtabs::-webkit-scrollbar{display:none}
+@media(min-width:960px){.dtabs{flex-direction:column;overflow:visible}}
+.dtabs button{flex:none;text-align:left;cursor:pointer;background:transparent;border:1.5px solid rgba(253,240,220,.3);
+  color:var(--cream);border-radius:14px;padding:14px 18px;font-family:var(--display);transition:background .16s ease,border-color .16s ease}
+.dtabs button b{display:block;font-weight:600;font-size:17px}
+.dtabs button small{display:block;font-size:13.5px;color:rgba(253,240,220,.7);margin-top:2px;font-weight:500}
+.dtabs button:hover{border-color:var(--cream)}
+.dtabs button[aria-selected="true"]{background:var(--cream);color:var(--teal);border-color:var(--cream)}
+.dtabs button[aria-selected="true"] small{color:var(--teal-mid)}
+.dtabs button:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.dtabs__note{display:none}
+@media(min-width:960px){.dtabs__note{display:block;margin-top:8px;font-size:14.5px;line-height:1.5;color:rgba(253,240,220,.72)}}
+.dstage{background:var(--cream);color:var(--teal);border-radius:20px;padding:clamp(14px,2vw,22px);min-height:540px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+.dpanel[hidden]{display:none}
+.dlbl{display:block;font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:10px}
+
+/* chat */
+.chat{display:flex;flex-direction:column;height:520px;background:var(--paper);border:1.5px solid rgba(27,69,82,.18);border-radius:16px;overflow:hidden}
+.chat__hd{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--teal);color:var(--cream)}
+.chat__hd b{display:block;font-family:var(--display);font-weight:600;font-size:16.5px;line-height:1.2}
+.chat__hd small{display:flex;align-items:center;gap:7px;font-family:var(--display);font-size:13px;color:rgba(253,240,220,.78)}
+.chat__hd small i{width:8px;height:8px;border-radius:50%;background:#7FD1A8}
+.chat__logo{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--peach);color:var(--teal);
+  font-family:var(--display);font-weight:700;font-size:14px;flex:none}
+.chat__log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.msg{max-width:84%;padding:11px 15px;border-radius:16px;font-size:16.5px;line-height:1.45;animation:msgin .25s ease both}
+.msg--bot{background:var(--cream);border:1px solid rgba(27,69,82,.13);border-bottom-left-radius:5px;align-self:flex-start}
+.msg--me{background:var(--teal);color:var(--cream);border-bottom-right-radius:5px;align-self:flex-end}
+.msg--note{align-self:stretch;max-width:none;background:transparent;border:1.5px dashed rgba(27,69,82,.35);border-radius:12px;
+  font-family:var(--display);font-size:14.5px;color:var(--teal-mid)}
+.msg--note b{color:var(--teal)}
+.msg--typing{display:inline-flex;gap:5px;padding:14px 16px}
+.msg--typing i{width:7px;height:7px;border-radius:50%;background:var(--teal-mid);opacity:.4;animation:dot 1s infinite}
+.msg--typing i:nth-child(2){animation-delay:.15s}.msg--typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{opacity:1;transform:translateY(-2px)}}
+@keyframes msgin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.msg{animation:none}.msg--typing i{animation:none;opacity:.7}}
+.chat__chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
+.chat__chips:empty{display:none}
+.chip{cursor:pointer;background:var(--paper);border:1.5px solid var(--teal);color:var(--teal);border-radius:999px;
+  padding:8px 14px;font-family:var(--display);font-weight:500;font-size:14.5px;transition:background .15s ease,color .15s ease}
+.chip:hover{background:var(--teal);color:var(--cream)}
+.chip--hot{background:var(--coral);border-color:var(--coral);color:var(--teal);font-weight:600}
+.chip--hot:hover{background:var(--teal);border-color:var(--teal);color:var(--cream)}
+.chat__in{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(27,69,82,.14);background:var(--cream)}
+.chat__in input{flex:1;min-width:0;font-family:var(--body);font-size:16.5px;color:var(--teal);background:var(--paper);
+  border:1.5px solid var(--rule);border-radius:999px;padding:11px 16px}
+.chat__in input:focus{outline:none;border-color:var(--teal)}
+.chat__in button{flex:none;cursor:pointer;border:0;border-radius:999px;background:var(--teal);color:var(--cream);
+  font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:0 18px}
+.chat__in button:disabled{opacity:.5;cursor:default}
+
+/* review replies */
+.rv{display:grid;gap:16px}
+.seg2{display:flex;flex-wrap:wrap;gap:8px}
+.seg2 button{cursor:pointer;background:var(--paper);border:1.5px solid var(--rule);color:var(--teal);border-radius:999px;
+  padding:9px 15px;font-family:var(--display);font-weight:500;font-size:14.5px}
+.seg2 button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--cream)}
+.rv__card,.rv__reply,.qt__notes,.qt__doc{background:var(--paper);border:1.5px solid rgba(27,69,82,.18);border-radius:14px;padding:18px 20px}
+.rv__who{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;margin-bottom:10px}
+.rv__av{grid-row:span 2;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--sand);
+  font-family:var(--display);font-weight:700;color:var(--teal)}
+.rv__who b{font-family:var(--display);font-weight:600;font-size:16px}
+.rv__who small{font-family:var(--display);font-size:13px;color:var(--teal-mid)}
+.rv__stars{color:#D9822B;letter-spacing:2px;font-size:15px}
+.rv__text{margin:0;font-size:17px}
+.rv__reply{border-color:var(--teal);border-width:2px;position:relative}
+.rv__reply p{margin:0 0 16px;font-size:17px;min-height:3em}
+.rv__reply .btn,.qt .btn{padding:12px 20px;font-size:12.5px}
+.caret::after{content:"";display:inline-block;width:2px;height:1.05em;background:var(--teal);margin-left:2px;vertical-align:-.15em;animation:dot .9s infinite}
+.posted{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:14px;color:var(--teal);
+  background:rgba(127,209,168,.35);border-radius:999px;padding:7px 14px}
+.posted::before{content:"";width:8px;height:8px;border-radius:50%;background:#2E8B57}
+.dnote{font-family:var(--display);font-size:14px;color:var(--teal-mid);margin:0}
+
+/* job notes to estimate */
+.qt{display:grid;gap:16px}
+@media(min-width:760px){.qt{grid-template-columns:.9fr 1.1fr;align-items:start}}
+.qt__notes pre{white-space:pre-wrap;font-family:"Courier New",ui-monospace,monospace;font-size:15px;line-height:1.55;
+  background:#FFFBEA;border:1px solid #E8DDB5;border-radius:8px;padding:14px;margin:12px 0 16px;color:#3a3a2a;
+  transform:rotate(-.4deg)}
+.qt__doc[data-empty]{display:grid;place-items:center;min-height:300px;text-align:center;color:var(--teal-mid);
+  font-family:var(--display);font-size:15px;border-style:dashed}
+.est__hd{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:2px solid var(--teal);padding-bottom:12px;margin-bottom:12px}
+.est__hd b{font-family:var(--display);font-weight:700;font-size:17px;display:block}
+.est__hd small{font-family:var(--display);font-size:13px;color:var(--teal-mid)}
+.est__no{text-align:right}
+.est__for{font-size:15.5px;margin:0 0 10px;color:var(--teal-sub)}
+.est table{width:100%;border-collapse:collapse;font-size:15.5px}
+.est td{padding:8px 0;border-bottom:1px solid rgba(27,69,82,.12);vertical-align:top}
+.est td:last-child{text-align:right;font-family:var(--display);font-weight:600;font-variant-numeric:tabular-nums;padding-left:12px;white-space:nowrap}
+.est tr{animation:msgin .3s ease both}
+.est .tot td{border-bottom:0;border-top:2px solid var(--teal);font-family:var(--display);font-weight:700;font-size:17px;padding-top:10px}
+.est__terms{font-size:14px;color:var(--teal-mid);margin:12px 0 0}
+
+/* demo lead form */
+.demo-lead{margin-top:clamp(26px,3vw,38px);display:grid;gap:clamp(20px,3vw,40px);align-items:center;
+  border:1.5px solid rgba(253,240,220,.3);border-radius:20px;padding:clamp(22px,3.4vw,40px)}
+@media(min-width:900px){.demo-lead{grid-template-columns:.9fr 1.1fr}}
+.demo-lead h3{font-size:clamp(24px,2.4vw,30px);color:var(--cream);margin-bottom:12px}
+.demo-lead p{color:rgba(253,240,220,.84);margin:0}
+.demo-lead__form{display:grid;gap:14px}
+.demo-lead .field label{color:rgba(253,240,220,.8)}
+.demo-lead .field input,.demo-lead .field select{background:var(--paper);border-color:transparent}
+.demo-lead .formnote{color:rgba(253,240,220,.7)}
+.demo-lead .formstatus{border-color:var(--peach);color:var(--cream)}
+.demo-lead .formstatus .small{color:rgba(253,240,220,.84)}
+.demo-small{margin:18px 0 0;font-size:14px;color:rgba(253,240,220,.66);text-align:center}
+
+/* new: reply-speed question on the website check */
+.check__form .field select{font-family:var(--body)}
+.ck-new{display:inline-block;margin-left:6px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--peach);color:var(--teal);border-radius:4px;padding:2px 6px;vertical-align:.2em;font-family:var(--display);font-weight:700}
+
+/* contact: "what's eating your week" pills */
+.choice__opts--multi .pill input{width:1px}
+.mock-flag{position:fixed;left:12px;bottom:12px;z-index:80;background:var(--coral);color:var(--teal);font-family:var(--display);
+  font-weight:700;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:8px;pointer-events:none}
 """
 
 JS = r"""
@@ -1248,7 +1450,7 @@ JS = r"""
       upd();
     }
   }
-  var pre={'#pricing':'want-pricing','#call':'want-call'}[location.hash];
+  var pre={'call':'want-call','question':'want-question'}[new URLSearchParams(location.search).get('want')]||(new URLSearchParams(location.search).get('package')?'want-start':null);
   if(pre){var w=document.getElementById(pre);if(w)w.checked=true;}
   var f=document.getElementById('projectform');
   if(f){f.addEventListener('submit',function(ev){
@@ -1274,7 +1476,7 @@ JS = r"""
     fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.success,j:j};});})
       .then(function(res){
-        if(res.ok){show("Thanks, we've got it.","You'll hear back within one business day, from a person.");}
+        if(res.ok){show("Thanks, we've got it.","You'll hear back within two business days, from a person.");}
         else{throw new Error(res.j&&res.j.message);}
       })
       .catch(function(){
@@ -1653,6 +1855,248 @@ JS = r"""
     });
   }
 })();
+
+/* ================= v2: Harbor Line demo (scripted, no AI behind it yet) ================= */
+(function(){
+  var demo=document.getElementById('demo');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wait=function(ms){return new Promise(function(r){setTimeout(r,reduce?Math.min(ms,120):ms);});};
+  var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+  var KEY='__WEB3FORMS_KEY__';
+  var send=function(data){
+    data.access_key=KEY;data.from_name='Beaumont West Solutions website';
+    return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json().then(function(j){if(!(r.ok&&j.success))throw new Error(j&&j.message);return j;});});
+  };
+
+  /* ---------- contact page: preselect from links like contact.html?package=Get%20Leads#start ---------- */
+  var pkgSel=document.getElementById('package');
+  if(pkgSel){
+    var q=new URLSearchParams(location.search).get('package');
+    if(q){[].forEach.call(pkgSel.options,function(o){if(o.value===q||o.text===q)pkgSel.value=o.value;});}
+  }
+
+  if(!demo)return;
+
+  /* ---------- tabs ---------- */
+  var tabs=[].slice.call(demo.querySelectorAll('[role="tab"]'));
+  var pick=function(t,focus){
+    tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});
+    if(focus)t.focus();
+  };
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){pick(t);});
+    t.addEventListener('keydown',function(e){
+      var d={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];
+      if(d){e.preventDefault();pick(tabs[(i+d+tabs.length)%tabs.length],true);}
+    });
+  });
+
+  /* ---------- chat assistant ---------- */
+  var log=document.getElementById('chatlog'),chips=document.getElementById('chatchips'),
+      cin=document.getElementById('chatin'),cbox=document.getElementById('chatbox'),
+      cname=document.getElementById('chatname'),clogo=document.getElementById('chatlogo');
+  var answered=0,phase='qa',lead={},busy=false;
+  var add=function(cls,html){var m=document.createElement('div');m.className='msg msg--'+cls;m.innerHTML=html;log.appendChild(m);log.scrollTop=log.scrollHeight;return m;};
+  var bot=async function(html,ms){
+    var t=add('bot msg--typing','<i></i><i></i><i></i>');t.setAttribute('aria-hidden','true');
+    await wait(ms||900);t.remove();return add('bot',html);
+  };
+  var setChips=function(list){
+    chips.innerHTML='';
+    list.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='chip'+(c.hot?' chip--hot':'');
+      b.textContent=c.t;b.addEventListener('click',function(){if(!busy)say(c.t,c.k);});chips.appendChild(b);});
+  };
+  var QA={
+    emergency:{a:'Yes. We cover emergencies seven days a week, 7am to 10pm. After 10pm, leave your number here and the on-call plumber will text you back within 15 minutes.'},
+    price:{a:'Most standard water heater replacements run <b>$1,400 to $2,200</b> installed, depending on size and gas or electric. We confirm a fixed price on site before any work starts.'},
+    book:{a:'We have two openings tomorrow: <b>9 to 11am</b> or <b>2 to 4pm</b>. Want me to hold one for you?',
+      chips:[{t:'9 to 11am',k:'slot'},{t:'2 to 4pm',k:'slot'}]},
+    area:{a:'We cover North Bend and everywhere within about 25 miles. Tell me your town and I can check.'}
+  };
+  var START=[{t:'Do you do emergency call-outs?',k:'emergency'},{t:'How much is a new water heater?',k:'price'},
+    {t:'Can someone come tomorrow?',k:'book'},{t:'Do you cover my area?',k:'area'}];
+  var asked={};
+  var remaining=function(){return START.filter(function(c){return !asked[c.k];});};
+  var guess=function(s){
+    s=s.toLowerCase();
+    if(/emergenc|urgent|burst|flood|night|weekend/.test(s))return 'emergency';
+    if(/cost|price|how much|quote|estimate|\$/.test(s))return 'price';
+    if(/book|tomorrow|today|appoint|available|come out|schedule/.test(s))return 'book';
+    if(/area|town|city|near|cover|serve|zip/.test(s))return 'area';
+    return null;
+  };
+  var offer=async function(){
+    phase='offer';
+    await bot('Anything else I can help with?',700);
+    await wait(500);
+    add('note','<b>That&rsquo;s the demo.</b> On a real site, this is where the customer leaves their details and the owner gets a text straight away. Want to see it set up for <b>your</b> business?');
+    setChips([{t:'Yes, set it up for me',k:'yes',hot:true},{t:'Keep exploring',k:'more'}]);
+  };
+  var say=async function(text,k){
+    busy=true;setChips([]);add('me',esc(text));
+    try{
+      if(phase==='lead-biz'){
+        lead.business=text.trim();
+        var ini=lead.business.split(/\s+/).filter(Boolean).slice(0,2).map(function(w){return w[0];}).join('').toUpperCase()||'?';
+        cname.textContent=lead.business;clogo.textContent=ini;
+        await bot('Done. This chat now says <b>'+esc(lead.business)+'</b>. Where should we send your free mock-up, set up with your services and hours?',1000);
+        phase='lead-email';cin.type='email';cin.placeholder='you@yourbusiness.com';cin.setAttribute('autocomplete','email');cin.focus();
+        return;
+      }
+      if(phase==='lead-email'){
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text.trim())){await bot('That doesn&rsquo;t look like an email address. Could you check it?',600);return;}
+        lead.email=text.trim();
+        await bot('Thanks. And your first name?',700);
+        phase='lead-name';cin.type='text';cin.placeholder='First name';cin.setAttribute('autocomplete','given-name');cin.focus();
+        return;
+      }
+      if(phase==='lead-name'){
+        lead.name=text.trim();phase='done';cin.disabled=true;cin.placeholder='';
+        cbox.querySelector('button').disabled=true;
+        var ok=true;
+        try{await send({subject:'Demo mock-up request: '+lead.business,name:lead.name,email:lead.email,business:lead.business,
+          source:'Harbor Line chat demo',questions_tried:Object.keys(asked).join(', ')||'none'});}catch(e){ok=false;}
+        if(ok)await bot('Thanks, '+esc(lead.name)+'. Your mock-up will be in <b>'+esc(lead.email)+'</b> within two business days. Nothing to pay, nothing to sign.',1100);
+        else await bot('Sorry, that didn&rsquo;t send on our side. Please email <a href="mailto:info@beaumontwest.com">info@beaumontwest.com</a> and we&rsquo;ll set it up.',800);
+        return;
+      }
+      if(k==='yes'){
+        phase='lead-biz';
+        await bot('Great. What&rsquo;s your business called?',800);
+        cin.placeholder='Your business name';cin.focus();return;
+      }
+      if(k==='more'){phase='qa';await bot('Sure. Ask me anything, or try the other two tools on the left.',700);setChips(remaining().length?remaining():[{t:'Set it up for my business',k:'yes',hot:true}]);return;}
+      if(k==='slot'){
+        await bot('Done. You&rsquo;re pencilled in for <b>'+esc(text)+'</b> tomorrow. You&rsquo;ll get a reminder text the evening before, and a link to reschedule if plans change.',1000);
+        answered++;
+        if(phase==='qa'&&answered>=2){await offer();}else setChips(remaining());
+        return;
+      }
+      k=k||guess(text);
+      if(k&&QA[k]){
+        asked[k]=1;
+        await bot(QA[k].a,1000);
+        if(QA[k].chips){setChips(QA[k].chips);return;}
+        answered++;
+      }else{
+        await bot('Good question. On the live version, I&rsquo;d answer that from Harbor Line&rsquo;s own prices, hours and policies. For this demo, try one of these:',900);
+      }
+      if(phase==='qa'&&answered>=2){await offer();return;}
+      setChips(remaining());
+    }finally{busy=false;}
+  };
+  cbox.addEventListener('submit',function(e){
+    e.preventDefault();var v=cin.value.trim();if(!v||busy||phase==='done')return;cin.value='';say(v);
+  });
+  var started=false;
+  var startChat=async function(){
+    if(started)return;started=true;busy=true;
+    await bot('Hi! I&rsquo;m Harbor Line&rsquo;s assistant. I can answer questions, give rough prices or book a visit, any hour. What&rsquo;s going on?',700);
+    busy=false;setChips(START);
+  };
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){startChat();io.disconnect();}});},{threshold:.35});
+    io.observe(log);
+  }else startChat();
+
+  /* ---------- review replies ---------- */
+  var REVIEWS=[
+    {who:'Dana R.',av:'D',stars:4,when:'2 days ago',
+     text:'Fixed our leak quickly and the price was fair. Only gripe: the tech showed up about 40 minutes late and nobody called ahead.',
+     reply:['Thanks, Dana. Glad the leak is sorted and the price felt fair. You&rsquo;re right about the late arrival, and I&rsquo;m sorry nobody called ahead. We now send an automatic text whenever a tech is running behind, so you&rsquo;ll always know. Mike, Harbor Line',
+            'Thanks, Dana, and sorry about the wait. We now text ahead when we&rsquo;re running late. Mike']},
+    {who:'Luis P.',av:'L',stars:5,when:'1 week ago',
+     text:'Water heater died on a Sunday. Booked online at 10pm, they were here by noon Monday. Tidy, fast, explained everything.',
+     reply:['Thanks, Luis! A cold Sunday is no fun, so we&rsquo;re glad we could get you sorted by Monday lunchtime. Enjoy the hot showers, and you know where we are. Mike, Harbor Line',
+            'Thanks, Luis! Glad we got you back up and running fast. Mike']},
+    {who:'Karen T.',av:'K',stars:2,when:'3 weeks ago',
+     text:'The repair itself was fine, but the final bill was higher than the estimate and nobody explained why until I asked.',
+     reply:['Karen, thank you for telling us, and I&rsquo;m sorry. You should have heard about any change before the bill, not after. I&rsquo;d like to go through the difference with you. Could you call me directly on (555) 014-7781? Mike, Harbor Line',
+            'Karen, I&rsquo;m sorry. Any change to the price should have been explained first. Please call me on (555) 014-7781 so I can put it right. Mike']}
+  ];
+  var ri=0,variant=0,typing=0;
+  var rvAv=document.getElementById('rv-av'),rvWho=document.getElementById('rv-who'),rvStars=document.getElementById('rv-stars'),
+      rvWhen=document.getElementById('rv-when'),rvText=document.getElementById('rv-text'),rvDraft=document.getElementById('rv-draft'),
+      rvBox=document.getElementById('rv-reply'),rvOut=document.getElementById('rv-out'),rvOk=document.getElementById('rv-ok'),
+      rvAlt=document.getElementById('rv-alt'),rvPosted=document.getElementById('rv-posted');
+  var showReview=function(){
+    var r=REVIEWS[ri];rvAv.textContent=r.av;rvWho.textContent=r.who;rvWhen.textContent='Google review · '+r.when;
+    rvStars.textContent='★★★★★'.slice(0,r.stars)+'☆☆☆☆☆'.slice(0,5-r.stars);rvStars.setAttribute('aria-label',r.stars+' out of 5 stars');
+    rvText.textContent=r.text;rvBox.hidden=true;rvDraft.hidden=false;rvPosted.hidden=true;variant=0;typing++;
+  };
+  var typeOut=async function(html){
+    var id=++typing;rvOut.innerHTML='';rvOut.classList.add('caret');rvOk.disabled=rvAlt.disabled=true;
+    var tmp=document.createElement('div');tmp.innerHTML=html;var txt=tmp.textContent,i=0;
+    if(reduce){rvOut.textContent=txt;}
+    else while(i<txt.length){if(id!==typing)return;i=Math.min(txt.length,i+3);rvOut.textContent=txt.slice(0,i);await wait(14);}
+    rvOut.classList.remove('caret');rvOk.disabled=rvAlt.disabled=false;
+  };
+  [].forEach.call(demo.querySelectorAll('#rv-pick button'),function(b){
+    b.addEventListener('click',function(){
+      [].forEach.call(demo.querySelectorAll('#rv-pick button'),function(x){x.setAttribute('aria-pressed',x===b);});
+      ri=+b.dataset.r;showReview();
+    });
+  });
+  rvDraft.addEventListener('click',function(){rvDraft.hidden=true;rvBox.hidden=false;rvPosted.hidden=true;typeOut(REVIEWS[ri].reply[variant]);});
+  rvAlt.addEventListener('click',function(){variant=1-variant;rvAlt.textContent=variant?'Make it warmer':'Make it shorter';rvPosted.hidden=true;typeOut(REVIEWS[ri].reply[variant]);});
+  rvOk.addEventListener('click',function(){rvPosted.hidden=false;rvOk.disabled=true;});
+  showReview();
+
+  /* ---------- job notes to estimate ---------- */
+  var JOBS=[
+    {notes:'Smith, 14 Elm St.\n40 gal gas WH in basement, leaking at base. Replace w/ 50 gal.\nNeeds expansion tank.\nHaul old unit away. Town permit.\n~4 hrs, 1 tech.',
+     no:'1042',to:'J. Smith, 14 Elm Street, North Bend',
+     items:[['50-gallon gas water heater, supplied and installed','$1,650'],['Thermal expansion tank, fitted to code','$185'],
+            ['Removal and disposal of the old heater','$95'],['Town plumbing permit and inspection','$75'],['Labor (about 4 hours), included','$0']],
+     total:'$2,005'},
+    {notes:'Okafor, 7 Bay Rd.\nKitchen sink backing up, slow 2 wks.\nSnake main line from cleanout. Camera check.\nReplace P-trap (cracked).\n~1.5 hrs.',
+     no:'1043',to:'A. Okafor, 7 Bay Road, North Bend',
+     items:[['Drain clearing from the cleanout, kitchen line','$225'],['Camera inspection, with a short video sent to you','$140'],
+            ['Replace cracked P-trap under the kitchen sink','$85'],['Labor (about 1.5 hours), included','$0']],
+     total:'$450'}
+  ];
+  var ji=0,qtNotes=document.getElementById('qt-notes'),qtGo=document.getElementById('qt-go'),qtDoc=document.getElementById('qt-doc');
+  var showJob=function(){qtNotes.textContent=JOBS[ji].notes;qtDoc.setAttribute('data-empty','');qtDoc.innerHTML='<p>Your estimate appears here.</p>';qtGo.disabled=false;};
+  [].forEach.call(demo.querySelectorAll('#qt-pick button'),function(b){
+    b.addEventListener('click',function(){
+      [].forEach.call(demo.querySelectorAll('#qt-pick button'),function(x){x.setAttribute('aria-pressed',x===b);});
+      ji=+b.dataset.j;showJob();
+    });
+  });
+  qtGo.addEventListener('click',async function(){
+    var j=JOBS[ji];qtGo.disabled=true;qtDoc.removeAttribute('data-empty');
+    qtDoc.innerHTML='<div class="msg msg--typing" style="margin:auto"><i></i><i></i><i></i></div>';
+    await wait(1100);
+    qtDoc.innerHTML='<div class="est"><div class="est__hd"><div><b>Harbor Line Plumbing</b><small>Licensed &amp; insured · (555) 014-7781</small></div>'
+      +'<div class="est__no"><b>Estimate #'+j.no+'</b><small>Valid for 30 days</small></div></div>'
+      +'<p class="est__for">Prepared for '+esc(j.to)+'</p><table><tbody></tbody></table>'
+      +'<p class="est__terms">Fixed price, confirmed on site before any work starts. Nothing extra without your OK.</p>'
+      +'<div class="btn-row" style="margin-top:14px"><button type="button" class="btn btn--primary" disabled>Send to customer</button><span class="dnote">Disabled in the demo</span></div></div>';
+    var tb=qtDoc.querySelector('tbody');
+    for(var i=0;i<j.items.length;i++){var tr=document.createElement('tr');tr.innerHTML='<td>'+esc(j.items[i][0])+'</td><td>'+esc(j.items[i][1])+'</td>';tb.appendChild(tr);await wait(260);}
+    var tt=document.createElement('tr');tt.className='tot';tt.innerHTML='<td>Total</td><td>'+esc(j.total)+'</td>';tb.appendChild(tt);
+  });
+  showJob();
+
+  /* ---------- "get a mock-up" form under the demo ---------- */
+  var df=document.getElementById('demoform');
+  if(df){df.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!df.checkValidity()){df.reportValidity();return;}
+    if(df.querySelector('[name="botcheck"]').checked)return;
+    var btn=df.querySelector('button[type="submit"]');btn.disabled=true;btn.setAttribute('aria-busy','true');
+    var d=Object.fromEntries(new FormData(df));delete d.botcheck;
+    d.subject='Demo mock-up request: '+d.business;d.source='Form under the Harbor Line demo';
+    send(d).then(function(){
+      var st=document.getElementById('demostatus');
+      document.getElementById('demostatus-text').textContent='Your mock-up will be in '+d.email+' within two business days. Nothing to pay, nothing to sign.';
+      st.classList.add('show');df.style.display='none';st.focus({preventScroll:true});
+    }).catch(function(){btn.disabled=false;btn.removeAttribute('aria-busy');
+      alert("Sorry, that didn't send. Please try again, or email us at info@beaumontwest.com.");});
+  });}
+})();
 """
 
 # ------------------------------------------------------------------- chrome
@@ -1679,7 +2123,7 @@ def masthead(current):
     <nav class="nav" aria-label="Primary">
         %s
     </nav>
-    <a class="btn btn--primary" href="contact.html">Start a project</a>
+    <a class="btn btn--primary" href="index.html#check">Free website check</a>
     <button class="navtoggle" type="button" aria-expanded="false" aria-controls="mobilenav" aria-label="Menu">
       <svg class="navtoggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="nt1" d="M4 7h16"/><path class="nt2" d="M4 12h16"/><path class="nt3" d="M4 17h16"/></svg>
     </button>
@@ -1696,7 +2140,7 @@ FOOTER = """<footer class="foot">
     <div class="foot__top">
       <div>
         %s
-        <p class="foot__blurb">Websites for service businesses, coast to coast. We build it and keep it running. You run your business.</p>
+        <p class="foot__blurb">Websites and AI systems for service businesses, coast to coast. We build it and keep it running. You run your business.</p>
       </div>
       <div>
         <h4>Pages</h4>
@@ -1704,6 +2148,7 @@ FOOTER = """<footer class="foot">
           <li><a href="index.html">Home</a></li>
           <li><a href="services.html">Packages</a></li>
           <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.html#demo">Try the demo</a></li>
           <li><a href="index.html#check">Free website check</a></li>
         </ul>
       </div>
@@ -1718,7 +2163,7 @@ FOOTER = """<footer class="foot">
     </div>
     <div class="foot__base">
       <span>© 2026 Beaumont West Solutions</span>
-      <span>Replies within one business day</span>
+      <span>Replies within two business days</span>
     </div>
   </div>
 </footer>""" % footer_lockup("ft")
@@ -1802,7 +2247,7 @@ CHECK_REQUEST = r"""<section class="section check" id="check">
           <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Easy to contact</span><p class="ck-d">Customers can only call. There's no quote form for after-hours visitors.</p></li>
           <li><span class="ck-chip miss">Missing</span><span class="ck-t">Bookings and quotes online</span><p class="ck-d">No way to book or ask for a quote online.</p></li>
         </ul>
-        <div class="ck-reco"><span class="eyebrow">Best fit</span><strong>Starter</strong>
+        <div class="ck-reco"><span class="eyebrow">Best fit</span><strong>Get Found</strong>
           <p>A one-page site closes the biggest gap: being findable, with tap-to-call and a quote form.</p></div>
         <p class="ck-example">A sample report for a made-up business with no website.</p>
       </div>
@@ -1835,6 +2280,16 @@ CHECK_AUTO = r"""<section class="section check" id="check">
           <input id="ac-url" name="website" inputmode="url" placeholder="yourbusiness.com">
         </div>
         <label class="tick" for="ac-none"><input type="checkbox" id="ac-none" name="no_website" value="Yes"> We don't have a website yet</label>
+        <div class="field">
+          <label for="ac-speed">How fast do you usually reply to a new inquiry? <span class="ck-new">New</span></label>
+          <select id="ac-speed" name="reply_speed">
+            <option value="">Choose one</option>
+            <option>Within an hour</option>
+            <option>The same day</option>
+            <option>The next day or later</option>
+            <option>Honestly, not sure</option>
+          </select>
+        </div>
         <div class="field--pair">
           <div class="field">
             <label for="ac-first">First name</label>
@@ -1879,18 +2334,22 @@ CHECK_AUTO = r"""<section class="section check" id="check">
             <li><span class="ck-chip miss">Missing</span><span class="ck-t">Loads quickly</span><p class="ck-d">Nothing to check yet.</p></li>
             <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Easy to contact</span><p class="ck-d">Customers can only call. There's no quote form for after-hours visitors.</p></li>
             <li><span class="ck-chip miss">Missing</span><span class="ck-t">Bookings and quotes online</span><p class="ck-d">No way to book or ask for a quote online.</p></li>
+            <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Review replies <span class="ck-new">New</span></span><p class="ck-d">12 Google reviews, 2 with a reply. Customers read the replies too.</p></li>
+            <li><span class="ck-chip fix">Needs work</span><span class="ck-t">Reply speed <span class="ck-new">New</span></span><p class="ck-d">You said "next day". Most people hire whoever replies first.</p></li>
           </ul>
-          <div class="ck-reco" id="ac-reco"><span class="eyebrow">Best fit</span><strong>Starter</strong>
+          <div class="ck-reco" id="ac-reco"><span class="eyebrow">Best fit</span><strong>Get Found</strong>
             <p>A one-page site closes the biggest gap: being findable, with tap-to-call and a quote form.</p></div>
           <details class="ac-rubric">
             <summary>How the score works</summary>
             <table>
-              <tr><th>Google Business Profile</th><td>20</td><td>Full marks with hours, photos and reviews. Half if it's listed but incomplete.</td></tr>
-              <tr><th>Website</th><td>20</td><td>Full marks if it loads securely and looks current. Half if it's dated or not secure.</td></tr>
-              <tr><th>Works on phones</th><td>15</td><td>Google's phone checks: set up for phone screens, with readable text.</td></tr>
-              <tr><th>Loads quickly</th><td>15</td><td>Full marks under 3 seconds on a phone connection. Half from 3 to 6.</td></tr>
-              <tr><th>Easy to contact</th><td>15</td><td>Tap-to-call number and a contact form on the home page. Half for one of the two.</td></tr>
+              <tr><th>Google Business Profile</th><td>15</td><td>Full marks with hours, photos and reviews. Half if it's listed but incomplete.</td></tr>
+              <tr><th>Website</th><td>15</td><td>Full marks if it loads securely and looks current. Half if it's dated or not secure.</td></tr>
+              <tr><th>Works on phones</th><td>10</td><td>Google's phone checks: set up for phone screens, with readable text.</td></tr>
+              <tr><th>Loads quickly</th><td>10</td><td>Full marks under 3 seconds on a phone connection. Half from 3 to 6.</td></tr>
+              <tr><th>Easy to contact</th><td>10</td><td>Tap-to-call number and a contact form on the home page. Half for one of the two.</td></tr>
               <tr><th>Bookings and quotes</th><td>15</td><td>Full marks for online booking or a quote request.</td></tr>
+              <tr><th>Review replies</th><td>15</td><td>Full marks if most recent Google reviews have an owner reply. Half for some.</td></tr>
+              <tr><th>Reply speed</th><td>10</td><td>From your answer above: full marks within an hour, half for the same day.</td></tr>
             </table>
             <p>Under 40 is &ldquo;Hard to find&rdquo;, 40 to 69 &ldquo;Needs work&rdquo;, 70 and up &ldquo;In good shape&rdquo;.</p>
           </details>
@@ -1918,7 +2377,7 @@ def head_extra(slug):
                 "name": BRAND, "url": SITE_URL + "/", "email": EMAIL, "telephone": PHONE_LINK,
                 "logo": SITE_URL + "/assets/bws-logo-512.png",
                 "image": SITE_URL + "/assets/bws-social-1200x630.png",
-                "description": "Websites for service businesses. Three fixed packages, typically live in two to four weeks."}
+                "description": "Websites and AI systems for service businesses. Three packages, one setup fee and one simple monthly plan."}
         out += '\n<script type="application/ld+json">%s</script>' % json.dumps(data)
     if CF_ANALYTICS_TOKEN:
         out += ('\n<script defer src="https://static.cloudflareinsights.com/beacon.min.js" '
@@ -1984,20 +2443,20 @@ home = """
   <div class="hero__glow" aria-hidden="true"></div>
   <div class="hero__in hero__grid">
     <div class="hero__copy">
-      <span class="eyebrow">Websites for service businesses</span>
-      <h1>Good work deserves to be seen.</h1>
-      <p class="lede">For the businesses people call, book and recommend.<br class="br-desk"> Three clear packages,
-      typically live in two to four weeks.</p>
+      <span class="eyebrow">Websites and AI for service businesses</span>
+      <h1>Good work deserves to be seen. <span class="nowrap">And answered.</span></h1>
+      <p class="lede">A website that gets you found, plus AI that replies, follows up and books jobs while
+      you're busy doing the work.</p>
       <div class="btn-row">
-        <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
-        <a class="btn btn--ghost" href="#check">Free website check</a>
+        <a class="btn btn--primary" href="#check">Run my free check <span class="arrow">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#demo">Try the live demo</a>
       </div>
     </div>
 
     <div class="builder" id="builder">
       <div class="seg" role="group" aria-label="Choose a site type to preview">
-        <button type="button" id="mode-one" data-mode="one" aria-pressed="true">One-page site<small>Starter</small></button>
-        <button type="button" id="mode-multi" data-mode="multi" aria-pressed="false">Multi-page site<small>Standard &middot; Premium</small></button>
+        <button type="button" id="mode-one" data-mode="one" aria-pressed="true">One-page site<small>Get Found</small></button>
+        <button type="button" id="mode-multi" data-mode="multi" aria-pressed="false">Multi-page site<small>Get Leads &middot; Get Booked</small></button>
       </div>
       <ol class="bsteps" aria-label="Build progress">
         <li>Intake</li><li>Sample page</li><li>Build out</li><li>Live</li>
@@ -2088,7 +2547,7 @@ home = """
         <h2>Started close to home</h2>
       </div>
       <div class="about__copy">
-        <p class="lede">Beaumont West began when I rebuilt my dad's <span class="nowrap">small-business</span> website. Now I help other small businesses <strong>get found</strong>, <strong>look established</strong> and <strong>win more customers</strong>. No <span class="nowrap">hand-offs</span>, no middlemen: I build every project myself, start to finish.</p>
+        <p class="lede">Beaumont West began when I rebuilt my dad's <span class="nowrap">small-business</span> website. Now I help other small businesses <strong>get found</strong>, <strong>get leads</strong> and <strong>get booked</strong>: a website, plus the systems that reply, follow up and fill the calendar for you. No <span class="nowrap">hand-offs</span>, no middlemen: I build every project myself, start to finish.</p>
         <p class="about__call">East&nbsp;Coast, West&nbsp;Coast or anywhere in&nbsp;between. Wherever you call home, let's build something you're proud&nbsp;of.</p>
       </div>
     </div>
@@ -2105,23 +2564,137 @@ home = """
         <span class="card__tag">No site at all</span>
         <h3>Running on referrals</h3>
         <p>Which works right up until someone searches your name at 9pm and finds nothing.</p>
-        <span class="card__fit">Best fit: <strong>Starter</strong></span>
+        <span class="card__fit">Best fit: <strong>Get Found</strong></span>
       </article>
       <article class="card card--who">
         <svg class="who-ic" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M16 22v-6a8 8 0 0 1 16 0v6" class="s"/><rect x="11" y="22" width="26" height="19" rx="4" class="s"/><path d="M24 29v5" class="a"/><circle cx="24" cy="29" r="1.6" class="af"/></svg>
-        <span class="card__tag">A site you're stuck with</span>
-        <h3>Built in 2016</h3>
-        <p>You can't change the hours, and nobody remembers who has the login.</p>
-        <span class="card__fit">Best fit: <strong>Standard</strong></span>
+        <span class="card__tag">Inquiries slipping through</span>
+        <h3>The quote that went quiet</h3>
+        <p>You sent it last Tuesday. Nobody followed up, so nobody booked.</p>
+        <span class="card__fit">Best fit: <strong>Get Leads</strong></span>
       </article>
       <article class="card card--who">
         <svg class="who-ic" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M37 5a9 9 0 1 0 7 13 7 7 0 0 1-7-13z" class="af"/><path d="M8 20h20a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H17l-6 5v-5H8a4 4 0 0 1-4-4V24a4 4 0 0 1 4-4z" class="s"/><path d="M11 29h14M11 34h9" class="s t"/></svg>
         <span class="card__tag">Outgrowing word of mouth</span>
         <h3>Admin after hours</h3>
-        <p>Quotes and bookings by text, every evening. The site should take the first pass.</p>
-        <span class="card__fit">Best fit: <strong>Premium</strong></span>
+        <p>Quotes and bookings by text, every evening. Let the site take the first pass.</p>
+        <span class="card__fit">Best fit: <strong>Get Booked</strong></span>
       </article>
     </div>
+  </div>
+</section>
+
+<section class="section band-teal demo-band" id="demo">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Try it yourself</span>
+      <h2>See it working before you buy</h2>
+      <p class="lede" style="margin-top:18px">Harbor Line Plumbing is a sample business we built to show the
+      full Get Booked package. It isn't a real company, so try anything.</p>
+    </div>
+    <div class="demo reveal">
+      <div>
+        <div class="dtabs" role="tablist" aria-label="Demo tools">
+          <button type="button" role="tab" id="dt-chat" aria-controls="dp-chat" aria-selected="true"><b>Chat assistant</b><small>Ask what a customer would at 10pm</small></button>
+          <button type="button" role="tab" id="dt-review" aria-controls="dp-review" aria-selected="false" tabindex="-1"><b>Review replies</b><small>A draft reply in the owner's voice</small></button>
+          <button type="button" role="tab" id="dt-quote" aria-controls="dp-quote" aria-selected="false" tabindex="-1"><b>Notes to estimate</b><small>Rough job notes in, clean quote out</small></button>
+        </div>
+        <p class="dtabs__note">Every tool here is part of Get Booked. Get Leads includes the review replies and estimates.</p>
+      </div>
+
+      <div class="dstage">
+        <div class="dpanel" role="tabpanel" id="dp-chat" aria-labelledby="dt-chat">
+          <div class="chat">
+            <div class="chat__hd"><span class="chat__logo" id="chatlogo">HL</span>
+              <span><b id="chatname">Harbor Line Plumbing</b><small><i></i>Replies instantly, any hour</small></span></div>
+            <div class="chat__log" id="chatlog" aria-live="polite"></div>
+            <div class="chat__chips" id="chatchips"></div>
+            <form class="chat__in" id="chatbox" autocomplete="off">
+              <label class="sr" for="chatin" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Type a message</label>
+              <input id="chatin" placeholder="Type a question" maxlength="120">
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="dpanel" role="tabpanel" id="dp-review" aria-labelledby="dt-review" hidden>
+          <div class="rv">
+            <div>
+              <span class="dlbl">Pick a new Google review</span>
+              <div class="seg2" id="rv-pick" role="group" aria-label="Choose a review">
+                <button type="button" data-r="0" aria-pressed="true">4 stars, one gripe</button>
+                <button type="button" data-r="1" aria-pressed="false">5 stars</button>
+                <button type="button" data-r="2" aria-pressed="false">2 stars</button>
+              </div>
+            </div>
+            <article class="rv__card">
+              <div class="rv__who"><span class="rv__av" id="rv-av">D</span><span><b id="rv-who">Dana R.</b> <span class="rv__stars" id="rv-stars" role="img">★★★★☆</span></span><small id="rv-when">Google review</small></div>
+              <p class="rv__text" id="rv-text"></p>
+            </article>
+            <div><button type="button" class="btn btn--primary" id="rv-draft">Draft a reply <span class="arrow">&rarr;</span></button></div>
+            <div class="rv__reply" id="rv-reply" hidden>
+              <span class="dlbl">Draft reply, waiting for your OK</span>
+              <p id="rv-out" aria-live="polite"></p>
+              <div class="btn-row">
+                <button type="button" class="btn btn--primary" id="rv-ok">Approve and post</button>
+                <button type="button" class="btn btn--ghost" id="rv-alt">Make it shorter</button>
+                <span class="posted" id="rv-posted" hidden>Posted to Google (in the demo, nothing is sent)</span>
+              </div>
+            </div>
+            <p class="dnote">Nothing posts without your OK. Once you trust it, you can let it post on its own.</p>
+          </div>
+        </div>
+
+        <div class="dpanel" role="tabpanel" id="dp-quote" aria-labelledby="dt-quote" hidden>
+          <div class="qt">
+            <div class="qt__notes">
+              <span class="dlbl">Your notes from the job</span>
+              <div class="seg2" id="qt-pick" role="group" aria-label="Choose a job">
+                <button type="button" data-j="0" aria-pressed="true">Water heater</button>
+                <button type="button" data-j="1" aria-pressed="false">Kitchen drain</button>
+              </div>
+              <pre id="qt-notes"></pre>
+              <button type="button" class="btn btn--primary" id="qt-go">Write the estimate <span class="arrow">&rarr;</span></button>
+            </div>
+            <div class="qt__doc" id="qt-doc" data-empty aria-live="polite"><p>Your estimate appears here.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-lead reveal">
+      <div>
+        <span class="eyebrow">Want this for your business?</span>
+        <h3>Get a free mock-up with your name on it</h3>
+        <p>Tell us about your business and we'll send back a version of this demo set up for you, with your
+        services and hours, within two business days. No charge, no obligation.</p>
+      </div>
+      <div>
+        <div class="formstatus" id="demostatus" role="status" tabindex="-1">
+          <h3 style="font-size:22px">Thanks. It's on its way.</h3>
+          <p class="small" id="demostatus-text" style="margin-top:10px"></p>
+        </div>
+        <form class="demo-lead__form" id="demoform" action="https://api.web3forms.com/submit" method="POST">
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="field--pair">
+            <div class="field"><label for="dm-biz">Business name</label><input id="dm-biz" name="business" autocomplete="organization" required></div>
+            <div class="field"><label for="dm-type">Type of business</label>
+              <select id="dm-type" name="business_type">
+                <option>Trades and home services</option><option>Salon, spa or personal care</option>
+                <option>Gym, studio or coaching</option><option>Landscaping, outdoor or property</option>
+                <option>Food, drink or hospitality</option><option>Professional services</option><option>Something else</option>
+              </select></div>
+          </div>
+          <div class="field--pair">
+            <div class="field"><label for="dm-first">First name</label><input id="dm-first" name="name" autocomplete="given-name" required></div>
+            <div class="field"><label for="dm-email">Email</label><input id="dm-email" name="email" type="email" autocomplete="email" required></div>
+          </div>
+          <div class="btn-row"><button class="btn btn--primary" type="submit">Send me my mock-up <span class="arrow">&rarr;</span></button></div>
+          <p class="formnote">We'll only use this to send your mock-up and follow up once. No list, no newsletter.</p>
+        </form>
+      </div>
+    </div>
+    <p class="demo-small">Harbor Line Plumbing is a fictional demo business. Its reviews and details are for illustration only.</p>
   </div>
 </section>
 
@@ -2136,30 +2709,31 @@ __CHECK_SECTION__
       <span class="eyebrow">Packages</span>
       <h2>Three ways to start</h2>
       <span class="accent-bar accent-bar--left" aria-hidden="true"></span>
-      <p class="lede" style="margin-top:18px">Pricing is on request. Ask for the price sheet, or we'll
-      go through it on a quick call.</p>
+      <p class="lede" style="margin-top:18px">Each package pairs a website with the systems that handle the
+      busywork. One setup fee, then one simple monthly plan.</p>
       <div class="btn-row" style="margin-top:26px">
-        <a class="btn btn--ghost" href="services.html">Compare the packages <span class="arrow">&rarr;</span></a>
+        <a class="btn btn--primary" href="services.html">See packages and prices <span class="arrow">&rarr;</span></a>
       </div>
+      <p class="small" style="margin-top:22px">Already have a website you like? <a href="services.html#quickwin">Start with an AI Quick Win</a>.</p>
     </div>
     <ul class="ways reveal">
       <li>
-        <span class="card__tag">Get found</span>
-        <h3>Starter</h3>
+        <span class="card__tag">Website + review replies</span>
+        <h3>Get Found</h3>
         <span class="pgs"><span class="pgs__stack" style="--n:1"><i style="--i:0"></i></span>1 page</span>
-        <p>Everything a customer needs to find you and get in touch, on one page.</p>
+        <p>A one-page site, your Google profile tidied, and a drafted reply for every new review.</p>
       </li>
       <li>
-        <span class="card__tag">Look established</span>
-        <h3>Standard</h3>
+        <span class="card__tag">Website + instant replies</span>
+        <h3>Get Leads</h3>
         <span class="pgs"><span class="pgs__stack" style="--n:5"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></span>5 pages</span>
-        <p>A full five-page site, with the words written for you.</p>
+        <p>Five pages written for you, instant replies to every inquiry, and follow-up on quiet quotes.</p>
       </li>
       <li>
-        <span class="card__tag">Win more customers</span>
-        <h3>Premium</h3>
+        <span class="card__tag">Website + bookings</span>
+        <h3>Get Booked</h3>
         <span class="pgs"><span class="pgs__stack" style="--n:8"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i></span>Up to 8</span>
-        <p>Online booking, a page for every service, and your Google profile set up.</p>
+        <p>Online booking, a chat assistant that answers at any hour, and missed-call text-back.</p>
       </li>
     </ul>
   </div>
@@ -2172,27 +2746,26 @@ __CHECK_SECTION__
     <div class="head reveal">
       <span class="eyebrow">Plain terms</span>
       <h2>How pricing works</h2>
-      <p class="lede" style="margin-top:18px">Each package has a fixed price, so you know the full cost
-      before anything starts.</p>
+      <p class="lede" style="margin-top:18px">One setup fee to build it, then one simple monthly plan
+      to keep it running. No hourly billing.</p>
     </div>
     <div class="grid g3 reveal">
       <article class="card card--dark card--terms">
-        <h3>Fixed, not hourly</h3>
-        <p style="margin-top:8px">One price per package. Extra pages and custom work are quoted up front.</p>
+        <h3>Fixed setup price</h3>
+        <p style="margin-top:8px">Half up front, half at launch. Custom work is quoted before it starts.</p>
       </article>
       <article class="card card--dark card--terms">
-        <h3>Half now, half at launch</h3>
-        <p style="margin-top:8px">You pay the balance when your site goes live.</p>
+        <h3>Monthly from launch</h3>
+        <p style="margin-top:8px">Covers the tools, tune-ups, a short monthly report and help when you need it. Month to month.</p>
       </article>
       <article class="card card--dark card--terms">
         <h3>Upgrade any time</h3>
-        <p style="margin-top:8px">Move up within six months and everything you've paid counts toward the new package.</p>
+        <p style="margin-top:8px">Move up within six months and what you've paid in setup counts toward the bigger package.</p>
       </article>
     </div>
     <div class="band-foot reveal">
       <span class="accent-bar" aria-hidden="true"></span>
-      <p>Want the numbers? <a href="contact.html#pricing">Request the price sheet</a> and it'll be in
-      your inbox within one business day.</p>
+      <p>Prices for every package are on the <a href="services.html">Packages page</a>.</p>
     </div>
   </div>
 </section>
@@ -2205,34 +2778,9 @@ __CHECK_SECTION__
       <span class="eyebrow">How it goes</span>
       <h2>Four steps, two to four weeks</h2>
     </div>
-    <div class="track reveal">
-      <div class="track__step">
-        <span class="track__n">01</span>
-        <span class="track__marker"><span class="track__dot"></span></span>
-        <h3>Intake form</h3>
-        <p>Your details, photos and what you want said.</p>
-      </div>
-      <div class="track__step">
-        <span class="track__n">02</span>
-        <span class="track__marker"><span class="track__dot"></span></span>
-        <h3>Sample page</h3>
-        <p>One page first, to confirm the direction.</p>
-      </div>
-      <div class="track__step">
-        <span class="track__n">03</span>
-        <span class="track__marker"><span class="track__dot"></span></span>
-        <h3>Build out</h3>
-        <p>Your feedback, carried through every page.</p>
-      </div>
-      <div class="track__step">
-        <span class="track__n">04</span>
-        <span class="track__marker"><span class="track__dot"></span></span>
-        <h3>Launch</h3>
-        <p>Tested on real phones, then live.</p>
-      </div>
-    </div>
+    __TRACK__
     <div class="btn-row" style="margin-top:40px">
-      <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--primary" href="#check">Run my free check <span class="arrow">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -2241,23 +2789,29 @@ __CHECK_SECTION__
 <a class="btn btn--primary stickycta" href="#check">Free website check <span class="arrow">&rarr;</span></a>
 """
 home = home % (RIDGE_HERO, WAVE_CREAM, SUN_HORIZON, MOUNTAIN_HORIZON, RIDGE_FOOT)
+# (the four steps are filled in once the shared track() helper exists, below)
 
 # ==========================================================================
 #  SERVICES
 # ==========================================================================
-PREVIEWS = {'Starter': '<div class="pv pv--one" aria-hidden="true"><div class="pv__phone"><div class="pv__page"><i class="pv-bar"></i><i class="pv-hero"></i><i class="pv-ln"></i><i class="pv-ln pv-s"></i><i class="pv-btn"></i><i class="pv-box"></i><i class="pv-ln"></i><i class="pv-ln pv-s"></i><i class="pv-box"></i><i class="pv-btn"></i><i class="pv-ln"></i></div></div><span class="pv__cap">One page</span></div>', 'Standard': '<div class="pv pv--web" aria-hidden="true"><div class="pv__web"><div class="pv__chrome"><b></b><b></b><b></b><span>yourbusiness.com</span></div><div class="pv__nav"><i class="on">Home</i><i>Services</i><i>About</i><i>Reviews</i><i>Gallery</i></div><div class="pv__pages"><div class="pw on"><i class="pw-hero"></i><i class="pw-ln"></i><i class="pw-ln pw-s"></i><i class="pw-cta"></i></div><div class="pw"><i class="pw-row"></i><i class="pw-row"></i><i class="pw-row"></i><i class="pw-row"></i></div><div class="pw"><i class="pw-img"></i><i class="pw-ln"></i><i class="pw-ln pw-s"></i></div><div class="pw"><i class="pw-card"></i><i class="pw-card"></i></div><div class="pw"><i class="pw-grid"><b></b><b></b><b></b><b></b><b></b><b></b></i></div></div></div><span class="pv__cap">Five pages</span></div>', 'Premium': '<div class="pv pv--book" aria-hidden="true"><div class="pv__cal"><b>This week <span class="pv__count">4 bookings</span></b><div class="pv__slots"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div><span class="pv__toast">New booking</span><span class="pv__cap">Online booking</span></div>'}
+PREVIEWS = {'Get Found': '<div class="pv pv--one" aria-hidden="true"><div class="pv__phone"><div class="pv__page"><i class="pv-bar"></i><i class="pv-hero"></i><i class="pv-ln"></i><i class="pv-ln pv-s"></i><i class="pv-btn"></i><i class="pv-box"></i><i class="pv-ln"></i><i class="pv-ln pv-s"></i><i class="pv-box"></i><i class="pv-btn"></i><i class="pv-ln"></i></div></div><span class="pv__cap">One page</span></div>', 'Get Leads': '<div class="pv pv--web" aria-hidden="true"><div class="pv__web"><div class="pv__chrome"><b></b><b></b><b></b><span>yourbusiness.com</span></div><div class="pv__nav"><i class="on">Home</i><i>Services</i><i>About</i><i>Reviews</i><i>Gallery</i></div><div class="pv__pages"><div class="pw on"><i class="pw-hero"></i><i class="pw-ln"></i><i class="pw-ln pw-s"></i><i class="pw-cta"></i></div><div class="pw"><i class="pw-row"></i><i class="pw-row"></i><i class="pw-row"></i><i class="pw-row"></i></div><div class="pw"><i class="pw-img"></i><i class="pw-ln"></i><i class="pw-ln pw-s"></i></div><div class="pw"><i class="pw-card"></i><i class="pw-card"></i></div><div class="pw"><i class="pw-grid"><b></b><b></b><b></b><b></b><b></b><b></b></i></div></div></div><span class="pv__cap">Five pages</span></div>', 'Get Booked': '<div class="pv pv--book" aria-hidden="true"><div class="pv__cal"><b>This week <span class="pv__count">4 bookings</span></b><div class="pv__slots"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div><span class="pv__toast">New booking</span><span class="pv__cap">Online booking</span></div>'}
 
-def pkg(tag, name, line, points, level=1):
+def pkg(name, for_, setup, monthly, points, btn, intro=None, level=1, flag=None):
     lis = "".join('<li><span class="sun" aria-hidden="true"></span><span>%s</span></li>' % p
                   for p in points)
-    return """<article class="card pkg%s reveal">
-  %s
-  <span class="card__tag">%s</span>
+    inc = '<p class="pkg__inc">%s</p>' % (intro or "What's included:")
+    fl = '<span class="pkg__flag">%s</span>' % flag if flag else ""
+    href = "contact.html?package=" + name.replace(" ", "%20") + "#start"
+    return """<article class="card pkg%s reveal" id="pk-%s">
+  %s%s
   <h3>%s</h3>
-  <p class="pkg__line">%s</p>
-  <ul class="checks">%s</ul>
+  <p class="pkg__for"><strong>For:</strong> %s</p>
+  <p class="pkg__price"><span class="from">Setup from</span><b>%s</b><span class="plus" aria-hidden="true">+</span><b>%s</b><span>/month</span></p>
+  %s<ul class="checks">%s</ul>
+  <div class="pkg__cta"><a class="btn btn--primary" href="%s">%s <span class="arrow">&rarr;</span></a></div>
   <span class="pkg__bars" aria-hidden="true">%s</span>
-</article>""" % (" pkg--l%d" % level, PREVIEWS.get(name, ""), tag, name, line, lis, "<i></i>" * level)
+</article>""" % (" pkg--l%d" % level, name.lower().replace(" ", "-"), fl, PREVIEWS.get(name, ""),
+                 name, for_, setup, monthly, inc, lis, href, btn, "<i></i>" * level)
 
 
 def step(n, title, body, open_=False):
@@ -2282,87 +2836,155 @@ def faq(q, a):
       </details>""" % (q, a)
 
 
+def track(items):
+    out = []
+    for i, (t, b) in enumerate(items, 1):
+        out.append("""      <div class="track__step">
+        <span class="track__n">%02d</span>
+        <span class="track__marker"><span class="track__dot"></span></span>
+        <h3>%s</h3>
+        <p>%s</p>
+      </div>""" % (i, t, b))
+    return '<div class="track reveal">\n%s\n    </div>' % "\n".join(out)
+
+
+HOW_IT_WORKS = track([
+    ("Free check", "We score your website and online presence out of 100 and show you the top fixes."),
+    ("Build", "We set up your site and your systems, usually within two to four weeks."),
+    ("Training", "A short session on using it, plus a one-page guide you keep."),
+    ("Ongoing", "Your monthly plan covers the tools, tune-ups and help when you need it."),
+])
+
+
+def cmp_row(label, cells, money=False):
+    tds = []
+    for c in cells:
+        if c is True:
+            tds.append('<td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td>')
+        elif c is False or c == "":
+            tds.append('<td><span class="no" aria-hidden="true"></span><span class="sr">Not included</span></td>')
+        else:
+            tds.append("<td>%s</td>" % c)
+    return '<tr%s><th scope="row">%s</th>%s</tr>' % (' class="money"' if money else "", label, "".join(tds))
+
+
+COMPARE = "\n".join([
+    cmp_row("Setup from", ["$1,200", "$2,500", "$4,000"], money=True),
+    cmp_row("Monthly plan", ["$79", "$149", "$249"], money=True),
+    cmp_row("Website pages", ["1", "5", "Up to 8"]),
+    cmp_row("Copy written for you", [False, True, True]),
+    cmp_row("Google profile setup", [True, True, True]),
+    cmp_row("AI review replies", [True, True, True]),
+    cmp_row("Instant inquiry replies", [False, True, True]),
+    cmp_row("Quote follow-up and drafting", [False, True, True]),
+    cmp_row("Online booking", [False, False, True]),
+    cmp_row("Chat assistant", [False, False, True]),
+    cmp_row("Missed-call text-back", [False, False, True]),
+    cmp_row("Reminders and review requests", [False, False, True]),
+])
+
+
 services = """
 <section class="hero hero--lite">
   <div class="hero__glow" aria-hidden="true"></div>
   <div class="hero__in">
     <div class="head" style="margin-bottom:0">
-      <span class="eyebrow">Packages</span>
-      <h1 style="font-size:clamp(34px,4.6vw,56px)">Three packages. One standard of work.</h1>
-      <p class="lede" style="margin-top:20px">Every site is designed for your business, built for
-      phones, and typically live in two to four weeks. Pick the one that fits where you are now. You can
-      move up later.</p>
+      <span class="eyebrow">Packages and prices</span>
+      <h1 style="font-size:clamp(34px,4.6vw,56px)">One setup fee. One simple monthly plan.</h1>
+      <p class="lede" style="margin-top:20px">A website that gets you found, plus AI that replies, follows up
+      and books jobs while you're busy doing the work. Three clear packages, typically live in two to
+      four weeks.</p>
+      <div class="btn-row" style="justify-content:flex-start;margin-top:30px">
+        <a class="btn btn--primary" href="index.html#check">Run my free check <span class="arrow">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#compare">Compare the packages</a>
+      </div>
     </div>
+  </div>
+</section>
+
+<section class="section band-paper" style="padding-top:clamp(20px,2.6vw,34px)">
+  <div class="wrap">
+    <div class="intro2 reveal">
+      <div>
+        <span class="eyebrow">Who it's for and how it works</span>
+        <h2>Built for the businesses people call, book and recommend</h2>
+      </div>
+      <div>
+        <p>You're great at the work. The hard part is everything around it: being easy to find,
+        answering the inquiry that came in at 9pm, chasing the quote you sent last Tuesday, replying to
+        reviews.</p>
+        <p>Each package pairs a website with the systems that handle that work for you. You pay once to
+        have it built, then a simple monthly plan keeps it running, updated and supported.</p>
+      </div>
+    </div>
+    %s
   </div>
 </section>
 
 %s
 
-<section class="section band-teal">
+<section class="section band-teal" id="packages">
   <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The packages</span>
+      <h2>Pick the one that fits where you are now</h2>
+    </div>
     <div class="grid g3 pkgs">
       %s
       %s
       %s
     </div>
-    <div class="pricing-note reveal">
-      <p class="lede">Pricing is on request. Ask for the price sheet, or we'll go through it on a
-      quick call.</p>
-      <div class="btn-row" style="justify-content:center;margin-top:24px">
-        <a class="btn btn--primary" href="contact.html#pricing">Request the price sheet <span class="arrow">&rarr;</span></a>
-        <a class="btn btn--ghost" href="contact.html#call">Book a call</a>
+    <div class="pkgs-foot reveal">
+      <p>Already have a website you like? <a href="#quickwin">Start with an AI Quick Win</a>.</p>
+    </div>
+  </div>
+</section>
+
+%s
+
+<section class="section band-paper" id="compare">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Side by side</span>
+      <h2>Compare at a glance</h2>
+    </div>
+    <div class="compare-wrap reveal">
+      <table class="compare">
+        <thead><tr><th scope="col"><span class="sr">Feature</span></th><th scope="col">Get Found</th><th scope="col">Get Leads</th><th scope="col">Get Booked</th></tr></thead>
+        <tbody>
+%s
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-note">Every package includes the training session, the one-page guide, and help when you need it.</p>
+  </div>
+</section>
+
+%s
+
+<section class="section band-cream" id="quickwin">
+  <div class="wrap qw">
+    <div class="reveal">
+      <span class="eyebrow">AI Quick Win</span>
+      <h2>Already have a website you like? Start here.</h2>
+      <p class="pkg__price"><span class="from">Setup from</span><b>$750</b><span class="plus" aria-hidden="true">+</span><b>$59</b><span>/month</span></p>
+      <p class="lede" style="margin-top:20px">Pick one thing that eats your week, and we'll set up a system that
+      handles it, in about two weeks. It comes with the same training session and guide as every
+      package.</p>
+      <div class="btn-row" style="margin-top:26px">
+        <a class="btn btn--primary" href="contact.html?package=AI%%20Quick%%20Win#start">Pick my Quick Win <span class="arrow">&rarr;</span></a>
       </div>
-      <p class="checklink">Not sure which fits? <a href="index.html#check">Run the free website check</a> and it will recommend one.</p>
     </div>
-  </div>
-</section>
-
-%s
-
-<section class="section band-paper">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">Good to know</span>
-      <h2>Room to grow</h2>
-    </div>
-    <div class="grid g3 reveal">
-      %s
-      %s
-      %s
-    </div>
-  </div>
-</section>
-
-%s
-
-<section class="section band-cream">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">How a project runs</span>
-      <h2>Four steps, two to four weeks</h2>
-      <p class="lede" style="margin-top:18px">Open any step to see what happens and what we need
-      from you.</p>
-    </div>
-    <div class="steps-layout">
-      <div class="card steps-card steps-card--paper reveal"><div class="faq">
-%s
-%s
-%s
-%s
-      </div></div>
-      <aside class="card ready-card reveal" aria-labelledby="ready-title">
-        <h3 id="ready-title">Handy to have ready</h3>
-        <ul class="ready-list">
-          <li>Your logo, if you have one</li>
-          <li>A list of your services</li>
-          <li>A few photos of your work</li>
-          <li>Two or three customer reviews</li>
-        </ul>
-        <div class="ready-card__pay">
-          <span class="accent-bar" aria-hidden="true"></span>
-          <p>Half to start, half at launch. Nothing is charged until you've chosen your package.</p>
-        </div>
-      </aside>
+    <div class="reveal">
+      <p class="qw-cap">Popular choices</p>
+      <ul class="qw-list">
+        <li><span class="sun" aria-hidden="true"></span>Review replies in your voice</li>
+        <li><span class="sun" aria-hidden="true"></span>Instant replies and follow-up for new inquiries</li>
+        <li><span class="sun" aria-hidden="true"></span>Missed-call text-back</li>
+        <li><span class="sun" aria-hidden="true"></span>Social posts made from your job photos</li>
+        <li><span class="sun" aria-hidden="true"></span>Turning job notes into estimates or invoices</li>
+        <li><span class="sun" aria-hidden="true"></span>Inbox sorting with drafted replies</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -2372,28 +2994,43 @@ services = """
 <section class="section band-teal">
   <div class="wrap">
     <div class="head reveal">
-      <span class="eyebrow">After launch</span>
-      <h2>Care plans, if you want one</h2>
-      <p class="lede" style="margin-top:18px">Optional. Without a plan, we set you up with your own
-      hosting account and hand over your site's files at launch. Upkeep and edits are then yours.</p>
+      <span class="eyebrow">Plain terms</span>
+      <h2>How billing works</h2>
     </div>
-    <div class="grid g2 reveal">
-      <article class="card plan">
-        <span class="card__tag">Keep it running</span>
-        <h3>Essential</h3>
-        <span class="accent-bar" aria-hidden="true"></span>
-        <p>Hosting, security, backups and small updates each month, so your site stays fast, safe
-        and current.</p>
-      </article>
-      <article class="card plan">
-        <span class="card__tag">Keep it growing</span>
-        <h3>Growth</h3>
-        <span class="accent-bar" aria-hidden="true"></span>
-        <p>Everything in Essential, plus more update time, a monthly post and upkeep on your Google
-        profile, and a monthly report on your leads.</p>
-      </article>
+    <div class="bill reveal">
+      <article class="card card--dark card--terms"><h3>Fixed setup price</h3><p>No hourly billing. You pay half up front and half at launch.</p></article>
+      <article class="card card--dark card--terms"><h3>Monthly plan starts at launch</h3><p>It covers the tools your systems run on, monthly tune-ups, a short monthly report on replies and reviews, and help when you need it.</p></article>
+      <article class="card card--dark card--terms"><h3>Upgrade any time in the first six months</h3><p>What you've paid in setup counts toward the bigger package.</p></article>
+      <article class="card card--dark card--terms"><h3>Month to month</h3><p>Cancel your monthly plan with 30 days' notice.</p></article>
+      <article class="card card--dark card--terms"><h3>Texting and calls included, up to a monthly limit</h3><p>Missed-call text-back and reminders are covered by your plan. If you ever go over the limit, the extra is billed at cost.</p></article>
+      <article class="card card--dark card--terms"><h3>You own it</h3><p>Your website content, your accounts and your customer list are yours.</p></article>
     </div>
-    <div class="yearly reveal"><span class="yearly__a">Pay yearly</span><span class="yearly__b">Two months free</span></div>
+  </div>
+</section>
+
+<section class="section band-teal" style="padding-top:0">
+  <div class="wrap">
+    <div class="card card--dark demo-teaser reveal" style="border:1.5px solid rgba(253,240,220,.25)">
+      <div>
+        <span class="eyebrow">Try the demo</span>
+        <h2 style="margin-bottom:16px">See it working before you buy</h2>
+        <p>Harbor Line Plumbing is a sample business we built to show the full Get Booked package. It
+        isn't a real company, so try anything:</p>
+        <ul>
+          <li>Ask the chat assistant a question, the way a customer would at 10pm</li>
+          <li>See a sample review reply written in the owner's voice</li>
+          <li>See rough job notes turned into a finished estimate</li>
+        </ul>
+        <a class="btn btn--primary" href="index.html#demo">Try the Harbor Line demo <span class="arrow">&rarr;</span></a>
+        <p class="finep">Harbor Line Plumbing is a fictional demo business. Its reviews and details are for illustration only.</p>
+      </div>
+      <div class="mini-chat" aria-hidden="true">
+        <span class="u">Do you do emergency call-outs?</span>
+        <span class="b">Yes, seven days a week, 7am to 10pm. After 10pm, leave your number and the on-call plumber texts you back within 15 minutes.</span>
+        <span class="u">Can someone come tomorrow?</span>
+        <span class="b">We have 9 to 11am or 2 to 4pm. Want me to hold one?</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2403,9 +3040,10 @@ services = """
   <div class="wrap">
     <div class="head reveal" style="max-width:52ch">
       <span class="eyebrow">Common questions</span>
-      <h2>Before you call</h2>
+      <h2>Questions</h2>
     </div>
     <div class="faq reveal">
+%s
 %s
 %s
 %s
@@ -2415,72 +3053,65 @@ services = """
     <div class="card card--dark cta-card reveal" style="text-align:center;margin-top:clamp(48px,5.6vw,72px)">
       <h2 style="max-width:22ch;margin-inline:auto">Not sure which package fits?</h2>
       <span class="accent-bar" aria-hidden="true"></span>
-      <p class="lede" style="margin:0 auto;text-align:center">That's what the call is for. Tell
-      us about the business and we'll recommend one, including the smaller one if it'll do.</p>
+      <p class="lede" style="margin:0 auto;text-align:center">Run the free check. We'll score your website
+      and online presence out of 100, list the top fixes, and tell you which package, if any, makes
+      sense.</p>
       <div class="btn-row" style="justify-content:center;margin-top:28px">
-        <a class="btn btn--primary" href="contact.html">Start a project <span class="arrow">&rarr;</span></a>
-        <a class="btn btn--ghost btn--peach" href="contact.html#pricing">Request the price sheet</a>
+        <a class="btn btn--primary" href="index.html#check">Run my free check <span class="arrow">&rarr;</span></a>
+        <a class="btn btn--ghost btn--peach" href="contact.html?want=call#start">Request a call</a>
       </div>
-      <p class="checklink">Or <a href="index.html#check">run the free website check</a> and get a recommendation.</p>
     </div>
   </div>
 </section>
 
 %s
 """ % (
+  HOW_IT_WORKS,
   RIDGE_HERO,
-  pkg("Get found", "Starter",
-      "Everything a customer needs to find you and get in touch, on one page.",
-      ["One-page website", "Contact form and click-to-call", "Built for phones first"]),
-  pkg("Look established", "Standard",
-      "A full site that looks the part, with the words written for you.",
-      ["Everything in Starter",
-       "Five pages: home, services, about, reviews and photo gallery",
-       "Page copy written from your intake form"], level=2),
-  pkg("Win more customers", "Premium",
-      "A site that brings in work: bookings online, built for local search.",
-      ["Everything in Standard", "Up to eight pages", "A search-ready page for each service",
-       "Online booking", "Google Business Profile setup"], level=3),
+  pkg("Get Found", "businesses running on referrals with no website, or an outdated one.",
+      "$1,200", "$79",
+      ["A one-page website that helps customers find you and get in touch",
+       "Google Business Profile set up and tidied",
+       "AI review replies: a draft reply, in your voice, for every new Google review. You approve it in one click"],
+      "Start with Get Found"),
+  pkg("Get Leads", "businesses that get inquiries but lose some to slow replies or forgotten quotes.",
+      "$2,500", "$149",
+      ["A five-page website, with the copy written for you",
+       "Instant replies: every website inquiry gets a personal response within minutes, and is logged in one simple list",
+       "Quote follow-up: friendly reminders go out on quotes that haven't been answered, and stop when the customer replies",
+       "Quote drafting assistant: turn rough job notes into a clean written estimate"],
+      "Start with Get Leads", intro="Everything in Get Found, plus:", level=2, flag="Most popular"),
+  pkg("Get Booked", "businesses outgrowing word of mouth and handling quotes and bookings after hours.",
+      "$4,000", "$249",
+      ["Up to eight pages, with a page for each service",
+       "Online booking",
+       "A website chat assistant that answers common questions at any hour and points visitors to booking",
+       "Missed-call text-back: callers you can't answer get a text with a booking link",
+       "Booking reminders and an automatic review request after each job"],
+      "Start with Get Booked", intro="Everything in Get Leads, plus:", level=3),
   WAVE,
-  know("1", "Need more pages?", "Standard and Premium can add pages one at a time."),
-  know("2", "Something custom?", "Tell us what you need and we'll quote it up front."),
-  know("3", "Upgrading later?", "Move up within six months and everything you've paid counts "
-       "toward the new package."),
+  COMPARE,
   SUN_HORIZON,
-  step("01", "Complete the intake form",
-       "Share your business details, services and photos so the site is tailored to you. On "
-       "Standard and Premium we write your page copy from it, so the more you share, the more it "
-       "sounds like you.", open_=True),
-  step("02", "Review a sample page",
-       "We design one page first, so you can confirm the direction before the rest is built. On "
-       "Starter, that page is your whole site."),
-  step("03", "Refine and build out",
-       "We incorporate your feedback, then carry it through the remaining pages. Most projects are "
-       "completed in two to four weeks, depending on the package and how quickly we receive your "
-       "intake form, photos and final approval."),
-  step("04", "Launch",
-       "We point your domain, test on real phones and go live. Then it runs on your own hosting "
-       "account, or we look after it on a care plan."),
-  TOPO, WAVE,
-  faq("How much does a site cost?",
-      "Each package has a fixed price, so you'll know the full cost before we start. Ask for the "
-      "price sheet on the contact page, or we'll go through it on a quick call."),
-  faq("How does payment work?",
-      "Half to start and half at launch. Premium can also be split into smaller payments."),
-  faq("Do I need a care plan?",
-      "No. Without one, we set you up with your own hosting account and hand over your site's "
-      "files at launch. From then on, upkeep and edits are yours. Either way, your domain is "
-      "registered in your name."),
-  faq("I don't have any good photos.",
-      "Common, and fixable. We'll work with what's on your phone, or build the design around type "
-      "and colour so it doesn't lean on photography at all. What we won't do is fill your site "
-      "with stock images of someone else's business."),
-  faq("What if I already have a site?",
-      "Then the first question is whether it needs rebuilding or just fixing. Sometimes a day of "
-      "cleanup beats a new site, and we'll tell you that even though it's the smaller invoice. If "
-      "we do rebuild, your existing pages get redirected so you don't lose the search rankings "
-      "you've built up."),
+  TOPO,
+  WAVE,
+  faq("Do I need to be good with technology?",
+      "No. We build and set everything up. You get a short training session and a one-page guide "
+      "written in plain English."),
+  faq("Will the AI say things I wouldn't?",
+      "Not without you seeing it first. Review replies and follow-ups start as drafts you approve. "
+      "You choose when, or whether, to let them send on their own."),
+  faq("What happens to my customers' information?",
+      "It stays in your accounts. We set clear rules on what the AI tools can see, and we never use "
+      "your customer list for anything else."),
+  faq("Who builds it?",
+      "The founder builds every project himself. No hand-offs, no middlemen."),
+  faq("I already have a website. Can I just add the AI part?",
+      "Yes. That's what the <a href=\"#quickwin\">AI Quick Win</a> is for."),
+  faq("How fast will I hear back?",
+      "Within two business days."),
   RIDGE_FOOT)
+
+home = home.replace("__TRACK__", HOW_IT_WORKS)
 
 # ==========================================================================
 #  CONTACT
@@ -2492,18 +3123,18 @@ contact = """
     <div class="head" style="margin-bottom:0">
       <span class="eyebrow">Contact</span>
       <h1 style="font-size:clamp(34px,4.6vw,56px)">Tell us about the business.</h1>
-      <p class="lede" style="margin-top:20px">Ask for the price sheet, book a call, or both. You'll
-      hear back within one business day, from a person.</p>
+      <p class="lede" style="margin-top:20px">Pick a package, book a call, or just ask a question. You'll
+      hear back within two business days, from a person.</p>
     </div>
   </div>
 </section>
 
-<section class="section band-paper" style="padding-top:clamp(28px,3.5vw,44px)">
+<section class="section band-paper" id="start" style="padding-top:clamp(28px,3.5vw,44px)">
   <div class="wrap split">
     <div class="reveal">
       <div class="formstatus" id="formstatus" role="status" tabindex="-1">
         <h3 id="formstatus-title">Thanks, we've got it.</h3>
-        <p class="small" id="formstatus-text" style="margin-top:10px">You'll hear back within one business day, from a person.</p>
+        <p class="small" id="formstatus-text" style="margin-top:10px">You'll hear back within two business days, from a person.</p>
       </div>
       <form class="form" id="projectform" action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="__WEB3FORMS_KEY__">
@@ -2513,9 +3144,9 @@ contact = """
         <fieldset class="choice">
           <legend>What would you like?</legend>
           <div class="choice__opts">
-            <label class="pill"><input type="radio" name="want" value="Price sheet" id="want-pricing" required><span>Send me the price sheet</span></label>
+            <label class="pill"><input type="radio" name="want" value="Start a package" id="want-start" required><span>Start a package</span></label>
             <label class="pill"><input type="radio" name="want" value="Call" id="want-call"><span>Book a call</span></label>
-            <label class="pill"><input type="radio" name="want" value="Both" id="want-both"><span>Both</span></label>
+            <label class="pill"><input type="radio" name="want" value="Question" id="want-question"><span>Just a question</span></label>
           </div>
         </fieldset>
         <div class="field--pair">
@@ -2542,11 +3173,23 @@ contact = """
           <label for="package">Which package are you leaning toward?</label>
           <select id="package" name="package">
             <option>Not sure yet</option>
-            <option>Starter</option>
-            <option>Standard</option>
-            <option>Premium</option>
+            <option>Get Found</option>
+            <option>Get Leads</option>
+            <option>Get Booked</option>
+            <option>AI Quick Win</option>
           </select>
         </div>
+        <fieldset class="choice">
+          <legend>What eats most of your week? <span class="optional">(pick any)</span></legend>
+          <div class="choice__opts">
+            <label class="pill"><input type="checkbox" name="time_drain[]" value="Replying to new inquiries"><span>Replying to new inquiries</span></label>
+            <label class="pill"><input type="checkbox" name="time_drain[]" value="Chasing quotes"><span>Chasing quotes</span></label>
+            <label class="pill"><input type="checkbox" name="time_drain[]" value="Missed calls"><span>Missed calls</span></label>
+            <label class="pill"><input type="checkbox" name="time_drain[]" value="Booking and rescheduling"><span>Booking and rescheduling</span></label>
+            <label class="pill"><input type="checkbox" name="time_drain[]" value="Replying to reviews"><span>Replying to reviews</span></label>
+            <label class="pill"><input type="checkbox" name="time_drain[]" value="Writing estimates"><span>Writing estimates</span></label>
+          </div>
+        </fieldset>
         <div class="field--pair">
           <div class="field">
             <label for="kind">What kind of business is it?</label>
@@ -2597,9 +3240,9 @@ contact = """
         </div>
         <div class="rail__item">
           <h3>What happens next</h3>
-          <p class="small">Asked for pricing? We'll email you the price sheet within one business
-          day. Booked a call? We'll reply with times that suit you. Nothing is charged until you
-          choose a package and pay the first half.</p>
+          <p class="small">Picked a package? We'll reply within two business days to book your free check
+          and intake. Booked a call? We'll send times that suit you. Nothing is charged until you
+          choose a package and pay the first half of setup.</p>
         </div>
       </div>
     </div>
@@ -2611,12 +3254,12 @@ contact = """
 
 # ==========================================================================
 PAGES = [
- ("index.html","Beaumont West Solutions | Websites for service businesses",
-  "Websites for the businesses people call, book and recommend. Three clear packages, typically live in two to four weeks.", home),
+ ("index.html","Beaumont West Solutions | Websites and AI for service businesses",
+  "A website that gets you found, plus AI that replies, follows up and books jobs while you're busy doing the work. Try the live demo.", home),
  ("services.html","Packages | Beaumont West Solutions",
-  "Three website packages for service businesses (Starter, Standard and Premium), plus optional monthly care plans. Typically live in two to four weeks.", services),
+  "Get Found, Get Leads and Get Booked: a website plus AI systems, for one setup fee and one simple monthly plan. Typically live in two to four weeks.", services),
  ("contact.html","Contact | Beaumont West Solutions",
-  "Request the price sheet or book a call. You'll hear back within one business day, from a person.", contact),
+  "Pick a package, book a call or ask a question. You'll hear back within two business days, from a person.", contact),
 ]
 
 os.makedirs(OUT, exist_ok=True)
