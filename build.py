@@ -1062,14 +1062,14 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 
 /* Starter: one long page scrolling inside a phone */
 .pv__phone{width:58px;height:96px;margin-top:20px;border-radius:12px;border:3px solid var(--teal);background:#fff;overflow:hidden;position:relative}
-.pv__page{display:grid;gap:5px;padding:6px 5px;animation:pvscroll 7s ease-in-out infinite}
+.pv__page{display:grid;gap:5px;padding:6px 5px;animation:pvscroll 5s ease-in-out infinite}
 .pv__page .pv-bar{height:6px;border-radius:2px;background:var(--teal)}
 .pv__page .pv-hero{height:30px;border-radius:3px;background:var(--teal-mid)}
 .pv__page .pv-ln{height:3px;border-radius:2px;background:rgba(27,69,82,.22)}
 .pv__page .pv-ln.pv-s{width:60%}
 .pv__page .pv-btn{height:7px;width:55%;border-radius:4px;background:var(--coral)}
 .pv__page .pv-box{height:22px;border-radius:3px;background:var(--cream);border:1px solid rgba(27,69,82,.18)}
-@keyframes pvscroll{0%,12%{transform:translateY(0)}45%,62%{transform:translateY(-82px)}92%,100%{transform:translateY(0)}}
+@keyframes pvscroll{0%,3%{transform:translateY(0)}40%,60%{transform:translateY(-82px)}92%,100%{transform:translateY(0)}}
 
 /* Premium: a booking calendar filling up */
 .pv__cal{width:150px;padding:8px 9px 9px;border-radius:8px;background:#fff;border:1.5px solid rgba(27,69,82,.3);margin-top:18px}
@@ -1125,9 +1125,9 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .fx .pkg.in .pkg__bars i:nth-child(2){transition-delay:.55s}
 .fx .pkg.in .pkg__bars i:nth-child(3){transition-delay:.85s}
 /* bars refill bottom to top when a card is hovered */
-.fx .pkg.in:hover .pkg__bars i{animation:barrefill .8s cubic-bezier(.2,.7,.3,1) both}
-.fx .pkg.in:hover .pkg__bars i:nth-child(2){animation-delay:.14s}
-.fx .pkg.in:hover .pkg__bars i:nth-child(3){animation-delay:.28s}
+.fx .pkg.in:hover .pkg__bars i{animation:barrefill .5s cubic-bezier(.2,.7,.3,1) both}
+.fx .pkg.in:hover .pkg__bars i:nth-child(2){animation-delay:.07s}
+.fx .pkg.in:hover .pkg__bars i:nth-child(3){animation-delay:.14s}
 @keyframes barrefill{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
 .pkg:hover .pkg__bars i{filter:brightness(1.08)}
 
@@ -1734,7 +1734,7 @@ JS = r"""
       if(el.classList.contains('pv--book')){
         var slots=[].slice.call(el.querySelectorAll('.pv__slots i')),toast=el.querySelector('.pv__toast'),count=el.querySelector('.pv__count');
         var order=[6,1,12,8,3,10,14,0,5,9];
-        return {ms:1100,tick:function(){
+        return {ms:800,tick:function(){
           var n=slots.filter(function(s){return s.classList.contains('on');}).length;
           if(n>=order.length){slots.forEach(function(s){s.classList.remove('on');});n=0;}
           else{slots[order[n]].classList.add('on');n++;toast.classList.add('show');setTimeout(function(){toast.classList.remove('show');},900);}
@@ -1743,7 +1743,7 @@ JS = r"""
       }
       if(el.classList.contains('pv--web')){
         var tabs=[].slice.call(el.querySelectorAll('.pv__nav i')),pgs=[].slice.call(el.querySelectorAll('.pv__pages > div')),wp=0;
-        return {ms:1500,tick:function(){
+        return {ms:1100,tick:function(){
           wp=(wp+1)%pgs.length;
           tabs.forEach(function(t,i){t.classList.toggle('on',i===wp);});
           pgs.forEach(function(p,i){p.classList.toggle('on',i===wp);});
@@ -1758,7 +1758,7 @@ JS = r"""
       if(x.isIntersecting&&!lp.timer)lp.timer=setInterval(lp.tick,lp.ms);
       if(!x.isIntersecting&&lp.timer){clearInterval(lp.timer);lp.timer=null;}
     });},{threshold:.3});
-    var start=function(el){var lp=loops.get(el);el.classList.add('play');if(lp&&!lp.timer)lp.timer=setInterval(lp.tick,lp.ms);};
+    var start=function(el){var lp=loops.get(el);el.classList.add('play');if(lp&&!lp.timer){lp.tick();lp.timer=setInterval(lp.tick,lp.ms);}};
     var stop=function(el){var lp=loops.get(el);el.classList.remove('play');if(lp&&lp.timer){clearInterval(lp.timer);lp.timer=null;}};
     /* with a mouse, a card's preview only plays while that card is hovered; on phones it plays while on screen */
     var canHover=window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -2583,7 +2583,52 @@ home = """
   </div>
 </section>
 
-<section class="section band-paper demo-band demo-band--top" id="demo">
+
+
+%s
+
+<section class="section band-teal hp-packages" id="packages">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Packages</span>
+      <h2>Three ways to start</h2>
+      <p class="lede" style="margin-top:18px">Each package pairs a website with the systems that handle the
+      busywork around it.</p>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card hp-pk">
+        <span class="card__tag">Get found</span>
+        <h3>Starter</h3>
+        <p class="hp-pk__for">For businesses running on referrals, with no website or an outdated one.</p>
+        <p>A one-page site, your Google profile tidied, and a drafted reply for every new review.</p>
+        <a class="card__link" href="services.html#pk-starter">What's included <span class="arrow">&rarr;</span></a>
+      </article>
+      <article class="card hp-pk">
+        <span class="card__tag">Get leads</span>
+        <h3>Standard</h3>
+        <p class="hp-pk__for">For businesses that get inquiries but lose some to slow replies or forgotten quotes.</p>
+        <p>Five pages written for you, instant replies to every inquiry, and follow-up on quiet quotes.</p>
+        <a class="card__link" href="services.html#pk-standard">What's included <span class="arrow">&rarr;</span></a>
+      </article>
+      <article class="card hp-pk">
+        <span class="card__tag">Get booked</span>
+        <h3>Premium</h3>
+        <p class="hp-pk__for">For businesses outgrowing word of mouth, handling quotes and bookings after hours.</p>
+        <p>Online booking, a chat assistant that answers at any hour, and missed-call text-back.</p>
+        <a class="card__link" href="services.html#pk-premium">What's included <span class="arrow">&rarr;</span></a>
+      </article>
+    </div>
+    <div class="price-banner reveal">
+      <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
+      <a class="btn btn--primary" href="services.html">Compare the packages <span class="arrow">&rarr;</span></a>
+    </div>
+    <p class="hp-qw">Already have a website you like? <a href="services.html#quickwin">Start with an AI Quick Win</a>.</p>
+  </div>
+</section>
+
+%s
+
+<section class="section band-paper demo-band" id="demo">
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Try it yourself</span>
@@ -2669,49 +2714,6 @@ home = """
   </div>
 </section>
 
-%s
-
-<section class="section band-teal hp-packages" id="packages">
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">Packages</span>
-      <h2>Three ways to start</h2>
-      <p class="lede" style="margin-top:18px">Each package pairs a website with the systems that handle the
-      busywork around it.</p>
-    </div>
-    <div class="grid g3 reveal">
-      <article class="card hp-pk">
-        <span class="card__tag">Get found</span>
-        <h3>Starter</h3>
-        <p class="hp-pk__for">For businesses running on referrals, with no website or an outdated one.</p>
-        <p>A one-page site, your Google profile tidied, and a drafted reply for every new review.</p>
-        <a class="card__link" href="services.html#pk-starter">What's included <span class="arrow">&rarr;</span></a>
-      </article>
-      <article class="card hp-pk">
-        <span class="card__tag">Get leads</span>
-        <h3>Standard</h3>
-        <p class="hp-pk__for">For businesses that get inquiries but lose some to slow replies or forgotten quotes.</p>
-        <p>Five pages written for you, instant replies to every inquiry, and follow-up on quiet quotes.</p>
-        <a class="card__link" href="services.html#pk-standard">What's included <span class="arrow">&rarr;</span></a>
-      </article>
-      <article class="card hp-pk">
-        <span class="card__tag">Get booked</span>
-        <h3>Premium</h3>
-        <p class="hp-pk__for">For businesses outgrowing word of mouth, handling quotes and bookings after hours.</p>
-        <p>Online booking, a chat assistant that answers at any hour, and missed-call text-back.</p>
-        <a class="card__link" href="services.html#pk-premium">What's included <span class="arrow">&rarr;</span></a>
-      </article>
-    </div>
-    <div class="price-banner reveal">
-      <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
-      <a class="btn btn--primary" href="services.html">Compare the packages <span class="arrow">&rarr;</span></a>
-    </div>
-    <p class="hp-qw">Already have a website you like? <a href="services.html#quickwin">Start with an AI Quick Win</a>.</p>
-  </div>
-</section>
-
-%s
-
 __CHECK_SECTION__
 
 <section class="section band-paper about--light pk-after-check">
@@ -2733,7 +2735,7 @@ __CHECK_SECTION__
 %s
 <a class="btn btn--primary stickycta" href="#check">Free website check <span class="arrow">&rarr;</span></a>
 """
-home = home % (RIDGE_HERO, WAVE_CREAM, RIDGE_FOOT)
+home = home % (RIDGE_HERO, WAVE, RIDGE_FOOT)
 # (the four steps are filled in once the shared track() helper exists, below)
 
 # ==========================================================================
@@ -3020,7 +3022,7 @@ services = """
        "Instant replies: every website inquiry gets a personal response within minutes, and is logged in one simple list",
        "Quote follow-up: friendly reminders go out on quotes that haven't been answered, and stop when the customer replies",
        "Quote drafting assistant: turn rough job notes into a clean written estimate"],
-      "Start with Standard", intro="Everything in Starter, plus:", level=2, flag="Most popular"),
+      "Start with Standard", intro="Everything in Starter, plus:", level=2),
   pkg("Premium", "Get booked", "businesses outgrowing word of mouth and handling quotes and bookings after hours.",
       ["Up to eight pages, with a page for each service",
        "Online booking",
@@ -3050,6 +3052,7 @@ services = """
   faq("How fast will I hear back?",
       "Within two business days."),
   RIDGE_FOOT)
+
 
 
 
