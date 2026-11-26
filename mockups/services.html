@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Packages | Beaumont West Solutions</title>
-<meta name="description" content="Get Found, Get Leads and Get Booked: a website plus AI systems, for one setup fee and one simple monthly plan. Typically live in two to four weeks.">
+<meta name="description" content="Starter, Standard and Premium: a website plus the systems that reply, follow up and book jobs. Packages start at $1,200. Typically live in two to four weeks.">
 <meta property="og:title" content="Packages | Beaumont West Solutions">
-<meta property="og:description" content="Get Found, Get Leads and Get Booked: a website plus AI systems, for one setup fee and one simple monthly plan. Typically live in two to four weeks.">
+<meta property="og:description" content="Starter, Standard and Premium: a website plus the systems that reply, follow up and book jobs. Packages start at $1,200. Typically live in two to four weeks.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://beaumontwest.com/assets/bws-social-1200x630.png">
 <meta name="theme-color" content="#1B4552">
@@ -1097,6 +1097,25 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 /* ---------- home: the Harbor Line demo ---------- */
 .demo-band{position:relative}
 .demo-band .head h2{max-width:none}
+.hero + .demo-band--top{padding-top:clamp(56px,6vw,84px)}
+.hero--build{padding-bottom:clamp(24px,3vw,40px)}
+/* home packages: three short cards and one price banner */
+.hp-pk{display:flex;flex-direction:column}
+.hp-pk h3{font-size:clamp(26px,2.6vw,32px);margin-bottom:6px}
+.hp-pk__for{font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.45;color:var(--teal-mid);margin:0 0 14px}
+.hp-pk p{font-size:clamp(17px,1.3vw,18.5px);line-height:1.55;margin:0}
+.hp-pk .card__link{margin-top:auto;padding-top:22px}
+.price-banner{margin-top:clamp(26px,3vw,36px);display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;
+  background:var(--peach);color:var(--teal);border-radius:16px;padding:18px clamp(18px,2.6vw,30px)}
+.price-banner p{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35}
+.price-banner b{font-weight:700;font-size:clamp(24px,2.4vw,30px);letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin:0 4px}
+.price-banner .price-banner__note{font-size:15px;font-weight:500;color:var(--teal-sub)}
+.band-teal .price-banner .btn--primary{background:var(--teal);color:var(--cream)}
+.band-teal .price-banner .btn--primary:hover{background:var(--teal-deep)}
+.price-banner--top{margin:0 0 clamp(26px,3vw,36px)}
+.hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
+.hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
+.compare thead th small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-top:4px}
 .demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
 .demo-band .dtabs button{border-color:rgba(27,69,82,.28);color:var(--teal)}
 .demo-band .dtabs button small{color:var(--teal-mid)}
@@ -1326,32 +1345,36 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
       <span class="eyebrow">The packages</span>
       <h2>Pick the one that fits where you are now</h2>
     </div>
+    <div class="price-banner price-banner--top reveal">
+      <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
+      <p class="price-banner__note">Fixed setup price, no hourly billing. Your free check tells you which one fits.</p>
+    </div>
     <div class="grid g3 pkgs">
-      <article class="card pkg pkg--l1 reveal" id="pk-get-found">
+      <article class="card pkg pkg--l1 reveal" id="pk-starter">
   <div class="pv pv--one" aria-hidden="true"><div class="pv__phone"><div class="pv__page"><i class="pv-bar"></i><i class="pv-hero"></i><i class="pv-ln"></i><i class="pv-ln pv-s"></i><i class="pv-btn"></i><i class="pv-box"></i><i class="pv-ln"></i><i class="pv-ln pv-s"></i><i class="pv-box"></i><i class="pv-btn"></i><i class="pv-ln"></i></div></div><span class="pv__cap">One page</span></div>
-  <h3>Get Found</h3>
+  <span class="card__tag">Get found</span>
+  <h3>Starter</h3>
   <p class="pkg__for"><strong>For:</strong> businesses running on referrals with no website, or an outdated one.</p>
-  <p class="pkg__price"><span class="from">Starting at</span><b>$1,200</b></p>
   <p class="pkg__inc">What's included:</p><ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>A one-page website that helps customers find you and get in touch</span></li><li><span class="sun" aria-hidden="true"></span><span>Google Business Profile set up and tidied</span></li><li><span class="sun" aria-hidden="true"></span><span>AI review replies: a draft reply, in your voice, for every new Google review. You approve it in one click</span></li></ul>
-  <div class="pkg__cta"><a class="btn btn--primary" href="contact.html?package=Get%20Found#start">Start with Get Found <span class="arrow">&rarr;</span></a></div>
+  <div class="pkg__cta"><a class="btn btn--primary" href="contact.html?package=Starter#start">Start with Starter <span class="arrow">&rarr;</span></a></div>
   <span class="pkg__bars" aria-hidden="true"><i></i></span>
 </article>
-      <article class="card pkg pkg--l2 reveal" id="pk-get-leads">
+      <article class="card pkg pkg--l2 reveal" id="pk-standard">
   <span class="pkg__flag">Most popular</span><div class="pv pv--web" aria-hidden="true"><div class="pv__web"><div class="pv__chrome"><b></b><b></b><b></b><span>yourbusiness.com</span></div><div class="pv__nav"><i class="on">Home</i><i>Services</i><i>About</i><i>Reviews</i><i>Gallery</i></div><div class="pv__pages"><div class="pw on"><i class="pw-hero"></i><i class="pw-ln"></i><i class="pw-ln pw-s"></i><i class="pw-cta"></i></div><div class="pw"><i class="pw-row"></i><i class="pw-row"></i><i class="pw-row"></i><i class="pw-row"></i></div><div class="pw"><i class="pw-img"></i><i class="pw-ln"></i><i class="pw-ln pw-s"></i></div><div class="pw"><i class="pw-card"></i><i class="pw-card"></i></div><div class="pw"><i class="pw-grid"><b></b><b></b><b></b><b></b><b></b><b></b></i></div></div></div><span class="pv__cap">Five pages</span></div>
-  <h3>Get Leads</h3>
+  <span class="card__tag">Get leads</span>
+  <h3>Standard</h3>
   <p class="pkg__for"><strong>For:</strong> businesses that get inquiries but lose some to slow replies or forgotten quotes.</p>
-  <p class="pkg__price"><span class="from">Starting at</span><b>$2,500</b></p>
-  <p class="pkg__inc">Everything in Get Found, plus:</p><ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>A five-page website, with the copy written for you</span></li><li><span class="sun" aria-hidden="true"></span><span>Instant replies: every website inquiry gets a personal response within minutes, and is logged in one simple list</span></li><li><span class="sun" aria-hidden="true"></span><span>Quote follow-up: friendly reminders go out on quotes that haven't been answered, and stop when the customer replies</span></li><li><span class="sun" aria-hidden="true"></span><span>Quote drafting assistant: turn rough job notes into a clean written estimate</span></li></ul>
-  <div class="pkg__cta"><a class="btn btn--primary" href="contact.html?package=Get%20Leads#start">Start with Get Leads <span class="arrow">&rarr;</span></a></div>
+  <p class="pkg__inc">Everything in Starter, plus:</p><ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>A five-page website, with the copy written for you</span></li><li><span class="sun" aria-hidden="true"></span><span>Instant replies: every website inquiry gets a personal response within minutes, and is logged in one simple list</span></li><li><span class="sun" aria-hidden="true"></span><span>Quote follow-up: friendly reminders go out on quotes that haven't been answered, and stop when the customer replies</span></li><li><span class="sun" aria-hidden="true"></span><span>Quote drafting assistant: turn rough job notes into a clean written estimate</span></li></ul>
+  <div class="pkg__cta"><a class="btn btn--primary" href="contact.html?package=Standard#start">Start with Standard <span class="arrow">&rarr;</span></a></div>
   <span class="pkg__bars" aria-hidden="true"><i></i><i></i></span>
 </article>
-      <article class="card pkg pkg--l3 reveal" id="pk-get-booked">
+      <article class="card pkg pkg--l3 reveal" id="pk-premium">
   <div class="pv pv--book" aria-hidden="true"><div class="pv__cal"><b>This week <span class="pv__count">4 bookings</span></b><div class="pv__slots"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div></div><span class="pv__toast">New booking</span><span class="pv__cap">Online booking</span></div>
-  <h3>Get Booked</h3>
+  <span class="card__tag">Get booked</span>
+  <h3>Premium</h3>
   <p class="pkg__for"><strong>For:</strong> businesses outgrowing word of mouth and handling quotes and bookings after hours.</p>
-  <p class="pkg__price"><span class="from">Starting at</span><b>$4,000</b></p>
-  <p class="pkg__inc">Everything in Get Leads, plus:</p><ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>Up to eight pages, with a page for each service</span></li><li><span class="sun" aria-hidden="true"></span><span>Online booking</span></li><li><span class="sun" aria-hidden="true"></span><span>A website chat assistant that answers common questions at any hour and points visitors to booking</span></li><li><span class="sun" aria-hidden="true"></span><span>Missed-call text-back: callers you can't answer get a text with a booking link</span></li><li><span class="sun" aria-hidden="true"></span><span>Booking reminders and an automatic review request after each job</span></li></ul>
-  <div class="pkg__cta"><a class="btn btn--primary" href="contact.html?package=Get%20Booked#start">Start with Get Booked <span class="arrow">&rarr;</span></a></div>
+  <p class="pkg__inc">Everything in Standard, plus:</p><ul class="checks"><li><span class="sun" aria-hidden="true"></span><span>Up to eight pages, with a page for each service</span></li><li><span class="sun" aria-hidden="true"></span><span>Online booking</span></li><li><span class="sun" aria-hidden="true"></span><span>A website chat assistant that answers common questions at any hour and points visitors to booking</span></li><li><span class="sun" aria-hidden="true"></span><span>Missed-call text-back: callers you can't answer get a text with a booking link</span></li><li><span class="sun" aria-hidden="true"></span><span>Booking reminders and an automatic review request after each job</span></li></ul>
+  <div class="pkg__cta"><a class="btn btn--primary" href="contact.html?package=Premium#start">Start with Premium <span class="arrow">&rarr;</span></a></div>
   <span class="pkg__bars" aria-hidden="true"><i></i><i></i><i></i></span>
 </article>
     </div>
@@ -1420,9 +1443,8 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
     </div>
     <div class="compare-wrap reveal">
       <table class="compare">
-        <thead><tr><th scope="col"><span class="sr">Feature</span></th><th scope="col">Get Found</th><th scope="col">Get Leads</th><th scope="col">Get Booked</th></tr></thead>
+        <thead><tr><th scope="col"><span class="sr">Feature</span></th><th scope="col">Starter<small>Get found</small></th><th scope="col">Standard<small>Get leads</small></th><th scope="col">Premium<small>Get booked</small></th></tr></thead>
         <tbody>
-<tr class="money"><th scope="row">Starting at</th><td>$1,200</td><td>$2,500</td><td>$4,000</td></tr>
 <tr><th scope="row">Website pages</th><td>1</td><td>5</td><td>Up to 8</td></tr>
 <tr><th scope="row">Copy written for you</th><td><span class="no" aria-hidden="true"></span><span class="sr">Not included</span></td><td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td><td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td></tr>
 <tr><th scope="row">Google profile setup</th><td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td><td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td><td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td></tr>
@@ -1436,7 +1458,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
         </tbody>
       </table>
     </div>
-    <p class="compare-note">Prices are for setup. Each package then has a simple monthly plan, from $59 a month. Every package includes the training session, the one-page guide, and help when you need it.</p>
+    <p class="compare-note">Every package includes the training session, the one-page guide, and help when you need it.</p>
   </div>
 </section>
 
@@ -1463,8 +1485,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
     <div class="reveal">
       <span class="eyebrow">AI Quick Win</span>
       <h2>Already have a website you like? Start here.</h2>
-      <p class="pkg__price"><span class="from">Starting at</span><b>$750</b></p>
-      <p class="lede" style="margin-top:20px">Pick one thing that eats your week, and we'll set up a system that
+            <p class="lede" style="margin-top:20px">Pick one thing that eats your week, and we'll set up a system that
       handles it, in about two weeks. It comes with the same training session and guide as every
       package.</p>
       <div class="btn-row" style="margin-top:26px">
@@ -1509,7 +1530,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
     </div>
     <div class="bill reveal">
       <article class="card card--dark card--terms"><h3>Fixed setup price</h3><p>No hourly billing. You pay half up front and half at launch.</p></article>
-      <article class="card card--dark card--terms"><h3>Monthly plan starts at launch</h3><p>Plans start at $59 a month. They cover the tools your systems run on, monthly tune-ups, a short monthly report on replies and reviews, and help when you need it.</p></article>
+      <article class="card card--dark card--terms"><h3>Monthly plan starts at launch</h3><p>It covers the tools your systems run on, monthly tune-ups, a short monthly report on replies and reviews, and help when you need it.</p></article>
       <article class="card card--dark card--terms"><h3>Upgrade any time in the first six months</h3><p>What you've paid in setup counts toward the bigger package.</p></article>
       <article class="card card--dark card--terms"><h3>Month to month</h3><p>Cancel your monthly plan with 30 days' notice.</p></article>
       <article class="card card--dark card--terms"><h3>Texting and calls included, up to a monthly limit</h3><p>Missed-call text-back and reminders are covered by your plan. If you ever go over the limit, the extra is billed at cost.</p></article>
@@ -1524,7 +1545,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
       <div>
         <span class="eyebrow">Try the demo</span>
         <h2 style="margin-bottom:16px">See it working before you buy</h2>
-        <p>Harbor Line Plumbing is a sample business we built to show the full Get Booked package. It
+        <p>Harbor Line Plumbing is a sample business we built to show the full Premium package. It
         isn't a real company, so try anything:</p>
         <ul>
           <li>Ask the chat assistant a question, the way a customer would at 10pm</li>

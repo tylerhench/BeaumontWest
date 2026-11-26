@@ -1097,6 +1097,25 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 /* ---------- home: the Harbor Line demo ---------- */
 .demo-band{position:relative}
 .demo-band .head h2{max-width:none}
+.hero + .demo-band--top{padding-top:clamp(56px,6vw,84px)}
+.hero--build{padding-bottom:clamp(24px,3vw,40px)}
+/* home packages: three short cards and one price banner */
+.hp-pk{display:flex;flex-direction:column}
+.hp-pk h3{font-size:clamp(26px,2.6vw,32px);margin-bottom:6px}
+.hp-pk__for{font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.45;color:var(--teal-mid);margin:0 0 14px}
+.hp-pk p{font-size:clamp(17px,1.3vw,18.5px);line-height:1.55;margin:0}
+.hp-pk .card__link{margin-top:auto;padding-top:22px}
+.price-banner{margin-top:clamp(26px,3vw,36px);display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;
+  background:var(--peach);color:var(--teal);border-radius:16px;padding:18px clamp(18px,2.6vw,30px)}
+.price-banner p{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35}
+.price-banner b{font-weight:700;font-size:clamp(24px,2.4vw,30px);letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin:0 4px}
+.price-banner .price-banner__note{font-size:15px;font-weight:500;color:var(--teal-sub)}
+.band-teal .price-banner .btn--primary{background:var(--teal);color:var(--cream)}
+.band-teal .price-banner .btn--primary:hover{background:var(--teal-deep)}
+.price-banner--top{margin:0 0 clamp(26px,3vw,36px)}
+.hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
+.hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
+.compare thead th small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-top:4px}
 .demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
 .demo-band .dtabs button{border-color:rgba(27,69,82,.28);color:var(--teal)}
 .demo-band .dtabs button small{color:var(--teal-mid)}
@@ -1356,9 +1375,9 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
           <label for="package">Which package are you leaning toward?</label>
           <select id="package" name="package">
             <option>Not sure yet</option>
-            <option>Get Found</option>
-            <option>Get Leads</option>
-            <option>Get Booked</option>
+            <option>Starter</option>
+            <option>Standard</option>
+            <option>Premium</option>
             <option>AI Quick Win</option>
           </select>
         </div>
