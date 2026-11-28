@@ -1303,7 +1303,6 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 @media(max-width:760px){.price-banner{padding-right:clamp(18px,2.6vw,30px)}.pb-art{display:none}}
 .band-teal .price-banner .btn--primary{background:var(--teal);color:var(--cream)}
 .band-teal .price-banner .btn--primary:hover{background:var(--teal-deep)}
-.cmp-seam{position:relative;isolation:isolate;overflow-x:clip;border-top:0!important;background:linear-gradient(to bottom,var(--cream),var(--paper) clamp(160px,16vw,240px))}
 /* billing terms: cream cards, a coral top edge, and a line icon in a soft coral circle */
 .bill .bill-card{position:relative;overflow:hidden;border-top:4px solid var(--coral)}
 .bill .bill-card h3{color:var(--teal);margin-bottom:8px}
@@ -1314,11 +1313,6 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .bi .a{fill:none;stroke:var(--coral);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
 .bi .af{fill:var(--coral)}
 .bill .bill-card::after{content:"";position:absolute;right:-28px;bottom:-28px;width:84px;height:84px;border-radius:50%;border:1.5px solid rgba(232,111,81,.25);box-shadow:0 0 0 10px rgba(232,111,81,.06)}
-/* contour lines on the packages page: thicker, teal mixed with coral and peach */
-.cmp-seam .seam-contours{color:rgba(27,69,82,.22)}
-.cmp-seam .seam-contours g{stroke-width:2}
-.cmp-seam .seam-contours path:nth-child(3n+2){stroke:rgba(232,111,81,.45)}
-.cmp-seam .seam-contours path:nth-child(3n){stroke:rgba(244,162,97,.5)}
 .hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
 .hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
 .demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
@@ -2768,7 +2762,6 @@ __CHECK_SECTION__
 """
 home = home % (RIDGE_HERO, WAVE, RIDGE_FOOT)
 home = home.replace("__MOUNTAIN_OPEN__", MOUNTAIN_HORIZON_OPEN)
-SEAM = home[home.index('<svg class="seam-contours"'):home.index("</svg>", home.index('<svg class="seam-contours"')) + 6]
 
 # home package cards: one line icon each (get found / get leads / get booked)
 ICONS_NEW = {
@@ -2887,7 +2880,7 @@ services = """
 
 %s
 
-<section class="section band-cream" id="how">
+<section class="section band-paper" id="how">
   <div class="wrap">
     <div class="intro2 reveal">
       <div>
@@ -2906,8 +2899,9 @@ services = """
   </div>
 </section>
 
-<section class="section band-paper cmp-seam" id="quickwin">
-  __SEAM__
+__SUN__
+
+<section class="section band-cream" id="quickwin">
   <div class="wrap qw">
     <div class="reveal">
       <span class="eyebrow">AI Quick Win</span>
@@ -3029,9 +3023,9 @@ services = """
        "Missed-call text-back: callers you can't answer get a text with a booking link",
        "Booking reminders and an automatic review request after each job"],
       "Start with Premium", intro="Everything in Standard, plus:", level=3),
-  WAVE_CREAM,
+  WAVE,
   HOW_IT_WORKS,
-  RIDGE,
+  TOPO,
   WAVE,
   faq("Do I need to be good with technology?",
       "No. We build and set everything up. You get a short training session and a one-page guide "
@@ -3053,7 +3047,7 @@ services = """
 
 
 
-services = services.replace("__SEAM__", SEAM)
+services = services.replace("__SUN__", SUN_HORIZON)
 
 # ==========================================================================
 #  CONTACT
