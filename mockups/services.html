@@ -1121,6 +1121,21 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .band-teal .price-banner .btn--primary{background:var(--teal);color:var(--cream)}
 .band-teal .price-banner .btn--primary:hover{background:var(--teal-deep)}
 .cmp-seam{position:relative;isolation:isolate;overflow-x:clip;border-top:0!important;background:linear-gradient(to bottom,var(--cream),var(--paper) clamp(160px,16vw,240px))}
+/* billing terms: cream cards, a coral top edge, and a line icon in a soft coral circle */
+.bill .bill-card{position:relative;overflow:hidden;border-top:4px solid var(--coral)}
+.bill .bill-card h3{color:var(--teal);margin-bottom:8px}
+.bill .bill-card p{color:var(--teal-mid)}
+.bi-wrap{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:rgba(232,111,81,.13);margin-bottom:16px}
+.bi{width:32px;height:32px;display:block}
+.bi .s{fill:none;stroke:var(--teal);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.bi .a{fill:none;stroke:var(--coral);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.bi .af{fill:var(--coral)}
+.bill .bill-card::after{content:"";position:absolute;right:-28px;bottom:-28px;width:84px;height:84px;border-radius:50%;border:1.5px solid rgba(232,111,81,.25);box-shadow:0 0 0 10px rgba(232,111,81,.06)}
+/* contour lines on the packages page: thicker, teal mixed with coral and peach */
+.cmp-seam .seam-contours{color:rgba(27,69,82,.22)}
+.cmp-seam .seam-contours g{stroke-width:2}
+.cmp-seam .seam-contours path:nth-child(3n+2){stroke:rgba(232,111,81,.45)}
+.cmp-seam .seam-contours path:nth-child(3n){stroke:rgba(244,162,97,.5)}
 .hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
 .hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
 .demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
@@ -1486,12 +1501,12 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
       <h2>How billing works</h2>
     </div>
     <div class="bill reveal">
-      <article class="card card--dark card--terms"><h3>Fixed setup price</h3><p>No hourly billing. You pay half up front and half at launch.</p></article>
-      <article class="card card--dark card--terms"><h3>Monthly plan starts at launch</h3><p>It covers the tools your systems run on, monthly tune-ups, a short monthly report on replies and reviews, and help when you need it.</p></article>
-      <article class="card card--dark card--terms"><h3>Upgrade any time in the first six months</h3><p>What you've paid in setup counts toward the bigger package.</p></article>
-      <article class="card card--dark card--terms"><h3>Month to month</h3><p>Cancel your monthly plan with 30 days' notice.</p></article>
-      <article class="card card--dark card--terms"><h3>Texting and calls included, up to a monthly limit</h3><p>Missed-call text-back and reminders are covered by your plan. If you ever go over the limit, the extra is billed at cost.</p></article>
-      <article class="card card--dark card--terms"><h3>You own it</h3><p>Your website content, your accounts and your customer list are yours.</p></article>
+      <article class="card card--terms bill-card"><span class="bi-wrap"><svg class="bi" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 8h16l14 14-12 12L10 22z" class="s"/><circle cx="15" cy="15" r="2.6" class="af"/></svg></span><h3>Fixed setup price</h3><p>No hourly billing. You pay half up front and half at launch.</p></article>
+      <article class="card card--terms bill-card"><span class="bi-wrap"><svg class="bi" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="7" y="10" width="34" height="30" rx="4" class="s"/><path d="M7 18h34M15 6v8M33 6v8" class="s"/><path d="M18 30a6 6 0 1 0 6-6h-3" class="a"/><path d="M20 21l-3 3 3 3" class="a"/></svg></span><h3>Monthly plan starts at launch</h3><p>It covers the tools your systems run on, monthly tune-ups, a short monthly report on replies and reviews, and help when you need it.</p></article>
+      <article class="card card--terms bill-card"><span class="bi-wrap"><svg class="bi" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 40h32" class="s"/><path d="M14 32V20M24 32V12M34 32V24" class="s"/><path d="M18 12l6-6 6 6" class="a"/></svg></span><h3>Upgrade any time in the first six months</h3><p>What you've paid in setup counts toward the bigger package.</p></article>
+      <article class="card card--terms bill-card"><span class="bi-wrap"><svg class="bi" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="12" y="6" width="22" height="36" rx="2" class="s"/><circle cx="28" cy="25" r="2" class="af"/><path d="M6 42h36" class="s"/></svg></span><h3>Month to month</h3><p>Cancel your monthly plan with 30 days' notice.</p></article>
+      <article class="card card--terms bill-card"><span class="bi-wrap"><svg class="bi" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="10" y="6" width="18" height="34" rx="4" class="s"/><path d="M16 34h6" class="s"/><path d="M30 14h12v10h-6l-4 4v-4h-2z" class="a"/></svg></span><h3>Texting and calls included, up to a monthly limit</h3><p>Missed-call text-back and reminders are covered by your plan. If you ever go over the limit, the extra is billed at cost.</p></article>
+      <article class="card card--terms bill-card"><span class="bi-wrap"><svg class="bi" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="16" cy="24" r="8" class="s"/><path d="M24 24h18M36 24v6M41 24v4" class="s"/><circle cx="16" cy="24" r="2.5" class="af"/></svg></span><h3>Your name, your customers</h3><p>We host and run everything for you. Your domain, content, photos and customer list are yours, and if you ever leave, we hand them over.</p></article>
     </div>
   </div>
 </section>
@@ -1546,7 +1561,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
       </details>
       <details>
         <summary>What happens to my customers' information?</summary>
-        <p>It stays in your accounts. We set clear rules on what the AI tools can see, and we never use your customer list for anything else.</p>
+        <p>It stays yours. We set clear rules on what the AI tools can see, we never use your customer list for anything else, and if you ever leave, it goes with you.</p>
       </details>
       <details>
         <summary>Who builds it?</summary>
