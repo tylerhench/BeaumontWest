@@ -1306,9 +1306,15 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .price-banner p{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35}
 .price-banner b{font-weight:700;font-size:clamp(24px,2.4vw,30px);letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin:0 4px}
 .price-banner .price-banner__note{font-size:15px;font-weight:500;color:var(--teal-sub)}
+.price-banner{position:relative;overflow:hidden;isolation:isolate;padding-right:clamp(18px,24vw,300px)}
+.price-banner > p,.price-banner > .btn{position:relative;z-index:1}
+/* the logo's sun between two matching peaks, tucked into the right end */
+.pb-art{position:absolute;right:0;bottom:0;height:100%;width:300px;z-index:0;pointer-events:none}
+.price-banner:has(.btn){justify-content:flex-start;column-gap:clamp(18px,2.4vw,32px);padding-right:clamp(18px,16vw,196px)}
+.price-banner:has(.btn) .pb-art{width:190px}
+@media(max-width:760px){.price-banner{padding-right:clamp(18px,2.6vw,30px)}.pb-art{display:none}}
 .band-teal .price-banner .btn--primary{background:var(--teal);color:var(--cream)}
 .band-teal .price-banner .btn--primary:hover{background:var(--teal-deep)}
-.price-banner--top{margin:0 0 clamp(26px,3vw,36px)}
 .hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
 .hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
 .compare thead th small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-top:4px}
@@ -2638,6 +2644,7 @@ home = """
       </article>
     </div>
     <div class="price-banner reveal">
+      <svg class="pb-art" viewBox="0 0 320 100" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false"><circle cx="200" cy="64" r="34" fill="#FAD9BA"/><circle cx="200" cy="64" r="25" fill="#E86F51"/><path d="M60,100 L116,54 L156,84 L200,72 L244,84 L284,54 L340,100 Z" fill="#E86F51" opacity=".7"/><path d="M106,100 L150,40 L176,72 L200,52 L224,72 L250,40 L294,100 Z" fill="#1B4552"/></svg>
       <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
       <a class="btn btn--primary" href="services.html">Compare the packages <span class="arrow">&rarr;</span></a>
     </div>
@@ -2884,14 +2891,15 @@ services = """
       <span class="eyebrow">The packages</span>
       <h2>Pick the one that fits where you are now</h2>
     </div>
-    <div class="price-banner price-banner--top reveal">
-      <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
-      <p class="price-banner__note">Fixed setup price, no hourly billing. Your free check tells you which one fits.</p>
-    </div>
     <div class="grid g3 pkgs">
       %s
       %s
       %s
+    </div>
+    <div class="price-banner reveal">
+      <svg class="pb-art" viewBox="0 0 320 100" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false"><circle cx="200" cy="64" r="34" fill="#FAD9BA"/><circle cx="200" cy="64" r="25" fill="#E86F51"/><path d="M60,100 L116,54 L156,84 L200,72 L244,84 L284,54 L340,100 Z" fill="#E86F51" opacity=".7"/><path d="M106,100 L150,40 L176,72 L200,52 L224,72 L250,40 L294,100 Z" fill="#1B4552"/></svg>
+      <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
+      <p class="price-banner__note">Fixed setup price, no hourly billing. Your free check tells you which one fits.</p>
     </div>
     <div class="pkgs-foot reveal">
       <p>Already have a website you like? <a href="#quickwin">Start with an AI Quick Win</a>.</p>
