@@ -1288,7 +1288,19 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .hp-pk h3{font-size:clamp(26px,2.6vw,32px);margin-bottom:6px}
 .hp-pk__for{font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.45;color:var(--teal-mid);margin:0 0 14px}
 .hp-pk p{font-size:clamp(17px,1.3vw,18.5px);line-height:1.55;margin:0}
+.hp-pk .hp-pk__for{margin:0 0 14px;font-size:15.5px}
 .hp-pk .card__link{margin-top:auto;padding-top:22px}
+.hp-pk{position:relative;transition:transform .2s ease,box-shadow .2s ease}
+.hp-pk .card__tag{padding-right:52px}
+.hp-pk:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(0,0,0,.55)}
+.hp-pk:hover .who-ic{transform:translateY(-3px) rotate(-4deg)}
+/* "What's included": a coral underline draws in and the arrow nudges on hover */
+.hp-pk .card__link{display:inline-flex;align-items:center;gap:6px;padding-bottom:3px;font-weight:600;
+  background:linear-gradient(var(--coral),var(--coral)) left bottom / 0 2px no-repeat;transition:background-size .25s ease,color .2s ease}
+.hp-pk .card__link:hover,.hp-pk .card__link:focus-visible{background-size:100% 2px;color:var(--teal-deep)}
+.hp-pk .card__link:hover .arrow,.hp-pk .card__link:focus-visible .arrow{transform:translateX(5px)}
+.hp-pk .card__link:focus-visible{outline:3px solid var(--coral);outline-offset:4px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){.hp-pk,.hp-pk .card__link{transition:none}.hp-pk:hover{transform:none}}
 .price-banner{margin-top:clamp(26px,3vw,36px);display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;
   background:var(--peach);color:var(--teal);border-radius:16px;padding:18px clamp(18px,2.6vw,30px)}
 .price-banner p{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35}
@@ -2601,6 +2613,7 @@ home = """
     </div>
     <div class="grid g3 reveal">
       <article class="card hp-pk">
+        __ICON_starter__
         <span class="card__tag">Get found</span>
         <h3>Starter</h3>
         <p class="hp-pk__for">For businesses running on referrals, with no website or an outdated one.</p>
@@ -2608,6 +2621,7 @@ home = """
         <a class="card__link" href="services.html#pk-starter">What's included <span class="arrow">&rarr;</span></a>
       </article>
       <article class="card hp-pk">
+        __ICON_standard__
         <span class="card__tag">Get leads</span>
         <h3>Standard</h3>
         <p class="hp-pk__for">For businesses that get inquiries but lose some to slow replies or forgotten quotes.</p>
@@ -2615,6 +2629,7 @@ home = """
         <a class="card__link" href="services.html#pk-standard">What's included <span class="arrow">&rarr;</span></a>
       </article>
       <article class="card hp-pk">
+        __ICON_premium__
         <span class="card__tag">Get booked</span>
         <h3>Premium</h3>
         <p class="hp-pk__for">For businesses outgrowing word of mouth, handling quotes and bookings after hours.</p>
@@ -2743,6 +2758,16 @@ __CHECK_SECTION__
 """
 home = home % (RIDGE_HERO, WAVE, RIDGE_FOOT)
 home = home.replace("__MOUNTAIN_OPEN__", MOUNTAIN_HORIZON_OPEN)
+
+# home package cards: one line icon each (get found / get leads / get booked)
+ICONS_NEW = {
+ "starter": '<svg class="who-ic" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="21" cy="21" r="12" class="s"/><path d="M30 30l10 10" class="s"/><path d="M15.5 21.5l4 4 7-8" class="a"/></svg>',
+ "standard": '<svg class="who-ic" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 9h32a4 4 0 0 1 4 4v17a4 4 0 0 1-4 4H22l-9 7v-7H8a4 4 0 0 1-4-4V13a4 4 0 0 1 4-4z" class="s"/><path d="M26 13l-8 10h6l-3 8 9-11h-6l2-7z" class="af"/></svg>',
+ "premium": '<svg class="who-ic" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="6" y="10" width="36" height="32" rx="4" class="s"/><path d="M6 19h36" class="s t"/><path d="M15 6v8M33 6v8" class="s"/><path d="M16 30l6 6 11-12" class="a"/></svg>',
+}
+for _k, _v in ICONS_NEW.items():
+    home = home.replace("__ICON_%s__" % _k, _v)
+
 # (the four steps are filled in once the shared track() helper exists, below)
 
 # ==========================================================================
