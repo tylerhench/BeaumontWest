@@ -177,6 +177,9 @@ MOUNTAIN_HORIZON = """<div class="horizon horizon--close" aria-hidden="true">
 </g>
 </svg></div>"""
 
+# the same mountain and sun, from a light band down into cream (home: demo -> free check)
+MOUNTAIN_HORIZON_OPEN = MOUNTAIN_HORIZON.replace('horizon horizon--close"', 'horizon horizon--close horizon--open"')
+
 PLAIN_HORIZON = """<div class="horizon horizon--plain" aria-hidden="true"></div>"""
 
 TOPO = """<div class="divider divider--topo" aria-hidden="true">
@@ -535,6 +538,7 @@ p:last-child{margin-bottom:0}
   rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 74px),transparent calc(50% - 74px),
   transparent calc(50% + 74px),#9FB0B5 calc(50% + 74px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
 .horizon--close{background:linear-gradient(to bottom,var(--cream) 50%,var(--paper) 50%)}
+.horizon--open{background:linear-gradient(to bottom,var(--paper) 50%,var(--cream) 50%)}
 .horizon--close::before{background:linear-gradient(to right,
   rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 62px),transparent calc(50% - 62px),
   transparent calc(50% + 62px),#9FB0B5 calc(50% + 62px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
@@ -1322,7 +1326,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .dstage .btn--ghost{border-color:rgba(27,69,82,.28);color:var(--teal)}
 .dstage .btn--ghost:disabled{opacity:.45}
 .demo{display:grid;gap:18px;align-items:start}
-@media(min-width:960px){.demo{grid-template-columns:290px minmax(0,1fr);gap:26px}}
+@media(min-width:960px){.demo{grid-template-columns:290px minmax(0,1fr);gap:26px;align-items:center}}
 .dtabs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .dtabs::-webkit-scrollbar{display:none}
 @media(min-width:960px){.dtabs{flex-direction:column;overflow:visible}}
@@ -2714,6 +2718,8 @@ home = """
   </div>
 </section>
 
+__MOUNTAIN_OPEN__
+
 __CHECK_SECTION__
 
 <section class="section band-paper about--light pk-after-check">
@@ -2736,6 +2742,7 @@ __CHECK_SECTION__
 <a class="btn btn--primary stickycta" href="#check">Free website check <span class="arrow">&rarr;</span></a>
 """
 home = home % (RIDGE_HERO, WAVE, RIDGE_FOOT)
+home = home.replace("__MOUNTAIN_OPEN__", MOUNTAIN_HORIZON_OPEN)
 # (the four steps are filled in once the shared track() helper exists, below)
 
 # ==========================================================================

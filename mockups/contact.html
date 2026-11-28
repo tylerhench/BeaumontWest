@@ -355,6 +355,7 @@ p:last-child{margin-bottom:0}
   rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 74px),transparent calc(50% - 74px),
   transparent calc(50% + 74px),#9FB0B5 calc(50% + 74px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
 .horizon--close{background:linear-gradient(to bottom,var(--cream) 50%,var(--paper) 50%)}
+.horizon--open{background:linear-gradient(to bottom,var(--paper) 50%,var(--cream) 50%)}
 .horizon--close::before{background:linear-gradient(to right,
   rgba(159,176,181,0) 0,#9FB0B5 32%,#9FB0B5 calc(50% - 62px),transparent calc(50% - 62px),
   transparent calc(50% + 62px),#9FB0B5 calc(50% + 62px),#9FB0B5 68%,rgba(159,176,181,0) 100%)}
@@ -1142,7 +1143,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .dstage .btn--ghost{border-color:rgba(27,69,82,.28);color:var(--teal)}
 .dstage .btn--ghost:disabled{opacity:.45}
 .demo{display:grid;gap:18px;align-items:start}
-@media(min-width:960px){.demo{grid-template-columns:290px minmax(0,1fr);gap:26px}}
+@media(min-width:960px){.demo{grid-template-columns:290px minmax(0,1fr);gap:26px;align-items:center}}
 .dtabs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .dtabs::-webkit-scrollbar{display:none}
 @media(min-width:960px){.dtabs{flex-direction:column;overflow:visible}}
