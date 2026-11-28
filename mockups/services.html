@@ -1069,17 +1069,31 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .bill .card h3{color:var(--peach);margin-bottom:8px}
 .bill .card p{margin:0}
 
-/* small demo teaser on the packages page */
-.demo-teaser{display:grid;gap:clamp(22px,3vw,40px);align-items:center}
-@media(min-width:900px){.demo-teaser{grid-template-columns:1.2fr .8fr}}
-.demo-teaser ul{margin:0 0 22px;padding-left:20px}
-.demo-teaser li{font-size:clamp(17.5px,1.35vw,19.5px);margin-bottom:6px}
-.demo-teaser li::marker{color:var(--peach)}
-.finep{font-size:14px;color:rgba(253,240,220,.66);margin-top:16px}
-.mini-chat{background:var(--paper);border-radius:18px;padding:18px;display:grid;gap:10px;color:var(--teal);font-size:15.5px;line-height:1.45}
-.mini-chat span{padding:10px 14px;border-radius:14px;max-width:88%}
-.mini-chat .b{background:var(--cream);border:1px solid rgba(27,69,82,.14);border-bottom-left-radius:4px}
-.mini-chat .u{background:var(--teal);color:var(--cream);justify-self:end;border-bottom-right-radius:4px}
+/* packages page: "try the demo" card with a still of the chat */
+.tz{display:grid;gap:clamp(24px,4vw,56px);align-items:center;background:var(--cream);color:var(--teal);border-radius:20px;padding:clamp(24px,4vw,52px);
+  box-shadow:0 0 0 2.5px rgba(250,217,186,.95),0 0 26px 2px rgba(244,162,97,.35)}
+@media(min-width:900px){.tz{grid-template-columns:1.1fr .9fr}}
+.tz .eyebrow{color:var(--teal-mid)}
+.tz h2{margin-bottom:16px}
+.tz p{color:var(--teal-mid)}
+.tz-list{margin:0 0 24px;padding-left:20px}
+.tz-list li{margin-bottom:6px;font-size:clamp(17px,1.35vw,19px)}
+.tz-list li::marker{color:var(--coral)}
+.band-teal .tz .tz-btn{background:var(--teal);color:var(--cream)}
+.band-teal .tz .tz-btn:hover{background:var(--teal-deep)}
+.tz .tz-fine{font-size:14px;margin:18px 0 0}
+.tz-chat{background:var(--paper);border:1.5px solid rgba(27,69,82,.18);border-radius:16px;overflow:hidden;font-size:15.5px;line-height:1.45;color:var(--teal)}
+.tz-chat__hd{display:flex;gap:10px;align-items:center;background:var(--teal);color:var(--cream);padding:12px 14px}
+.tz-chat__hd b{display:block;font-family:var(--display);font-weight:600;font-size:15px}
+.tz-chat__hd small{display:flex;gap:6px;align-items:center;font-family:var(--display);font-size:12px;color:rgba(253,240,220,.78)}
+.tz-chat__hd small i{width:7px;height:7px;border-radius:50%;background:#7FD1A8}
+.tz-logo{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:var(--peach);color:var(--teal);font-family:var(--display);font-weight:700;font-size:12.5px;flex:none}
+.tz-chat__log{display:flex;flex-direction:column;gap:9px;padding:14px}
+.tz-m{max-width:86%;padding:9px 13px;border-radius:14px}
+.tz-u{align-self:flex-end;background:var(--teal);color:var(--cream);border-bottom-right-radius:4px}
+.tz-b{align-self:flex-start;background:var(--cream);border:1px solid rgba(27,69,82,.13);border-bottom-left-radius:4px}
+.tz-chips{display:flex;gap:8px;padding:0 14px 14px}
+.tz-chips span{border:1.5px solid var(--teal);border-radius:999px;padding:6px 12px;font-family:var(--display);font-size:13px;font-weight:500}
 
 /* ---------- home: the Harbor Line demo ---------- */
 .demo-band{position:relative}
@@ -1531,25 +1545,29 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 
 <section class="section band-teal" style="padding-top:0">
   <div class="wrap">
-    <div class="card card--dark demo-teaser reveal" style="border:1.5px solid rgba(253,240,220,.25)">
+    <div class="tz reveal">
       <div>
         <span class="eyebrow">Try the demo</span>
-        <h2 style="margin-bottom:16px">See it working before you buy</h2>
+        <h2>See it working before you buy</h2>
         <p>Harbor Line Plumbing is a sample business we built to show the full Premium package. It
         isn't a real company, so try anything:</p>
-        <ul>
+        <ul class="tz-list">
           <li>Ask the chat assistant a question, the way a customer would at 10pm</li>
           <li>See a sample review reply written in the owner's voice</li>
           <li>See rough job notes turned into a finished estimate</li>
         </ul>
-        <a class="btn btn--primary" href="index.html#demo">Try the Harbor Line demo <span class="arrow">&rarr;</span></a>
-        <p class="finep">Harbor Line Plumbing is a fictional demo business. Its reviews and details are for illustration only.</p>
+        <a class="btn btn--primary tz-btn" href="index.html#demo">Try the Harbor Line demo <span class="arrow">&rarr;</span></a>
+        <p class="tz-fine">Harbor Line Plumbing is a fictional demo business. Its reviews and details are for illustration only.</p>
       </div>
-      <div class="mini-chat" aria-hidden="true">
-        <span class="u">Do you do emergency call-outs?</span>
-        <span class="b">Yes, seven days a week, 7am to 10pm. After 10pm, leave your number and the on-call plumber texts you back within 15 minutes.</span>
-        <span class="u">Can someone come tomorrow?</span>
-        <span class="b">We have 9 to 11am or 2 to 4pm. Want me to hold one?</span>
+      <div class="tz-chat" aria-hidden="true">
+        <div class="tz-chat__hd"><span class="tz-logo">HL</span><span><b>Harbor Line Plumbing</b><small><i></i>Replies instantly, any hour</small></span></div>
+        <div class="tz-chat__log">
+          <span class="tz-m tz-u">Do you do emergency call-outs?</span>
+          <span class="tz-m tz-b">Yes, seven days a week, 7am to 10pm. After 10pm, leave your number and the on-call plumber texts you back within 15 minutes.</span>
+          <span class="tz-m tz-u">Can someone come tomorrow?</span>
+          <span class="tz-m tz-b">We have <strong>9 to 11am</strong> or <strong>2 to 4pm</strong>. Want me to hold one?</span>
+        </div>
+        <div class="tz-chips"><span>9 to 11am</span><span>2 to 4pm</span></div>
       </div>
     </div>
   </div>
