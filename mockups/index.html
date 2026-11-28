@@ -1049,20 +1049,6 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .pkgs-foot p{color:rgba(253,240,220,.85);font-size:clamp(17.5px,1.4vw,20px);margin:0}
 .pkgs-foot a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
 
-/* comparison table */
-.compare-wrap{overflow-x:auto;border:2px solid rgba(27,69,82,.5);border-radius:var(--r);background:var(--paper);-webkit-overflow-scrolling:touch}
-.compare{width:100%;border-collapse:collapse;min-width:560px;font-family:var(--display)}
-.compare th,.compare td{padding:14px 16px;text-align:center;border-bottom:1px solid rgba(27,69,82,.14);font-size:16px}
-.compare thead th{font-size:clamp(17px,1.5vw,20px);font-weight:650;background:var(--cream);border-bottom:2px solid rgba(27,69,82,.3)}
-.compare tbody th{text-align:left;font-weight:500;color:var(--teal);width:36%}
-.compare tbody tr:last-child th,.compare tbody tr:last-child td{border-bottom:0}
-.compare td{font-variant-numeric:tabular-nums;font-weight:600}
-.compare .yes{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--coral)}
-.compare .no{display:inline-block;width:14px;height:2px;background:rgba(27,69,82,.25);vertical-align:middle}
-.compare tr.money td{font-size:18px}
-.compare .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.compare-note{margin-top:14px;font-size:15px;color:var(--teal-mid)}
-
 /* how it works (packages page) */
 .intro2{display:grid;gap:clamp(28px,4vw,60px);align-items:start}
 @media(min-width:900px){.intro2{grid-template-columns:1fr 1fr}}
@@ -1138,7 +1124,6 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .cmp-seam{position:relative;isolation:isolate;overflow-x:clip;border-top:0!important;background:linear-gradient(to bottom,var(--cream),var(--paper) clamp(160px,16vw,240px))}
 .hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
 .hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
-.compare thead th small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-top:4px}
 .demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
 .demo-band .dtabs button{border-color:rgba(27,69,82,.28);color:var(--teal)}
 .demo-band .dtabs button small{color:var(--teal-mid)}
@@ -1484,7 +1469,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
     <div class="price-banner reveal">
       <svg class="pb-art" viewBox="0 0 320 100" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false"><circle cx="200" cy="64" r="34" fill="#FAD9BA"/><circle cx="200" cy="64" r="25" fill="#E86F51"/><path d="M60,100 L116,54 L156,84 L200,72 L244,84 L284,54 L340,100 Z" fill="#E86F51" opacity=".7"/><path d="M106,100 L150,40 L176,72 L200,52 L224,72 L250,40 L294,100 Z" fill="#1B4552"/></svg>
       <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
-      <a class="btn btn--primary" href="services.html">Compare the packages <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--primary" href="services.html">See the packages <span class="arrow">&rarr;</span></a>
     </div>
     <p class="hp-qw">Already have a website you like? <a href="services.html#quickwin">Start with an AI Quick Win</a>.</p>
   </div>

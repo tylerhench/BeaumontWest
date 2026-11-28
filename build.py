@@ -1231,20 +1231,6 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .pkgs-foot p{color:rgba(253,240,220,.85);font-size:clamp(17.5px,1.4vw,20px);margin:0}
 .pkgs-foot a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
 
-/* comparison table */
-.compare-wrap{overflow-x:auto;border:2px solid rgba(27,69,82,.5);border-radius:var(--r);background:var(--paper);-webkit-overflow-scrolling:touch}
-.compare{width:100%;border-collapse:collapse;min-width:560px;font-family:var(--display)}
-.compare th,.compare td{padding:14px 16px;text-align:center;border-bottom:1px solid rgba(27,69,82,.14);font-size:16px}
-.compare thead th{font-size:clamp(17px,1.5vw,20px);font-weight:650;background:var(--cream);border-bottom:2px solid rgba(27,69,82,.3)}
-.compare tbody th{text-align:left;font-weight:500;color:var(--teal);width:36%}
-.compare tbody tr:last-child th,.compare tbody tr:last-child td{border-bottom:0}
-.compare td{font-variant-numeric:tabular-nums;font-weight:600}
-.compare .yes{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--coral)}
-.compare .no{display:inline-block;width:14px;height:2px;background:rgba(27,69,82,.25);vertical-align:middle}
-.compare tr.money td{font-size:18px}
-.compare .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.compare-note{margin-top:14px;font-size:15px;color:var(--teal-mid)}
-
 /* how it works (packages page) */
 .intro2{display:grid;gap:clamp(28px,4vw,60px);align-items:start}
 @media(min-width:900px){.intro2{grid-template-columns:1fr 1fr}}
@@ -1320,7 +1306,6 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 .cmp-seam{position:relative;isolation:isolate;overflow-x:clip;border-top:0!important;background:linear-gradient(to bottom,var(--cream),var(--paper) clamp(160px,16vw,240px))}
 .hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
 .hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
-.compare thead th small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-top:4px}
 .demo-band + .check,.demo-band + .section{border-top:1px solid var(--rule)}
 .demo-band .dtabs button{border-color:rgba(27,69,82,.28);color:var(--teal)}
 .demo-band .dtabs button small{color:var(--teal-mid)}
@@ -2649,7 +2634,7 @@ home = """
     <div class="price-banner reveal">
       <svg class="pb-art" viewBox="0 0 320 100" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false"><circle cx="200" cy="64" r="34" fill="#FAD9BA"/><circle cx="200" cy="64" r="25" fill="#E86F51"/><path d="M60,100 L116,54 L156,84 L200,72 L244,84 L284,54 L340,100 Z" fill="#E86F51" opacity=".7"/><path d="M106,100 L150,40 L176,72 L200,52 L224,72 L250,40 L294,100 Z" fill="#1B4552"/></svg>
       <p><span class="price-banner__lbl">Packages start at</span> <b>$1,200</b> <span class="price-banner__plus">plus a monthly plan from</span> <b>$59</b></p>
-      <a class="btn btn--primary" href="services.html">Compare the packages <span class="arrow">&rarr;</span></a>
+      <a class="btn btn--primary" href="services.html">See the packages <span class="arrow">&rarr;</span></a>
     </div>
     <p class="hp-qw">Already have a website you like? <a href="services.html#quickwin">Start with an AI Quick Win</a>.</p>
   </div>
@@ -2846,32 +2831,6 @@ HOW_IT_WORKS = track([
 ])
 
 
-def cmp_row(label, cells, money=False):
-    tds = []
-    for c in cells:
-        if c is True:
-            tds.append('<td><span class="yes" aria-hidden="true"></span><span class="sr">Included</span></td>')
-        elif c is False or c == "":
-            tds.append('<td><span class="no" aria-hidden="true"></span><span class="sr">Not included</span></td>')
-        else:
-            tds.append("<td>%s</td>" % c)
-    return '<tr%s><th scope="row">%s</th>%s</tr>' % (' class="money"' if money else "", label, "".join(tds))
-
-
-COMPARE = "\n".join([
-    cmp_row("Website pages", ["1", "5", "Up to 8"]),
-    cmp_row("Copy written for you", [False, True, True]),
-    cmp_row("Google profile setup", [True, True, True]),
-    cmp_row("AI review replies", [True, True, True]),
-    cmp_row("Instant inquiry replies", [False, True, True]),
-    cmp_row("Quote follow-up and drafting", [False, True, True]),
-    cmp_row("Online booking", [False, False, True]),
-    cmp_row("Chat assistant", [False, False, True]),
-    cmp_row("Missed-call text-back", [False, False, True]),
-    cmp_row("Reminders and review requests", [False, False, True]),
-])
-
-
 services = """
 <section class="hero hero--lite">
   <div class="hero__glow" aria-hidden="true"></div>
@@ -2932,28 +2891,8 @@ services = """
   </div>
 </section>
 
-<section class="section band-paper cmp-seam" id="compare">
+<section class="section band-paper cmp-seam" id="quickwin">
   __SEAM__
-  <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">Side by side</span>
-      <h2>Compare at a glance</h2>
-    </div>
-    <div class="compare-wrap reveal">
-      <table class="compare">
-        <thead><tr><th scope="col"><span class="sr">Feature</span></th><th scope="col">Starter<small>Get found</small></th><th scope="col">Standard<small>Get leads</small></th><th scope="col">Premium<small>Get booked</small></th></tr></thead>
-        <tbody>
-%s
-        </tbody>
-      </table>
-    </div>
-    <p class="compare-note">Every package includes the training session, the one-page guide, and help when you need it.</p>
-  </div>
-</section>
-
-%s
-
-<section class="section band-cream" id="quickwin">
   <div class="wrap qw">
     <div class="reveal">
       <span class="eyebrow">AI Quick Win</span>
@@ -3077,9 +3016,7 @@ services = """
       "Start with Premium", intro="Everything in Standard, plus:", level=3),
   WAVE_CREAM,
   HOW_IT_WORKS,
-  COMPARE,
-  SUN_HORIZON,
-  TOPO,
+  RIDGE,
   WAVE,
   faq("Do I need to be good with technology?",
       "No. We build and set everything up. You get a short training session and a one-page guide "
