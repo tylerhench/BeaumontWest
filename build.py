@@ -1317,6 +1317,7 @@ input:not([type=checkbox]):not([type=radio]):focus-visible,.field input:focus-vi
 @media(max-width:760px){.price-banner{padding-right:clamp(18px,2.6vw,30px)}.pb-art{display:none}}
 .band-teal .price-banner .btn--primary{background:var(--teal);color:var(--cream)}
 .band-teal .price-banner .btn--primary:hover{background:var(--teal-deep)}
+.cmp-seam{position:relative;isolation:isolate;overflow-x:clip;border-top:0!important;background:linear-gradient(to bottom,var(--cream),var(--paper) clamp(160px,16vw,240px))}
 .hp-qw{text-align:center;margin:22px 0 0;color:rgba(253,240,220,.85);font-size:clamp(17px,1.35vw,19px)}
 .hp-qw a{color:var(--cream);text-decoration:none;border-bottom:1.5px solid var(--peach);padding-bottom:1px}
 .compare thead th small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-mid);margin-top:4px}
@@ -2767,6 +2768,7 @@ __CHECK_SECTION__
 """
 home = home % (RIDGE_HERO, WAVE, RIDGE_FOOT)
 home = home.replace("__MOUNTAIN_OPEN__", MOUNTAIN_HORIZON_OPEN)
+SEAM = home[home.index('<svg class="seam-contours"'):home.index("</svg>", home.index('<svg class="seam-contours"')) + 6]
 
 # home package cards: one line icon each (get found / get leads / get booked)
 ICONS_NEW = {
@@ -2911,7 +2913,7 @@ services = """
 
 %s
 
-<section class="section band-paper" id="how">
+<section class="section band-cream" id="how">
   <div class="wrap">
     <div class="intro2 reveal">
       <div>
@@ -2930,7 +2932,8 @@ services = """
   </div>
 </section>
 
-<section class="section band-paper" id="compare">
+<section class="section band-paper cmp-seam" id="compare">
+  __SEAM__
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Side by side</span>
@@ -3072,7 +3075,7 @@ services = """
        "Missed-call text-back: callers you can't answer get a text with a booking link",
        "Booking reminders and an automatic review request after each job"],
       "Start with Premium", intro="Everything in Standard, plus:", level=3),
-  WAVE,
+  WAVE_CREAM,
   HOW_IT_WORKS,
   COMPARE,
   SUN_HORIZON,
@@ -3097,6 +3100,8 @@ services = """
 
 
 
+
+services = services.replace("__SEAM__", SEAM)
 
 # ==========================================================================
 #  CONTACT
